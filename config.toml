@@ -9,6 +9,9 @@ compile_sass = true
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = true
 
+title = "Tim Richards"
+description = "Tim Richards Lecturer II"
+
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
@@ -22,9 +25,6 @@ d3_icon = "/images/favicon.jpg"
 
 d3_twitter = ""
 d3_author = "Tim Richards"
-
-title = "Tim Richards"
-description = "Tim Richards Lecturer II"
 
 d3_nav = [
   { name = "HOME", path = "/" },

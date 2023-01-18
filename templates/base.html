@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>
-      {% if page.title %}{{ page.title }} :: {% endif %}{{ config.title }}
+      {{ config.title }}
+      {% if page.title %}:: {{ page.title }}{% endif %}
+      {% if section.title %} :: {{ section.title }}{% endif %}
     </title>
     <link rel="stylesheet" href="{{ get_url(path="global.css") | safe }}">
     <meta

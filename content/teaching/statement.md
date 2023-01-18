@@ -1,5 +1,5 @@
 +++
-
+title = "Philosophy"
 +++
 
 # Teaching Philosophy
