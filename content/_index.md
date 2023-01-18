@@ -11,6 +11,7 @@
 - richards at cs dot umass dot edu
 - LGRC A351A
 - [Curriculum Vitae](/cv/richards-cv.pdf)
+- [Teaching Philosophy](/teaching/statement)
 
 ## Awards
 

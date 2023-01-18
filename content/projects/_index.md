@@ -4,4 +4,5 @@
 
 # Projects
 
-Some things about projects.
+- xv6
+- Rust

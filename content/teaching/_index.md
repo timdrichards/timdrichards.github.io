@@ -2,6 +2,8 @@
 
 ---
 
+*This site is in transition. More content to come soon.*
+
 # Teaching
 
 **Spring 2023 Semester**
