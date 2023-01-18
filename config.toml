@@ -1,3 +1,5 @@
+# Configuration
+
 # The URL the site will be built for
 base_url = "https://timdrichards.github.io"
 
