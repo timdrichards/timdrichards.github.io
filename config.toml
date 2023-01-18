@@ -20,9 +20,11 @@ author = "Tim Richards"
 
 d3_icon = "/images/favicon.jpg"
 
-d3_nav = []
 d3_twitter = ""
-d3_author = ""
+d3_author = "Tim Richards"
+
+title = "Tim Richards"
+description = "Tim Richards Lecturer II"
 
 d3_nav = [
   { name = "HOME", path = "/" },
