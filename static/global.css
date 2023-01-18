@@ -110,7 +110,7 @@ header {
 }
 
 /* Code */
-pre {
+/* pre {
   padding: 1rem;
   white-space: pre-wrap;
   border: 1px solid #CCC;
@@ -118,12 +118,54 @@ pre {
 
 pre > code {
   border: none;
+} */
+
+pre {
+  /* padding: 1rem; */
+  overflow: auto;
+}
+
+/* The line numbers already provide some kind of left/right padding */
+pre[data-linenos] {
+  padding: 1rem 0;
+}
+
+pre table td {
+  padding: 0;
+  border: none;
+}
+
+pre table tr {
+  padding: 0;
+}
+
+/* The line number cells */
+pre table td:nth-of-type(1) {
+  text-align: center;
+  user-select: none;
+  border: none;
+  padding: 0;
+}
+
+pre mark {
+  /* If you want your highlights to take the full width. */
+  display: block;
+  /* The default background colour of a mark is bright yellow */
+  background-color: rgba(254, 252, 232, 0.9);
+}
+
+pre table {
+  width: 100%;
+  border-collapse: collapse;  
+  padding: 0;
 }
 
 code {
   font-size: 1rem;
-  padding: 0 4px;
-  border: 1px solid #CCC;
+  /* padding: 0 4px; */
+  padding: 0;
+  border: none;
+  /* border: 1px solid #CCC; */
 }
 
 /* Quotes */
