@@ -1,0 +1,2 @@
+- [Home](/)
+- [Teaching](teaching.md "Tim Richards teaching history")
