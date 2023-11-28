@@ -11,13 +11,19 @@ here, however, it is certainly possible that some might show up.
 
 Let me start with a list I will write about these tools when I have time:
 
-- terminal: tab completion and history search
-- bat
+## Terminal
+
+- terminal: tab completion
+- terminal: history search
+- cd (tips for navigating easier) 
 - ls & exa
-- pushd, popd, & dirs (oh my!)
+
+## Tools
+
+- date
+- bat
 - wc
 - cal
-- bash
 - zsh
 - editors
 
