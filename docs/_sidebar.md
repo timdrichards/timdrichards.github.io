@@ -1,4 +1,4 @@
 - [Home](/)
-- [Teaching](teaching.md "Tim Richards teaching history")
+- [Teaching](teaching.md "Tim Richards teaching")
 - [Research](research.md "Tim Richards research")
-- [Tools and Things](tools.md "Tim's comments on Unix tools")
+- [Writings](writing.md "Tim Richards writing")
