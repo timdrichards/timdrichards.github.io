@@ -31,7 +31,7 @@ def parse_frontmatter(content: str) -> tuple[Dict[str, str], str]:
 
 def process_attributes(line: str) -> tuple[str, Optional[str]]:
     """Extract and process attribute syntax {: .class}."""
-    attr_pattern = r"\{:\s*\.([^}]+)\}"
+    attr_pattern = r".*\{:\s*\.([^}]+)\}"
     match = re.search(attr_pattern, line)
 
     if match:
@@ -64,7 +64,7 @@ def convert_markdown_to_html(md_content: str) -> str:
         next_line_attr = None
         if i + 1 < len(lines):
             next_line = lines[i + 1].strip()
-            if next_line.startswith("{:"):
+            if "{:" in next_line:
                 _, next_line_attr = process_attributes(next_line)
                 i += 1  # Skip the attribute line
 
@@ -82,11 +82,11 @@ def convert_markdown_to_html(md_content: str) -> str:
         elif line.startswith("## "):
             text = line[3:].strip()
             html_lines.append(f'<div class="section-title">{text}</div>')
-            html_lines.append('<div class="description" style="text-align: center">')
+            html_lines.append('<div class="description">')
 
         # Handle dividers
         elif line.startswith("---"):
-            html_lines.append("<hr>")
+            html_lines.append("<div class='divider'></div>")
 
         # Handle blockquotes (status boxes)
         elif line.startswith("> "):
@@ -181,7 +181,7 @@ def convert_markdown_to_html(md_content: str) -> str:
                 html_lines.append(f"<p>{html}</p>")
 
         # Handle regular paragraphs
-        elif line and not line.startswith("{:"):
+        elif line and "{:" not in line:
             # Convert markdown bold
             line = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", line)
             html_lines.append(f"<p>{line}</p>")
@@ -274,15 +274,15 @@ def main():
 
         create_html_page(md_file, output_file)
     else:
-        # Convert all .md files in current directory
+        # Convert all .md files recursively in current directory and subdirectories
         current_dir = Path(".")
-        md_files = list(current_dir.glob("*.md"))
+        md_files = list(current_dir.rglob("*.md"))
 
         if not md_files:
             print("No markdown files found in current directory")
             print("\nUsage:")
             print("  python build.py <input.md> [output.html]")
-            print("  python build.py  # converts all .md files")
+            print("  python build.py  # converts all .md files recursively")
             sys.exit(1)
 
         for md_file in md_files:

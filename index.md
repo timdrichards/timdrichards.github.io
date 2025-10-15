@@ -6,10 +6,10 @@ subtitle: Senior Teaching Faculty
 
 # Tim Richards
 
----
-
 [Manning College of Information and Computer Sciences (CICS)](https://www.cics.umass.edu/)
 {: .centered-link}
+
+---
 
 ## Contact
 

@@ -14,6 +14,7 @@ body {
   align-items: left;
   padding: 2rem;
   line-height: 1.7;
+  text-align: left;
 }
 
 .container {
@@ -40,6 +41,10 @@ h1 {
   text-shadow: 0 2px 8px rgba(143, 188, 143, 0.3);
 }
 
+p {
+  text-align: left;
+}
+
 .semester {
   font-size: 1.2rem;
   color: #9fbc9f;
@@ -63,7 +68,7 @@ h1 {
 }
 
 .description {
-  text-align: justify;
+  text-align: left;
   color: #b8b8b8;
   margin-bottom: 2rem;
   font-size: 1rem;
