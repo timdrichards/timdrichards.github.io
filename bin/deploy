@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "Deploying site to https://timdrichards.github.io"
+git add .
+git commit -am 'Deployed on 10/15/2025 @ 09:28 AM'
+git push
+echo "https://timdrichards.github.io will be updated soon."
