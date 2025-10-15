@@ -6,8 +6,8 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #303446;
-  color: #c6d0f5;
+  background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
+  color: #c5c5c5;
   min-height: 100vh;
   display: flex;
   justify-content: left;
@@ -20,29 +20,29 @@ body {
   width: 75%;
   max-width: 1200px;
   margin: 0 auto;
-  background: #414559;
+  background: rgba(50, 50, 50, 0.6);
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 3rem;
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 1px rgba(140, 170, 238, 0.3);
-  border: 1px solid #51576d;
-  text-align: left;
+    0 0 1px rgba(143, 188, 143, 0.3);
+  border: 1px solid rgba(143, 188, 143, 0.1);
+  text-align: center;
 }
 
 h1 {
   font-size: 2.5rem;
   font-weight: 300;
-  color: #8caaee;
+  color: #8fbc8f;
   margin-bottom: 0.5rem;
   letter-spacing: 1px;
-  text-shadow: 0 2px 8px rgba(140, 170, 238, 0.3);
+  text-shadow: 0 2px 8px rgba(143, 188, 143, 0.3);
 }
 
 .semester {
   font-size: 1.2rem;
-  color: #babbf1;
+  color: #9fbc9f;
   font-weight: 300;
   letter-spacing: 3px;
   margin-bottom: 0.5rem;
@@ -52,19 +52,19 @@ h1 {
 .section-title {
   text-align: left;
   font-size: 1.5rem;
-  color: #ca9ee6;
+  color: #a0a0a0;
   margin-top: 2.5rem;
   margin-bottom: 1.5rem;
   font-weight: 400;
   letter-spacing: 2px;
   text-transform: uppercase;
-  border-bottom: 2px solid #51576d;
+  border-bottom: 2px solid rgba(143, 188, 143, 0.2);
   padding-bottom: 0.5rem;
 }
 
 .description {
-  text-align: left;
-  color: #c6d0f5;
+  text-align: justify;
+  color: #b8b8b8;
   margin-bottom: 2rem;
   font-size: 1rem;
   line-height: 1.8;
@@ -73,17 +73,22 @@ h1 {
 .status {
   margin-top: 3rem;
   padding: 1.5rem;
-  background: #292c3c;
+  background: rgba(40, 40, 40, 0.5);
   border-radius: 8px;
-  border-left: 4px solid #81c8be;
-  color: #a6d189;
+  border-left: 4px solid #8fbc8f;
+  color: #9fbc9f;
   font-style: italic;
   font-size: 1.1rem;
 }
 
 .divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, #51576d, transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(143, 188, 143, 0.3),
+    transparent
+  );
   margin: 2rem 0;
 }
 

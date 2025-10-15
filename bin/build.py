@@ -152,10 +152,11 @@ def convert_markdown_to_html(md_content: str) -> str:
             elif match and next_line_attr == "course-button":
                 text, url = match.groups()
                 html_lines.append(
-                    f"""        <p style="margin-bottom: 1rem">
+                    f"""        <p style="display: inline;">
           <a
             href="{url}"
             style="
+              margin: 2px;
               color: #8fbc8f;
               text-decoration: none;
               font-size: 1.1rem;

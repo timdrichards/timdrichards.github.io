@@ -7,7 +7,6 @@ subtitle: Senior Teaching Faculty
 # Tim Richards
 
 [Manning College of Information and Computer Sciences (CICS)](https://www.cics.umass.edu/)
-{: .centered-link}
 
 ---
 
@@ -19,6 +18,9 @@ subtitle: Senior Teaching Faculty
 ## Teaching
 
 [COMPSCI 426 Spring 2026](courses/426/26s)
+{: .course-button}
+
+[COMPSCI 326 Spring 2026](courses/326/26s)
 {: .course-button}
 
 ## Awards & Recognition
