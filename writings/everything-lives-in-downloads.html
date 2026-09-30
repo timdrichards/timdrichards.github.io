@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Everything Lives in Downloads | Tim Richards</title>
+<meta name="description" content="Students who keep every file in one folder are not being careless. They are using a real strategy, and it works everywhere except the one place we need it to.">
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css?v=8">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Tim Richards</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#teaching">Teaching</a></li>
+        <li><a href="../index.html#awards">Awards</a></li>
+        <li><a href="../index.html#research">Research Projects</a></li>
+        <li><a href="../writings.html" aria-current="page">Writings</a></li>
+        <li><a href="../tools.html">Tools</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <article>
+    <div class="page-head">
+      <div class="wrap">
+        <p class="eyebrow"><a href="../writings.html">Writings</a></p>
+        <h1>Everything Lives in Downloads</h1>
+        <p class="byline">Published <time datetime="2026-09-16">16 September 2026</time> · 8 min read</p>
+      </div>
+    </div>
+
+    <div class="wrap prose">
+<p>A student shares their screen in office hours. The build will not
+run, and I ask them to open the project folder.</p>
+<p>They open Downloads.</p>
+<p>Not a project folder inside Downloads. Downloads itself: four
+thousand items sorted by date, a scrollbar the size of a grain of rice.
+Somewhere in there is a directory called <code>hw3</code>, and also
+<code>hw3 (1)</code>, and also <code>hw3-final</code>, along with every
+PDF, every zip, every screenshot, and eleven copies of the syllabus.
+They scroll for a while. They find it. The build fails, because the
+assignment expects to run from inside the project directory and they are
+two levels above it.</p>
+<p>I have watched some version of this happen more times than I can
+count, and my first instinct — the bad instinct, the one I try to catch
+— is to tease. To make a joke about digital hygiene, or mutter something
+about kids today. It is an easy laugh and it teaches nothing. Worse, it
+aims at the wrong target. The more I look at this, the less it resembles
+a mess and the more it resembles a <em>method</em>. Just not one that
+survives contact with a compiler.</p>
+<h2 id="it-is-not-laziness">It is not laziness</h2>
+<p>Start with the generous reading, because the generous reading turns
+out to be the accurate one.</p>
+<p>The Downloads folder is sorted by recency. That is a real organizing
+principle, and for most of what a person does with a computer it is a
+good one: the thing you need is almost always the thing you touched most
+recently. Everything else is a search away, search is fast, and search
+does not care where the file lives.</p>
+<p>Watch a student work this way and you notice they are not lost. They
+find things. They find them by typing three letters into a search box,
+which is not obviously worse than remembering that a file lives in
+<code>~/school/fall26/326/hw3/</code>. It is a different retrieval
+strategy: associative rather than spatial. Instead of <em>where did I
+put it</em>, the question is <em>what was it called</em>.</p>
+<p>For photos, music, mail, and essays, that strategy is nearly free. It
+does not collapse until you reach for a toolchain.</p>
+<h2 id="where-the-model-went">Where the model went</h2>
+<p>It is worth asking where the spatial model went, because it did not
+fall out of anyone’s head. It was never put there.</p>
+<p>Consider what a student who is twenty this year grew up using. In
+K-12 there is a good chance the school issued a Chromebook, where the
+real storage is Drive, the local disk is scratch space that gets wiped,
+and <em>where is it saved</em> has no answer because the question never
+comes up. On a phone, the filesystem is not so much hidden as absent:
+photos live in Photos, songs live in Spotify, notes live in Notes. Each
+app owns its data and hands you a list. Google Docs has no save dialog
+at all. There is nothing to name and nowhere to put it.</p>
+<p>None of these are mistakes. They are enormous usability wins, and for
+most people most of the time they are the correct design. The filing
+cabinet was always a metaphor anyway, invented so that office workers in
+the eighties would have something familiar to hold onto. Nobody owes it
+loyalty.</p>
+<p>This is well-trodden ground. The Verge ran a piece in 2021, <a
+href="https://www.theverge.com/22684730/students-file-folder-directory-structure-education-gen-z">File
+Not Found</a>, about STEM professors discovering that their students had
+no mental model of directory structure at all. It landed hard because so
+many instructors recognized their own classrooms in it. What struck me
+then, and strikes me more now, is that those students were not confused
+about computers. They were fluent. They were confused about one specific
+abstraction that their tools had spent a decade carefully hiding from
+them.</p>
+<h2 id="why-it-is-different-for-us">Why it is different for us</h2>
+<p>Here is where I stop being relaxed about it.</p>
+<p>In most disciplines, this is a tidiness issue. You can write an
+excellent history thesis out of a Downloads folder. In computing, the
+hierarchy is not a convention we can take or leave. It is one of the
+core abstractions the operating system actually exposes, and a startling
+amount of our tooling sits directly on top of it.</p>
+<p>A shell has a working directory. That is the entire premise.
+<code>cd</code> and <code>..</code> and <code>./run.sh</code> are
+meaningless without a model of location — not a vague sense that files
+exist somewhere, but a specific belief about where you are standing and
+what is around you.</p>
+<p>A git repository <em>is</em> a directory tree, plus history. A
+student who cannot picture the tree cannot picture what git is tracking,
+which is why “just commit your work” so reliably produces a repository
+containing one folder containing another folder containing the actual
+project.</p>
+<p>A compiler resolves include paths. Node resolves modules by walking
+up the tree. Docker ships a build context, which is a directory, to the
+daemon. A relative import in Python means different things depending on
+where you launched the interpreter. Deployment is very often copying one
+directory onto another machine and hoping the shape survived.</p>
+<p>So when the build fails and the error says
+<code>file not found</code>, we call it a path problem. It usually
+isn’t. It is a worldview problem wearing a path problem’s clothes. You
+cannot debug your way to a file if you do not believe files have
+locations.</p>
+<h2 id="the-uncomfortable-part">The uncomfortable part</h2>
+<p>I should admit something, because it undercuts the lecture I might
+otherwise be tempted to give.</p>
+<p>I don’t type paths either.</p>
+<p>I jump between directories by typing three characters at a tool that
+guesses from my history. I find files by fuzzy-matching fragments. I
+search a codebase rather than navigating it. If you watched my hands and
+not my head, I would look exactly like the student in office hours:
+recency and search, all the way down.</p>
+<p>The difference is not virtue, and it is worth naming precisely rather
+than waving at it. When I type <code>z 426</code> and land in the right
+directory, that works because there <em>is</em> a 426 directory, it has
+a shape I chose, and I could draw it on a whiteboard from memory if the
+tool vanished tomorrow. The shortcut rides on top of a map. Take the map
+away and the shortcut is not a shortcut any more; it is the only thing
+you have, and it fails silently the moment you need to reason about
+<em>where</em> rather than <em>which</em>.</p>
+<p>That is the real distinction: search on top of structure, versus
+search instead of structure. From the outside the two look identical.
+Under load they behave nothing alike.</p>
+<h2 id="the-filesystem-is-not-going-away">The filesystem is not going
+away</h2>
+<p>It would be convenient to believe this is a transitional problem:
+that the next generation of tools will hide the filesystem from
+programmers the way phones hid it from everyone else, and the gap will
+close on its own. I don’t think so.</p>
+<p>Every operating system that matters in computing still organizes its
+world as a tree of directories with permissions attached. Servers do.
+Containers do. The cloud machine running a student’s deployed project
+does. None of that is on its way out, and anyone studying computing in
+any form, whether software engineering, data science, security, or
+research computing, is going to spend their working life inside it.</p>
+<p>AI does not change this. If anything, it raises the stakes. An AI
+coding assistant like Claude Code works inside a directory. What it can
+see, what it can change, and what it has to ask permission to touch are
+all defined in terms of directories and file permissions. A student who
+launches it from their home folder, or from Downloads, has handed it a
+very different scope than one who launches it inside the project, and
+may not realize they made a choice at all. When it reports that a file
+is outside its working directory, or asks before writing somewhere, that
+message is only legible to someone who already holds the model. Everyone
+else clicks yes, or gets stuck. Either way, they are at a disadvantage
+before they have written a line.</p>
+<p>There is also a better reason to teach it than any particular tool. A
+directory tree is not really about files. It is a way of organizing
+knowledge: things live inside other things, names only mean something
+relative to where you stand, and a good structure makes the next piece
+of work easy to place. That model shows up in package namespaces, in
+URLs, in module systems, in the table of contents of a textbook. It is
+worth knowing for its own sake, independent of any application, and that
+alone makes it a reasonable thing to teach on purpose rather than hope
+students absorb.</p>
+<h2 id="bridging-the-gap">Bridging the gap</h2>
+<p>If the model is not arriving on its own, a few things seem
+necessary.</p>
+<p><strong>Teach it as a concept, not as tidiness.</strong> A lecture
+about keeping your desktop clean lands as a scolding and changes
+nothing. A lesson about how the operating system names things, what a
+working directory is, and how absolute and relative paths resolve lands
+as computer science, because it is.</p>
+<p><strong>Start from what students already do well.</strong> Search and
+recency are real strategies, and students who use them are not doing it
+wrong. The useful move is to show that structure is what makes search
+dependable, rather than to present structure as its replacement.</p>
+<p><strong>Make the tree visible.</strong> Most students have never seen
+their files as a tree. Drawing a project’s layout, running
+<code>tree</code>, or predicting where a relative path will land before
+running a command turns an invisible structure into something they can
+reason about.</p>
+<p><strong>Teach permissions alongside location.</strong> Who can read a
+file, who can write it, and what is allowed to execute are the same
+questions an AI agent’s permission prompts are asking. Students should
+recognize them as such.</p>
+<p><strong>Let real tools supply the consequences.</strong> A git
+repository, a build system, or a container has a shape, and the shape
+matters. Work that only succeeds when the structure is right teaches the
+structure faster than any explanation.</p>
+<p><strong>Leave the Downloads folder alone.</strong> It is a perfectly
+good inbox. Things arrive there; that is its job. The goal is not to
+empty it. The goal is for students to know that Downloads is one place
+among many, with a location of its own, rather than the only place there
+is.</p>
+<h2 id="where-first">Where first?</h2>
+<p>None of this is controversial on its own. Most instructors, asked
+directly, would agree that students of computing need to understand the
+filesystem. The harder question is whose job it is.</p>
+<p>The introductory programming course is the obvious candidate, and
+also the most crowded. Those first weeks already carry syntax, logic,
+tooling, and the ordinary difficulty of learning to think like a
+programmer. A dedicated tools course addresses the problem squarely, but
+often arrives a year or more in, after the Downloads habits have set,
+and is frequently optional. Earlier still, in high school, is where the
+gap actually opens, and it is also where the tools students are given
+hide the filesystem most completely.</p>
+<p>Each answer has a cost, and the default of teaching it nowhere in
+particular has the largest one: every later course assumes the model is
+already there, and each discovers, one office hour at a time, that it
+isn’t.</p>
+<p>So the question is not whether to teach it. It is where we teach it
+first.</p>
+    </div>
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="leaf" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 44C20 28 32 18 46 16c1 14-9 26-24 28-2 0-2 0-2 0z" fill="currentColor"/>
+      </svg>
+    </div>
+    <p>&copy; <span id="year">2026</span> Tim Richards</p>
+    <p class="art-credit">Illustrations in the style of <a href="https://www.cartoonsaloon.ie/irish-animation-studio/feature-films/song-of-the-sea/">Song of the Sea</a>, Cartoon Saloon, 2014.</p>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="../assets/js/main.js?v=4"></script>
+</body>
+</html>

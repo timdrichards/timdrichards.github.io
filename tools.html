@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tools I Use | Tim Richards</title>
+<meta name="description" content="The Unix and Linux command-line tools, languages, and frameworks Tim Richards uses day to day, with links so colleagues and students can try them.">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=8">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Tim Richards</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#teaching">Teaching</a></li>
+        <li><a href="index.html#awards">Awards</a></li>
+        <li><a href="index.html#research">Research Projects</a></li>
+        <li><a href="writings.html">Writings</a></li>
+        <li><a href="tools.html" aria-current="page">Tools</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">For colleagues and students</p>
+      <h1>Tools I Use</h1>
+      <p class="tagline">The command line I actually live in: Unix and Linux tools, the languages I write, and the frameworks I teach with. Most of these replaced something older and clunkier, and I only kept the ones that earned it.</p>
+      <p class="page-note">Everything here is free and open source unless noted, and every name links to its home page. Nothing is sponsored. If one of these changes how you work, that is the whole point. Last updated <time datetime="2026-09-14">September 2026</time>.</p>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 84 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 8c8-6 16-6 24 0s16 6 24 0 16-6 24 0 8 6 8 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="42" cy="8" r="2" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <section id="shell">
+    <div class="wrap reveal">
+      <h2>Shell &amp; terminal</h2>
+      <p>The foundation. If you change one thing on this page, change your shell.</p>
+      <div class="grid two-col tool-grid">
+
+        <div class="card tool">
+          <span class="meta">Shell framework</span>
+          <h3><a href="https://ohmyz.sh/">Oh My Zsh</a></h3>
+          <p>Configuration framework for zsh. Sensible defaults, completions, and plugins without hand-rolling a shell config from nothing. The gentlest possible on-ramp to a comfortable terminal.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Prompt</span>
+          <h3><a href="https://starship.rs/">Starship</a></h3>
+          <p>A fast, minimal prompt that shows the git branch, language version, and exit status only when they matter. One config file, works in any shell.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Multiplexer</span>
+          <h3><a href="https://github.com/tmux/tmux/wiki">tmux</a></h3>
+          <p>Splits one terminal into panes and windows, and keeps sessions alive on the far end of an SSH connection. Close the laptop, reconnect, everything is exactly where you left it. Indispensable for remote work on lab machines.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Terminal</span>
+          <h3><a href="https://ghostty.org/">Ghostty</a></h3>
+          <p>My terminal. Fast, GPU-accelerated, and native on every platform it runs on, with sane defaults that need almost no configuration. Pleasingly, it is written in Zig.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Terminal</span>
+          <h3><a href="https://sw.kovidgoyal.net/kitty/">kitty</a></h3>
+          <p>A GPU-accelerated terminal emulator. Fast, scriptable, and it renders ligatures and images without fuss.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 84 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 8c8-6 16-6 24 0s16 6 24 0 16-6 24 0 8 6 8 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="42" cy="8" r="2" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <section id="cli">
+    <div class="wrap reveal">
+      <h2>Everyday command line</h2>
+      <p>Modern replacements for the classic Unix utilities. Each one does a familiar job noticeably better, and most are drop-in.</p>
+      <div class="grid two-col tool-grid">
+
+        <div class="card tool">
+          <span class="meta">Fuzzy finder</span>
+          <h3><a href="https://junegunn.github.io/fzf/">fzf</a></h3>
+          <p>A general-purpose fuzzy finder. Pipe anything into it and filter interactively: files, git branches, shell history, process lists. It composes with everything, which is what makes it the single highest-leverage tool here.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">cd replacement</span>
+          <h3><a href="https://github.com/ajeetdsouza/zoxide">zoxide</a></h3>
+          <p>Learns the directories you visit and jumps to them by fragment: <code>z 426</code> instead of a long path. I have it aliased directly over <code>cd</code>, so it is simply how I move around now.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">cat replacement</span>
+          <h3><a href="https://github.com/sharkdp/bat">bat</a></h3>
+          <p>Like <code>cat</code>, but with syntax highlighting, line numbers, and git change markers, paging automatically when output is long. Reading source in the terminal stops being a chore.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">ls replacement</span>
+          <h3><a href="https://github.com/lsd-rs/lsd">lsd</a></h3>
+          <p>A friendlier <code>ls</code> with colors, icons, and a built-in tree view. Aliased over <code>ls</code> here, with a handful of shortcuts for long and tree listings.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">grep replacement</span>
+          <h3><a href="https://github.com/BurntSushi/ripgrep">ripgrep</a></h3>
+          <p>Recursive search that respects <code>.gitignore</code> and is fast enough that searching an entire codebase feels instant. Worth it for the speed alone; the sane defaults are a bonus.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">find replacement</span>
+          <h3><a href="https://github.com/sharkdp/fd">fd</a></h3>
+          <p>Finding files without remembering <code>find</code>'s argument grammar. <code>fd config</code> does what you meant.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Markdown viewer</span>
+          <h3><a href="https://leaf.rivolink.mg/">Leaf</a></h3>
+          <p>My most recent addition and a genuine delight. It previews Markdown in the terminal with a GUI-like reading experience, which means notes, READMEs, and course material render properly without leaving the shell.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">JSON</span>
+          <h3><a href="https://jqlang.github.io/jq/">jq</a></h3>
+          <p>A query language for JSON. Essential the moment you start poking at an API from the command line, which in my courses is immediately.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 84 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 8c8-6 16-6 24 0s16 6 24 0 16-6 24 0 8 6 8 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="42" cy="8" r="2" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <section id="editing">
+    <div class="wrap reveal">
+      <h2>Editing &amp; version control</h2>
+      <div class="grid two-col tool-grid">
+
+        <div class="card tool">
+          <span class="meta">Editor</span>
+          <h3><a href="https://neovim.io/">Neovim</a></h3>
+          <p>My editor and my <code>$EDITOR</code>. Modal editing means the muscle memory transfers to any machine with vi on it, which is every machine. I have <code>vim</code> aliased to it out of habit.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Editor config</span>
+          <h3><a href="https://www.lazyvim.org/">LazyVim</a></h3>
+          <p>A curated Neovim setup with LSP, completion, and fuzzy finding already wired together. The honest shortcut past a weekend of configuring your editor instead of using it.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Version control</span>
+          <h3><a href="https://git-scm.com/">Git</a></h3>
+          <p>The thing everything else here sits on top of. Worth learning properly rather than as four memorised commands: once the model of commits, branches, and history clicks, the tooling below stops being magic and starts being convenience.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Git UI</span>
+          <h3><a href="https://github.com/jesseduffield/lazygit">lazygit</a></h3>
+          <p>A terminal interface for git. Staging individual hunks, rewording commits, and untangling a messy history are all far easier here than at the bare command line, without hiding what git is actually doing.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">GitHub</span>
+          <h3><a href="https://cli.github.com/">GitHub CLI</a></h3>
+          <p>Pull requests, issues, and releases from the terminal. Scriptable, which makes bulk work across a semester's worth of student repositories tractable.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 84 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 8c8-6 16-6 24 0s16 6 24 0 16-6 24 0 8 6 8 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="42" cy="8" r="2" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <section id="containers">
+    <div class="wrap reveal">
+      <h2>Containers &amp; environments</h2>
+      <div class="grid two-col tool-grid">
+
+        <div class="card tool">
+          <span class="meta">Containers</span>
+          <h3><a href="https://www.docker.com/">Docker</a></h3>
+          <p>How I give a whole class the same environment. "Works on my machine" stops being a problem when the machine is a container, and it is the same shape as what students will meet in industry.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Container runtime</span>
+          <h3><a href="https://colima.run/">Colima</a></h3>
+          <p>Runs Docker containers on macOS without Docker Desktop. Lighter, open source, and it stays out of the way.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Docker UI</span>
+          <h3><a href="https://github.com/jesseduffield/lazydocker">lazydocker</a></h3>
+          <p>The same idea as lazygit, for containers. Logs, stats, and cleanup without memorising another set of subcommands.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Runtime versions</span>
+          <h3><a href="https://mise.jdx.dev/">mise</a></h3>
+          <p>Manages per-project versions of Node, Python, and anything else, so a course repository pins the runtime it expects. Replaces a pile of separate version managers with one tool.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 84 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 8c8-6 16-6 24 0s16 6 24 0 16-6 24 0 8 6 8 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="42" cy="8" r="2" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <section id="languages">
+    <div class="wrap reveal">
+      <h2>Languages</h2>
+      <p>What I write and teach in.</p>
+      <div class="grid two-col tool-grid">
+
+        <div class="card tool">
+          <span class="meta">Systems</span>
+          <h3><a href="https://en.cppreference.com/w/c">C</a></h3>
+          <p>The language of COMPSCI 198C and the one I keep coming back to. Nothing else makes the machine as visible: memory, pointers, and the cost of every choice.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Web</span>
+          <h3><a href="https://www.typescriptlang.org/">TypeScript</a></h3>
+          <p>JavaScript with types, which turns a whole category of runtime surprises into editor errors. What my web courses are built in.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Runtime</span>
+          <h3><a href="https://nodejs.org/">Node.js</a></h3>
+          <p>The server-side runtime behind the web work in COMPSCI 326 and 426.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Scripting</span>
+          <h3><a href="https://www.python.org/">Python</a></h3>
+          <p>For scripting, data wrangling, and anything that needs to exist by tomorrow morning.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Systems</span>
+          <h3><a href="https://www.rust-lang.org/">Rust</a></h3>
+          <p>Memory safety without a garbage collector. A useful foil to C when talking with students about what the compiler can and cannot prove.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Systems</span>
+          <h3><a href="https://ziglang.org/">Zig</a></h3>
+          <p>A small, explicit systems language with no hidden control flow or allocation. Currently the one I am enjoying exploring most.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 84 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 8c8-6 16-6 24 0s16 6 24 0 16-6 24 0 8 6 8 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="42" cy="8" r="2" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <section id="frameworks">
+    <div class="wrap reveal">
+      <h2>Web stack</h2>
+      <p>The frameworks and libraries my courses build on.</p>
+      <div class="grid two-col tool-grid">
+
+        <div class="card tool">
+          <span class="meta">Server framework</span>
+          <h3><a href="https://expressjs.com/">Express</a></h3>
+          <p>Small enough that students can see the whole request lifecycle, and standard enough that what they learn transfers. The backbone of both web courses.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Templating</span>
+          <h3><a href="https://ejs.co/">EJS</a></h3>
+          <p>Server-rendered templates that are just HTML with embedded JavaScript. A good first stop before any client-side framework enters the picture.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Database</span>
+          <h3><a href="https://www.prisma.io/">Prisma</a></h3>
+          <p>A typed ORM with real migrations. Paired with <a href="https://www.sqlite.org/">SQLite</a> it gives every student a working database with no server to install.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Testing</span>
+          <h3><a href="https://jestjs.io/">Jest</a></h3>
+          <p>Test runner for the web courses, usually alongside <a href="https://github.com/ladjs/supertest">SuperTest</a> for exercising HTTP endpoints end to end.</p>
+        </div>
+
+        <div class="card tool">
+          <span class="meta">Client</span>
+          <h3><a href="https://react.dev/">React</a></h3>
+          <p>Where the capstone teams usually end up when a project outgrows server-rendered pages.</p>
+        </div>
+
+      </div>
+      <p class="page-note" style="margin-top: var(--space-3);">Have something that genuinely changed how you work? <a href="mailto:richards@cs.umass.edu">Send it my way</a> and I will try it.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="leaf" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 44C20 28 32 18 46 16c1 14-9 26-24 28-2 0-2 0-2 0z" fill="currentColor"/>
+      </svg>
+    </div>
+    <p>&copy; <span id="year">2026</span> Tim Richards</p>
+    <p class="art-credit">Illustrations in the style of <a href="https://www.cartoonsaloon.ie/irish-animation-studio/feature-films/song-of-the-sea/">Song of the Sea</a>, Cartoon Saloon, 2014.</p>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="assets/js/main.js?v=4"></script>
+</body>
+</html>
