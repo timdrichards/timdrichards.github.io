@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Web Programming: COMPSCI 326</title>
+  <link>https://umamherst.instructure.com/courses/38092</link>
+  <atom:link href="https://timdrichards.github.io/podcast/326/feed.xml" rel="self" type="application/rss+xml"/>
+  <language>en-us</language>
+  <description>Audio companions to the knowledge units of COMPSCI 326, Web Programming, at UMass Amherst. Each episode walks through one unit for listening away from a screen. They go with the reading, not instead of it.</description>
+  <itunes:author>Tim Richards</itunes:author>
+  <itunes:owner><itunes:name>Tim Richards</itunes:name><itunes:email>tdr@umass.edu</itunes:email></itunes:owner>
+  <itunes:image href="https://timdrichards.github.io/podcast/326/cover.jpg"/>
+  <itunes:category text="Education"><itunes:category text="Courses"/></itunes:category>
+  <itunes:category text="Technology"/>
+  <itunes:explicit>false</itunes:explicit>
+  <itunes:type>serial</itunes:type>
+  <podcast:locked>yes</podcast:locked>
+  <itunes:block>yes</itunes:block>
+  <item>
+    <title>Unit 10: CRUD Against a File</title>
+    <itunes:episode>10</itunes:episode>
+    <itunes:episodeType>full</itunes:episodeType>
+    <guid isPermaLink="false">compsci326-podcast-unit-10</guid>
+    <pubDate>Fri, 09 Oct 2026 12:00:00 -0400</pubDate>
+    <description><![CDATA[<p>The audio companion to Unit 10. Your entries app can create, read and delete, but it cannot change an entry once it exists. This episode covers adding the update route with PUT, building an inline edit form safely, what idempotent means and why it matters when a request fails, why a plain HTML form cannot send PUT, and the one honest limit of using array positions as ids.</p><p>Chapters: Opening; Why CRUD exists; A short history; Adding the update route; Editing on the page; Idempotent; Why a plain form cannot do this; One honest limit; Wrapping up.</p><p>The unit page on Canvas has the full code, the exercise and the tutorial videos.</p>]]></description>
+    <enclosure url="https://timdrichards.github.io/podcast/326/unit-10/episode.mp3" length="8704827" type="audio/mpeg"/>
+    <itunes:duration>710</itunes:duration>
+    <itunes:explicit>false</itunes:explicit>
+    <podcast:transcript url="https://timdrichards.github.io/podcast/326/unit-10/transcript.vtt" type="text/vtt" language="en"/>
+    <podcast:chapters url="https://timdrichards.github.io/podcast/326/unit-10/chapters.json" type="application/json+chapters"/>
+  </item>
+</channel>
+</rss>

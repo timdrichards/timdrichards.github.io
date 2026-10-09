@@ -1,0 +1,529 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.000
+Welcome to Web Programming, the companion podcast for COMPSCI 326 at UMass Amherst.
+
+00:00:07.000 --> 00:00:08.600
+I'm Tim Richards.
+
+00:00:08.600 --> 00:00:12.280
+This episode goes with Unit 10, CRUD Against a File.
+
+00:00:12.280 --> 00:00:16.480
+It is meant for a walk, a bus ride, or the dishes.
+
+00:00:16.480 --> 00:00:21.520
+It does not replace reading the unit, and there is no code you need to see to follow
+
+00:00:21.520 --> 00:00:22.800
+along.
+
+00:00:22.800 --> 00:00:28.080
+When I talk about code, I will say what it does rather than read it out character by
+
+00:00:28.080 --> 00:00:29.080
+character.
+
+00:00:29.320 --> 00:00:30.680
+Here is where we are.
+
+00:00:30.680 --> 00:00:35.640
+Your entries app can already do three of the four things a data backed app needs to
+
+00:00:35.640 --> 00:00:36.640
+do.
+
+00:00:36.640 --> 00:00:41.640
+It can create an entry with a post, it can read the list with a get, and it can delete
+
+00:00:41.640 --> 00:00:43.840
+an entry with a delete.
+
+00:00:43.840 --> 00:00:49.320
+What it cannot do is change an entry once it exists.
+
+00:00:49.320 --> 00:00:55.320
+If you get a title wrong right now, the only fix is to delete the entry and add it again.
+
+00:00:55.320 --> 00:01:00.120
+That loses its place in the list, and it is not something any real app asks a person
+
+00:01:00.120 --> 00:01:01.520
+to do.
+
+00:01:01.520 --> 00:01:04.840
+This unit adds the missing piece, which is Update.
+
+00:01:04.840 --> 00:01:11.840
+By the end, you have a complete app that can create, read, update, and delete, still stored
+
+00:01:11.840 --> 00:01:15.440
+in a plain JSON file.
+
+00:01:15.440 --> 00:01:20.760
+Strip away the screens, and almost every app is a list of records that people make, look
+
+00:01:20.760 --> 00:01:23.440
+at, change, and throw away.
+
+00:01:23.440 --> 00:01:25.080
+A contact list.
+
+00:01:25.080 --> 00:01:26.280
+A to-do list.
+
+00:01:26.280 --> 00:01:27.560
+A shopping cart.
+
+00:01:27.560 --> 00:01:29.080
+A class roster.
+
+00:01:29.080 --> 00:01:31.280
+A set of blog posts.
+
+00:01:31.280 --> 00:01:35.000
+Each one is a collection of things, and the person using it wants to do the same four
+
+00:01:35.000 --> 00:01:37.440
+things to each thing.
+
+00:01:37.440 --> 00:01:42.720
+Those four are create, read, update, and delete, and the first letter spell crud.
+
+00:01:42.720 --> 00:01:47.240
+The name is worth having because it lets you check an app for gaps in a few seconds.
+
+00:01:47.240 --> 00:01:50.600
+For every kind of record in your project, ask four questions.
+
+00:01:50.600 --> 00:01:51.680
+Can I make one?
+
+00:01:51.680 --> 00:01:52.720
+Can I see one?
+
+00:01:52.720 --> 00:01:54.720
+Can I change one?
+
+00:01:54.720 --> 00:01:56.760
+Can I remove one?
+
+00:01:56.760 --> 00:02:00.760
+Your Notes app answered yes to three of those before this unit.
+
+00:02:00.760 --> 00:02:05.480
+The fourth is the one people notice first when it is missing, because fixing a mistake
+
+00:02:05.480 --> 00:02:11.080
+is the most ordinary thing anyone does with something they have written.
+
+00:02:11.080 --> 00:02:13.720
+The four operations are older than the web.
+
+00:02:13.720 --> 00:02:17.440
+They are what every database has always offered.
+
+00:02:17.440 --> 00:02:25.000
+The database language SQL from the 1970s spells them insert, select, update, and delete.
+
+00:02:25.000 --> 00:02:31.360
+The acronym crud is usually credited to James Martin's 1983 book on database design, and
+
+00:02:31.360 --> 00:02:36.200
+it's spread because it gave programmers one word for the plain core of a program that
+
+00:02:36.200 --> 00:02:38.040
+handles data.
+
+00:02:38.040 --> 00:02:43.000
+HTTP picked up the same four ideas as methods.
+
+00:02:43.000 --> 00:02:45.440
+Get and post came first.
+
+00:02:45.440 --> 00:02:51.640
+Rout and delete were defined in HTTP version 1.1, whose first specification appeared in
+
+00:02:51.640 --> 00:02:54.400
+January 1997.
+
+00:02:54.400 --> 00:03:00.160
+Around the year 2000, Roy Fielding's dissertation described REST, a way of designing web services
+
+00:03:00.160 --> 00:03:05.880
+where every record has its own URL, and the method says what to do to it.
+
+00:03:05.880 --> 00:03:09.400
+That is exactly the shape of the route you are about to write.
+
+00:03:09.400 --> 00:03:14.440
+The URL names one entry, entry slash three, for example.
+
+00:03:14.440 --> 00:03:20.600
+The method says what happens to it, get reads it, put replaces it, delete removes it.
+
+00:03:20.600 --> 00:03:26.200
+Once you see that pattern, you can guess most of an unfamiliar API just from its list of
+
+00:03:26.200 --> 00:03:28.920
+URLs.
+
+00:03:28.920 --> 00:03:31.080
+So what does the new route look like?
+
+00:03:31.080 --> 00:03:36.080
+It is a fourth route in your entries router matched to the same ID pattern your delete
+
+00:03:36.080 --> 00:03:37.840
+route already uses.
+
+00:03:37.840 --> 00:03:41.520
+And it does the same four steps as every other route in that file.
+
+00:03:41.520 --> 00:03:49.120
+Read the file, parse it into an array, do one thing to the array, write the array back.
+
+00:03:49.120 --> 00:03:51.720
+The one thing this time is replacement.
+
+00:03:51.720 --> 00:03:57.600
+Create pushes a new entry onto the end of the array, delete splices one out, update
+
+00:03:57.600 --> 00:04:03.160
+assigns a new value to a position, so whatever sat there is replaced, that really is the
+
+00:04:03.160 --> 00:04:05.480
+whole difference.
+
+00:04:05.480 --> 00:04:08.600
+There are two checks before the replacement happens.
+
+00:04:08.600 --> 00:04:12.440
+First, is there an entry at that ID at all?
+
+00:04:12.440 --> 00:04:16.600
+If not, the server answers with a 404, not found.
+
+00:04:16.600 --> 00:04:19.400
+Second, are the new values any good?
+
+00:04:19.400 --> 00:04:25.160
+For that you reuse the validate entry function from unit 09 exactly as written.
+
+00:04:25.160 --> 00:04:31.080
+If the title or body is missing, the server answers with a 400, bad request, and the same
+
+00:04:31.080 --> 00:04:35.280
+message the create form already shows.
+
+00:04:35.280 --> 00:04:38.280
+Notice that you did not write any new validation code.
+
+00:04:38.280 --> 00:04:43.720
+The function that guards create now guards update to because both are really asking the
+
+00:04:43.720 --> 00:04:45.240
+same question.
+
+00:04:45.240 --> 00:04:47.560
+Is this a well formed entry?
+
+00:04:47.560 --> 00:04:53.040
+That is the payoff of pulling validation into one function back in unit 09, a fourth
+
+00:04:53.040 --> 00:04:56.640
+route and zero new checks.
+
+00:04:56.640 --> 00:05:02.780
+And like every route in the file, the new one goes through the async handler wrapper.
+
+00:05:02.780 --> 00:05:08.960
+If something goes wrong inside it, say the JSON file no longer parses or the right fails,
+
+00:05:08.960 --> 00:05:14.080
+the error reaches your error handling middleware and comes back as a 500.
+
+00:05:14.080 --> 00:05:18.280
+The server keeps running instead of crashing.
+
+00:05:18.280 --> 00:05:23.500
+On the page, editing needs something the user did not have before, a form for an entry
+
+00:05:23.500 --> 00:05:25.420
+that already exists.
+
+00:05:25.420 --> 00:05:30.240
+Rather than sending them to a whole new page, the app swaps the entries text for a small
+
+00:05:30.240 --> 00:05:35.900
+form right where it sits in the list filled in with the current title and body.
+
+00:05:35.900 --> 00:05:40.380
+There is a save button and a cancel button.
+
+00:05:40.380 --> 00:05:42.860
+Where do those current values come from?
+
+00:05:42.860 --> 00:05:48.700
+Each list item carries them in two data attributes, data title and data body set when the page
+
+00:05:48.700 --> 00:05:52.140
+renders and updated after every save.
+
+00:05:52.140 --> 00:05:57.340
+So the form always starts from what is actually on the page instead of trying to read it back
+
+00:05:57.340 --> 00:06:00.440
+out of the displayed text.
+
+00:06:00.440 --> 00:06:04.240
+Here is a detail that matters more than it looks.
+
+00:06:04.240 --> 00:06:11.160
+Each input in that form is created on its own and its value is set as plain text.
+
+00:06:11.160 --> 00:06:15.360
+It is not written into one long string of HTML.
+
+00:06:15.360 --> 00:06:17.120
+Why does that matter?
+
+00:06:17.120 --> 00:06:22.960
+Because a title is whatever someone typed and people type double quotes.
+
+00:06:22.960 --> 00:06:29.300
+If you glue a title into a string of HTML, a title like he said, quote, high, quote,
+
+00:06:29.300 --> 00:06:34.380
+ends the attribute at the first quote, the edit form opens showing only the words he
+
+00:06:34.380 --> 00:06:38.820
+said and saving it quietly throws the rest away.
+
+00:06:38.820 --> 00:06:44.540
+A title written to close the tag can go further and run as code in the page.
+
+00:06:44.540 --> 00:06:49.420
+Setting the value as text avoids all of that quotes and all.
+
+00:06:49.420 --> 00:06:53.620
+The same rule applies when the saved entry goes back on the page.
+
+00:06:53.620 --> 00:06:58.580
+Its title and body are set as text content, never as HTML.
+
+00:06:58.580 --> 00:07:02.760
+If you remember one sentence from this section, make it this one.
+
+00:07:02.760 --> 00:07:06.900
+Never build HTML out of what someone typed.
+
+00:07:06.900 --> 00:07:12.000
+When you press save, the page sends a put request with fetch, carrying the new title
+
+00:07:12.000 --> 00:07:14.380
+and body as JSON.
+
+00:07:14.380 --> 00:07:20.460
+The same 5 second limit from unit 08 applies, so a server that never answers ends in an
+
+00:07:20.460 --> 00:07:24.100
+error instead of a page that waits forever.
+
+00:07:24.100 --> 00:07:30.700
+If the save works, the form is swapped back for the updated entry with no page reload.
+
+00:07:30.700 --> 00:07:35.640
+If it fails for any reason, the page says so, leaves the form open with your changes
+
+00:07:35.640 --> 00:07:39.780
+still in it and lets you try again.
+
+00:07:39.780 --> 00:07:41.180
+Cancel is the simple one.
+
+00:07:41.180 --> 00:07:45.780
+It puts the original entry back and sends nothing to the server at all.
+
+00:07:45.780 --> 00:07:52.140
+So there are only two ways out of the edit form and only one of them talks to the server.
+
+00:07:52.140 --> 00:07:54.660
+Put carries one more idea worth having a word for.
+
+00:07:54.660 --> 00:07:57.780
+The word is EOIDEMPATENT.
+
+00:07:57.780 --> 00:08:04.180
+It means that sending the exact same request again leaves things in the same state as sending
+
+00:08:04.180 --> 00:08:06.380
+it once.
+
+00:08:06.380 --> 00:08:12.420
+Send the same put five times and the entry ends up exactly as it would after one.
+
+00:08:12.420 --> 00:08:16.580
+Send the same post five times and you have five entries.
+
+00:08:16.580 --> 00:08:18.500
+That difference is not trivia.
+
+00:08:18.500 --> 00:08:23.620
+It decides what a client is allowed to do when something goes wrong.
+
+00:08:23.620 --> 00:08:25.780
+Picture a phone on a weak signal.
+
+00:08:25.780 --> 00:08:29.900
+It sends a request and the connection drops before the answer comes back.
+
+00:08:29.900 --> 00:08:31.180
+Did the server get it?
+
+00:08:31.180 --> 00:08:32.820
+The phone cannot tell.
+
+00:08:32.820 --> 00:08:37.780
+If the request is idempotent, it can simply send it again because repeating it changes
+
+00:08:37.780 --> 00:08:39.140
+nothing.
+
+00:08:39.140 --> 00:08:43.900
+If it is not, sending it again might create a second record so the client has to stop
+
+00:08:43.900 --> 00:08:45.820
+and ask the person.
+
+00:08:45.820 --> 00:08:52.980
+That is why browsers and libraries will quietly retry some requests and never others.
+
+00:08:52.980 --> 00:08:59.340
+You might wonder why the edit form uses fetch at all when Unit 08 showed a classic form that
+
+00:08:59.340 --> 00:09:01.480
+works with no JavaScript.
+
+00:09:01.480 --> 00:09:05.000
+The answer is a limit in HTML itself.
+
+00:09:05.000 --> 00:09:08.940
+An HTML form can only send get or post.
+
+00:09:08.940 --> 00:09:14.680
+If you write method equals put on a form, the browser does not complain.
+
+00:09:14.680 --> 00:09:18.040
+It quietly sends a get instead.
+
+00:09:18.040 --> 00:09:22.040
+Server rendered frameworks work around this with something called a method override.
+
+00:09:22.040 --> 00:09:28.520
+The form sends a post with a hidden field often named underscore method that says what
+
+00:09:28.520 --> 00:09:30.200
+it really means.
+
+00:09:30.200 --> 00:09:34.920
+A small piece of middleware on the server reads that field and treats the request as
+
+00:09:34.920 --> 00:09:38.520
+a put or a delete before the routes see it.
+
+00:09:38.520 --> 00:09:43.160
+You will not need it in this course, but you will see underscore method in other people's
+
+00:09:43.160 --> 00:09:47.920
+code and now you know why it is there.
+
+00:09:47.920 --> 00:09:53.020
+There is one thing this version of the app gets wrong and the unit says so plainly.
+
+00:09:53.020 --> 00:09:57.720
+Right now an entry's id is just its position in the array.
+
+00:09:57.720 --> 00:10:03.600
+Delete an entry and every entry after it moves down one place.
+
+00:10:03.600 --> 00:10:08.680
+Inside one browser tab, the code renumbers the list after a delete so everything stays
+
+00:10:08.680 --> 00:10:09.960
+in step.
+
+00:10:09.960 --> 00:10:13.080
+But a second tab does not know anything changed.
+
+00:10:13.080 --> 00:10:17.080
+An edit form left open there still holds the old position.
+
+00:10:17.080 --> 00:10:23.540
+Save it and it can land on whichever entry has moved into that spot and overwrite it.
+
+00:10:23.540 --> 00:10:29.380
+The home exercise has you handle the case the server can detect the entry your editing
+
+00:10:29.380 --> 00:10:35.300
+is gone, the save comes back 404 and the page should remove that stale entry instead of
+
+00:10:35.300 --> 00:10:38.060
+leaving a form with nowhere to go.
+
+00:10:38.060 --> 00:10:44.880
+The real fix comes in unit 12 when every entry gets an id from the database that never changes
+
+00:10:44.880 --> 00:10:48.380
+when other entries are deleted.
+
+00:10:48.380 --> 00:10:50.420
+Here is what to keep from this unit.
+
+00:10:50.700 --> 00:10:54.300
+The crud is create, read, update and delete.
+
+00:10:54.300 --> 00:10:57.940
+In this app that is post, get, put and delete.
+
+00:10:57.940 --> 00:11:04.180
+Put replaces the whole entry at an id and answers 404 when there is no entry there and
+
+00:11:04.180 --> 00:11:07.860
+400 when the new values fail validation.
+
+00:11:07.860 --> 00:11:13.420
+Idempotent means a repeat changes nothing so a repeated put is safe to retry and a repeated
+
+00:11:13.420 --> 00:11:14.880
+post is not.
+
+00:11:14.880 --> 00:11:19.820
+One validation function guards every root that takes entry data and the edit form never
+
+00:11:19.820 --> 00:11:23.820
+builds HTML out of what someone typed.
+
+00:11:23.820 --> 00:11:25.180
+Next is unit 11.
+
+00:11:25.180 --> 00:11:27.860
+Right now every route does everything itself.
+
+00:11:27.860 --> 00:11:33.740
+It reads the request, checks the rules and reads and writes the file all in one function.
+
+00:11:33.740 --> 00:11:36.780
+Unit 11 pulls those jobs apart into layers.
+
+00:11:36.780 --> 00:11:41.740
+The same structure real production apps use so that unit 12 can swap the file underneath
+
+00:11:41.740 --> 00:11:44.340
+for a real database.
+
+00:11:44.340 --> 00:11:49.340
+The unit page has the full code, the exercise and the tutorial videos.
+
+00:11:49.340 --> 00:11:50.340
+See you in class.

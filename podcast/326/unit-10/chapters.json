@@ -1,0 +1,41 @@
+{
+ "version": "1.2.0",
+ "chapters": [
+  {
+   "startTime": 0.0,
+   "title": "Opening"
+  },
+  {
+   "startTime": 75.07,
+   "title": "Why CRUD exists"
+  },
+  {
+   "startTime": 130.62,
+   "title": "A short history"
+  },
+  {
+   "startTime": 208.64,
+   "title": "Adding the update route"
+  },
+  {
+   "startTime": 317.93,
+   "title": "Editing on the page"
+  },
+  {
+   "startTime": 471.92,
+   "title": "Idempotent"
+  },
+  {
+   "startTime": 532.65,
+   "title": "Why a plain form cannot do this"
+  },
+  {
+   "startTime": 587.66,
+   "title": "One honest limit"
+  },
+  {
+   "startTime": 648.13,
+   "title": "Wrapping up"
+  }
+ ]
+}
