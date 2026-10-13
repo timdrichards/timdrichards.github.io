@@ -291,6 +291,11 @@ section:first-of-type { border-top: none; }
 }
 
 .card h3 { color: var(--forest); }
+.card .card-link {
+  margin-top: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
 .card .meta {
   display: block;
   font-size: 0.85rem;
