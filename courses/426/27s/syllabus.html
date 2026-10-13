@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="COMPSCI 426 Spring 2027 syllabus, UMass Amherst" />
+    <title>COMPSCI 426 Syllabus - Spring 2027</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+<p class="back"><a href="index.html">&larr; Course page</a></p>
+<h1>COMPSCI 426 Syllabus</h1>
+<div class="semester">Scalable Web Systems / Spring 2027</div>
+<nav class="toc">
+<div class="toc-title">Contents</div>
+<ul>
+<li><a href="#description" id="toc-description">Description</a></li>
+<li><a href="#staff" id="toc-staff">Staff</a></li>
+<li><a href="#learning-objectives" id="toc-learning-objectives">Learning Objectives</a></li>
+<li><a href="#time-commitment" id="toc-time-commitment">Time Commitment</a></li>
+<li><a href="#course-structure-synopsis" id="toc-course-structure-synopsis">Course Structure Synopsis</a></li>
+<li><a href="#required-books-equipment-and-technology" id="toc-required-books-equipment-and-technology">Required Books, Equipment, and Technology</a></li>
+<li><a href="#development-environment" id="toc-development-environment">Development Environment</a></li>
+<li><a href="#assignments" id="toc-assignments">Assignments</a></li>
+<li><a href="#schedule" id="toc-schedule">Schedule</a></li>
+<li><a href="#grades" id="toc-grades">Grades</a></li>
+<li><a href="#grading-scale" id="toc-grading-scale">Grading Scale</a></li>
+<li><a href="#communication-1" id="toc-communication-1">Communication</a></li>
+<li><a href="#course-policies" id="toc-course-policies">Course Policies</a></li>
+<li><a href="#academic-honesty-and-collaboration" id="toc-academic-honesty-and-collaboration">Academic Honesty and Collaboration</a></li>
+<li><a href="#ai-statement" id="toc-ai-statement">AI Statement</a></li>
+<li><a href="#disability-accommodation-statement" id="toc-disability-accommodation-statement">Disability Accommodation Statement</a></li>
+<li><a href="#diversity-equity-and-inclusion" id="toc-diversity-equity-and-inclusion">Diversity, Equity, and Inclusion</a></li>
+<li><a href="#title-ix-statement" id="toc-title-ix-statement">Title IX Statement</a></li>
+<li><a href="#chosen-names-and-pronouns" id="toc-chosen-names-and-pronouns">Chosen Names and Pronouns</a></li>
+<li><a href="#student-support-resources" id="toc-student-support-resources">Student Support Resources</a></li>
+</ul>
+</nav>
+<p><em>Spring 2027. This is the current syllabus, carried forward from the Summer 2026 offering and adapted for a full in-person semester. Staff, office hours, rooms, and the dated calendar for Spring 2027 are posted on Canvas when the term opens; where Canvas and this page differ, Canvas is the one to follow.</em></p>
+<ul>
+<li><strong>Number:</strong> COMPSCI 426</li>
+<li><strong>Title:</strong> Scalable Web Systems</li>
+<li><strong>Instructor:</strong> Tim Richards</li>
+<li><strong>Semester:</strong> Spring 2027</li>
+<li><strong>Mode:</strong> In-person</li>
+<li><strong>Scheduled Meetings:</strong> Lecture twice a week. Days, times, and rooms are on SPIRE.</li>
+<li><strong>Exams:</strong> There are no exams in this course</li>
+<li><strong>Groups:</strong> There is group work in this course</li>
+<li><strong>Credits:</strong> 3</li>
+<li><strong>Prerequisites:</strong> COMPSCI 320 or COMPSCI 326 with a grade of C or better. If you are from another academic institution or have unique circumstances, you must submit an <a href="https://www.cics.umass.edu/academics/course-overrides/undergraduate-overrides">override request</a> to be considered for enrollment.</li>
+</ul>
+<h2 id="description">Description</h2>
+<p>The web has become a large and complex area for application development. Access to an abundance of open source languages, libraries, and frameworks has led to the quick and easy construction of a variety of applications with several moving parts working in coordination to present to the user the illusion of a single program. In reality, web applications are extremely difficult to get right. They involve a large collection of coordinated services, multiple databases, complicated user interfaces, security and performance issues, and ever changing third party services, spread across physical and virtual machines. These complications are further stressed by the large number of concurrent users that access these applications every second. This course investigates several well known web-based applications and the technology and software architecture used to scale them. We will also study specific topics related to scalability in software design in the context of web application architecture. This course is hands-on and heavily project-based; students will build, monitor, and load test a distributed system composed of coordinated services. This course counts as an Elective for the CS and INFORM Majors.</p>
+<p><em>This course is concept-first and experiential. You will build and break real scalable systems before we put names to the patterns you discover. The vocabulary of the field, sidecars, ambassadors, sharding, scatter/gather, comes after you have already felt why each pattern exists.</em></p>
+<h2 id="staff">Staff</h2>
+<ul>
+<li><strong>Instructor:</strong> Tim Richards</li>
+<li><strong>Email:</strong> tdr@umass.edu</li>
+<li><strong>Teaching assistants and undergraduate course assistant:</strong> listed on Canvas when the term opens.</li>
+<li><strong>Office hours:</strong> posted on Canvas in the first week.</li>
+</ul>
+<h2 id="learning-objectives">Learning Objectives</h2>
+<p>By the end of this course, students will be able to:</p>
+<ol type="1">
+<li><p>Configure and use a devcontainer-based development environment with Docker and VS Code for a reproducible, team-consistent workspace.</p></li>
+<li><p>Explain the core properties of distributed systems, including latency, reliability, idempotency, and delivery semantics, and reason about the trade-offs between them.</p></li>
+<li><p>Containerize an application with Docker and orchestrate multiple coordinated services with Docker Compose.</p></li>
+<li><p>Apply single-node patterns, including the sidecar, ambassador, and adapter patterns, to extend services without modifying them.</p></li>
+<li><p>Design and reason about serving patterns, including replication, caching, sharding with consistent hashing, and scatter/gather.</p></li>
+<li><p>Measure system behavior under load using k6, and interpret latency percentiles, throughput, and error rates.</p></li>
+<li><p>Build event-driven and queue-based systems, including work queues, pub/sub pipelines, and dead letter queues.</p></li>
+<li><p>Reason about distributed coordination, including locks, leases, ownership election, and concurrent data manipulation.</p></li>
+<li><p>Instrument a system for observability using structured logging, metrics, and tracing.</p></li>
+<li><p>Diagnose common distributed failure patterns, including thundering herd, versioning errors, and cascading failure.</p></li>
+<li><p>Use Git and GitHub for version control, branching, and pull request workflows on a shared team repository.</p></li>
+<li><p>Plan, build, and present a complete, scalable web system simulation as a team.</p></li>
+</ol>
+<h2 id="time-commitment">Time Commitment</h2>
+<p><em>Plan for roughly nine to ten hours a week, steady across the semester.</em></p>
+<p>UMass Amherst defines course workload by a standard credit hour rule: forty five hours of work per semester for each unit of credit. By that rule a three credit course represents at least 135 hours of total work across the term, which comes to about nine to ten hours a week. About two and a half of those hours are the two weekly lectures; the rest is knowledge-unit work, homework, and your team’s sprint work.</p>
+<p>Because each unit builds directly on the one before, and because this is a systems course where one misconfigured service can block everything downstream, the work does not compress well into a weekend burst. The quizzes are the clearest early signal of whether you are keeping pace. If you find yourself consistently spending far more than this, or far less and still finishing everything, let me know: that is useful feedback on the course and may be a sign we should look at how you are approaching the work.</p>
+<h2 id="course-structure-synopsis">Course Structure Synopsis</h2>
+<h3 id="course-delivery">Course Delivery</h3>
+<p>This course is in-person, with lecture twice a week. All course materials, including the full text of every knowledge unit, are available on Canvas at any time, and homework, quizzes, and sprint work are completed within the posted deadlines. This course is designed to be experiential, meaning that you will learn by doing, and the course structure is built around active participation and hands-on activities.</p>
+<h3 id="knowledge-units-kus">Knowledge Units (KUs)</h3>
+<p>The primary way in which learning takes place is through knowledge units (KUs). Each KU is a self-contained module that includes preparatory reading, hands-on activities, and exercises. You are expected to complete each KU in order, as they build upon one another. The course is deliberately concept-first: most units ask you to build or observe something before the underlying pattern is named, so that the name lands on an experience you already have rather than on an abstraction. Each KU will have a set of activities that you must complete, including coding and load-testing exercises.</p>
+<h3 id="canvas">Canvas</h3>
+<p>Canvas is where you will find links to all of the course material. The syllabus and schedule can be found on Canvas. All assignments will be posted on Canvas. Grades will be posted to Canvas. Announcements will be posted on Canvas. If in doubt, go to Canvas to find what you are looking for and follow links from there.</p>
+<h3 id="gradescope">Gradescope</h3>
+<p>Homework assignments are submitted through Gradescope and graded automatically. When you submit, an autograder runs your code against a test suite and reports a score immediately; you do not have to wait for manual review to see how you did. If a test fails, the output includes enough information to diagnose and fix the issue before the deadline. You may resubmit as many times as you like before the deadline, and only your final submission is graded. Gradescope is accessible through Canvas.</p>
+<h3 id="communication">Communication</h3>
+<p>Email the instructor at <a href="mailto:tdr@umass.edu">tdr@umass.edu</a> for all course-related questions and requests. Every email must include <code>[426]</code> at the start of the subject line, for example <code>[426] Sprint 3 question</code>. Emails without this prefix may be missed. See the full Communication section for guidance on what to include in your message.</p>
+<h3 id="spire">Spire</h3>
+<p>Final grades will be posted to Canvas before they are submitted to Spire. You are expected to check your grades in both places to ensure that everything adds up. You are responsible for ensuring that your grades are accurate and that you have received credit for all assignments that you submitted by the posted deadline. If you notice any discrepancies, you should contact the course staff immediately.</p>
+<h2 id="required-books-equipment-and-technology">Required Books, Equipment, and Technology</h2>
+<p><em>One textbook, one container that carries the entire stack, and a machine capable of running it.</em></p>
+<p>This course uses one textbook: <a href="https://learning.oreilly.com/library/view/designing-distributed-systems/9781098156343/"><em>Designing Distributed Systems</em>, 2nd Edition</a>, by Brendan Burns (O’Reilly). You have free access to the book by logging in using your UMass credentials under “Other login options” and selecting “Affiliated with a school or institution?” The book frames containers as the vehicle for every pattern we study, and its treatment of patterns like the sidecar, the work queue, and dead letter queues is unusually thorough. Preparatory reading for the Knowledge Units draws directly from it. Beyond the textbook, everything you need to read is provided through as Knowledge Units, primers, and linked documentation. Where you need a reference for a specific tool, the course points you to that tool’s official documentation.</p>
+<p>What this course also requires is a computer you control and that is capable of running a containerized development environment. You need a reasonably current laptop or desktop running macOS, Windows, or Linux, with enough memory and disk space to run Docker comfortably; eight gigabytes of RAM is a practical minimum and sixteen is more comfortable, along with several gigabytes of free disk space for container images and your project. A Chromebook or a tablet is not sufficient for this course, because neither can run the local development environment. If your only computer cannot meet these requirements, email the course staff at <a href="mailto:tdr@umass.edu">tdr@umass.edu</a> during the first few days so we can help you find an alternative such as a loaner machine through the University. We will try, but we can’t guarantee.</p>
+<p>Nearly all of the software for this course is delivered through a single prepared development environment, a Dev Container that bundles the entire technology stack so you do not have to install or configure each piece by hand.</p>
+<h2 id="development-environment">Development Environment</h2>
+<p>This course uses development containers (devcontainers) to provide a uniform and consistent development environment for all students. Devcontainers are a way to package and distribute development environments using Docker containers. This allows you to have a consistent environment across different machines and operating systems, and ensures that you have all the necessary tools and dependencies installed.</p>
+<p>You are not required to know much about Docker or devcontainers to begin, but you will need to have Docker installed on your machine, and over the course of the term you will come to understand containers deeply, since they are the central building block of the entire course. You will be required to use the devcontainer for all course-related work, including coding exercises, load tests, and the project.</p>
+<p>The core software you will need to install is VS Code, Docker Desktop, and the VS Code Remote Containers extension. The devcontainer is configured to include the tools and dependencies for the course, including Node.js, npm, the Docker CLI and Compose, the k6 load testing tool, and Caddy as a reverse proxy and load balancer. Services and worker processes in this course are written in Node.js and JavaScript. You should not install this software right now, as you will be instructed on how to do so as part of the course setup unit.</p>
+<h2 id="assignments">Assignments</h2>
+<p>We use several different methods to scaffold your learning and assess your understanding of the material covered in this course. We outline the various methods and the kind of assessment below so you can better understand and plan your learning path. We categorize assignments as either being formative (F), summative (S), or a combination (FS). A purely formative assignment is designed to build your understanding, low stakes, and doesn’t have any or very little impact on your grade. A summative assignment is designed to measure your understanding of the material. A combination of formative/summative contains aspects of low stakes assessment with measurement.</p>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 8%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
+<th style="text-align: center;">Assessment Type</th>
+<th style="text-align: center;">Count</th>
+<th style="text-align: center;">Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Exercises</strong></td>
+<td style="text-align: left;">Short practice exercises</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: center;">&gt;10</td>
+<td style="text-align: center;">0%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Participation</strong></td>
+<td style="text-align: left;">Discussions and reflections</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">5%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Quizzes</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">20%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Quiz</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Homework</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">30%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Homework</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Sprints</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">25%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Sprint 1</td>
+<td style="text-align: center;">FS</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Sprint 2</td>
+<td style="text-align: center;">FS</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Sprint 3</td>
+<td style="text-align: center;">FS</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Sprint 4</td>
+<td style="text-align: center;">FS</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Sprint 5</td>
+<td style="text-align: center;">S</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Project</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">20%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">GitHub Repository URL</td>
+<td style="text-align: center;">S</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Recorded Video Demonstration</td>
+<td style="text-align: center;">S</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Project Poster</td>
+<td style="text-align: center;">S</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Reflection</td>
+<td style="text-align: center;">S</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="exercises">Exercises</h3>
+<p><strong><em>Practice embedded in every unit, not graded, but expected.</em></strong></p>
+<p>Exercises are short activities built into each Knowledge Unit. They are not submitted and they do not count toward your grade. Many ask you to run a service under load with k6, observe a latency percentile or an error rate, and interpret what you see. The goal is practice: try something, get it wrong safely, and learn from it. You are expected to do the exercises; they exist to make the hands-on work in the Knowledge Units land rather than to generate a score.</p>
+<h3 id="participation">Participation</h3>
+<p><strong><em>Small, low-stakes tasks spread across the term that keep you engaged with the course and your teammates-to-be.</em></strong></p>
+<p>Each of the six blocks, Block 0 through Block 5, carries one participation task on Canvas: Block 0 is a public discussion where you introduce yourself before project teams form; Blocks 1 through 5 are a short, private reflection survey connecting that block’s Knowledge Units to your own experience. Both are graded on completion, not correctness or length. Together the six tasks make up five percent of your final grade.</p>
+<h3 id="quizzes">Quizzes</h3>
+<p><strong><em>A timed, summative check on the block’s material, taken at your own pace within 3 days after the block closes.</em></strong></p>
+<p>After each of the six content blocks you complete a timed quiz covering that block’s Knowledge Units. Each quiz is multiple choice, approximately twenty questions, and you have forty-five minutes. You may take each quiz up to three times; your highest score is recorded. The quiz for the final block is cumulative across the full course. Together the six quizzes make up twenty percent of your final grade. Quizzes are available on Canvas.</p>
+<h3 id="homework">Homework</h3>
+<p><strong><em>Four hands-on assignments that build the skills the project depends on.</em></strong></p>
+<p>There are four homework assignments across the term, one per block for the first four blocks. Each is a hands-on task that involves creating parts of a simulated distributed system using real tools and services: k6 for load testing, JavaScript for building services, and existing services such as Caddy, Redis, MongoDB, PostgreSQL, Prometheus, and Grafana. Homework is submitted through Gradescope and graded automatically against a rubric; you will see your score as soon as the autograder runs. Together the four assignments make up thirty percent of your final grade. Your scores from Gradescope will be periodically synced to Canvas.</p>
+<h3 id="sprints">Sprints</h3>
+<p><strong><em>A simulated scalable system built incrementally: each sprint applies only what the previous block taught.</em></strong></p>
+<p>The Sprints are the team project itself, carried forward in stages rather than assembled at the end. Each sprint is due during the block after the Knowledge Units that inform it are covered, so the system grows in lockstep with the course material. You cannot design the full architecture at the start; you do not yet know the patterns. Instead the simulation is extended one layer at a time: Sprint 0 forms the team and stakes out a domain idea; Sprint 1 frames the scalability problem using the distributed systems vocabulary from Block 1; Sprint 2 produces the first containerized services running under Docker Compose; Sprint 3 adds serving patterns (replication, caching, load balancing) and a first k6 load test; Sprint 4 introduces async processing and resilience; and Sprint 5 instruments the system with observability, runs a final load test, and delivers the four capstone artifacts.</p>
+<p>The system you build throughout is a simulation: data is synthetic, latency is injected, failures are scripted, and computation is modeled. This is a deliberate choice, not a shortcut. Building a production system from scratch in one semester is not realistic, and the goal of this course is not deployment; it is design, engineering, and measurement. Simulation lets you practice every pattern the course covers, instrument and break the system intentionally, and measure it under realistic load, without the operational complexity of real data pipelines or live traffic. The skills you develop, structuring services, reasoning about coordination, interpreting latency percentiles, are the same ones a team would use on a real system.</p>
+<p>Sprints introduce no new instruction. They are where you apply the current state of the Knowledge Units to the simulated system your team is building. Teams are assigned by the instructor. Because this course has no separate lab sequence, the professional workflow skills that labs would otherwise carry, clean commits, pull requests, code review, conflict resolution, are practiced and assessed directly inside the sprints. Because impressions are unreliable, your sprint contribution is assessed against objective GitHub evidence, your commits, the pull requests you authored and reviewed, and the merge history, rather than against anyone’s sense of who did what. Sprints 0 and 1 are half-weight (each worth half a full sprint); Sprints 2, 3, and 4 are full-weight. Sprint 5 is graded as the Project Final (20%) rather than as part of the Sprints category.</p>
+<h4 id="sprint-0-team-formation-and-project-concept">Sprint 0: Team Formation and Project Concept</h4>
+<p>Block 0 covers setting up the development environment and GitHub. Sprint 0 is about getting organized as a team and staking out a project idea while that setup is still fresh. No architecture decisions are required yet; students do not have the vocabulary for them.</p>
+<ul>
+<li>Shared GitHub repository created with all team members added as collaborators</li>
+<li>README with team roster</li>
+<li>A short paragraph describing the domain the team wants to simulate and a first guess at what makes it interesting from a scalability standpoint: what would a real system in this domain need to handle that a single server could not?</li>
+</ul>
+<h4 id="sprint-1-project-definition-and-scalability-framing">Sprint 1: Project Definition and Scalability Framing</h4>
+<p>Block 1 covers why distributed systems exist, the core trade-offs between latency and reliability, and the semantics of idempotency and message delivery. Sprint 1 asks the team to apply that vocabulary to their chosen domain. No code is expected yet; this is design thinking grounded in the concepts just studied.</p>
+<ul>
+<li>A refined project description: what domain, what scalability problem, and why this problem is meaningful (the Computing for the Common Good framing)</li>
+<li>An initial list of services the simulation might include, with one sentence on what each does; this is a first guess, not a commitment, and it will evolve as more patterns are introduced</li>
+<li>A short statement of the system’s latency and reliability requirements: what does “fast enough” mean for this domain, and what happens if a component fails?</li>
+</ul>
+<h4 id="sprint-2-first-containerized-system">Sprint 2: First Containerized System</h4>
+<p>Block 2 covers Docker fundamentals, Docker Compose, the sidecar pattern, and the ambassador pattern. Sprint 2 is the first time the team writes code. The goal is a multi-service simulation running under Docker Compose with at least one pattern from Block 2 applied.</p>
+<ul>
+<li>At least two services containerized and running under Docker Compose, each with its own HTTP endpoint returning domain-relevant simulated data</li>
+<li>At least one sidecar or ambassador pattern applied alongside a primary service as a separate container</li>
+<li>A docker-compose.yml committed to the repository that starts the whole system with a single command</li>
+</ul>
+<h4 id="sprint-3-serving-patterns-and-first-load-test">Sprint 3: Serving Patterns and First Load Test</h4>
+<p>Block 3 covers the adapter pattern, replicated services with load balancing and caching, sharded services, and scatter/gather. Sprint 3 extends the existing simulation with at least one serving pattern and adds the first measurement.</p>
+<ul>
+<li>At least one service running with multiple replicas behind Caddy as a load balancer</li>
+<li>A caching layer (Redis) integrated into at least one service path, with simulated cache hits and misses</li>
+<li>A k6 load test script that exercises the replicated service, with a written summary of the p50, p95, and p99 latency results</li>
+</ul>
+<h4 id="sprint-4-async-processing-and-resilience">Sprint 4: Async Processing and Resilience</h4>
+<p>Block 4 covers resilience and failure modes, event-driven processing, work queue systems, and pub/sub pipelines. Sprint 4 adds an asynchronous processing path to the simulation and introduces controlled failures to show the system can handle them.</p>
+<ul>
+<li>At least one async processing path: a work queue or pub/sub channel backed by Redis</li>
+<li>Health check endpoints on all services, wired into Docker Compose healthcheck configuration</li>
+<li>At least one scripted failure scenario: a service that can be made to fail or slow down, with a brief written description of how the system responds</li>
+</ul>
+<h4 id="sprint-5-observability-final-measurement-and-delivery">Sprint 5: Observability, Final Measurement, and Delivery</h4>
+<p>Block 5 covers coordinated batch processing, ownership election, and observability. Sprint 5 instruments the simulation, produces the final load test evidence, and assembles the four capstone deliverables.</p>
+<ul>
+<li>Prometheus metrics exposed by all custom services, scraped by a Prometheus instance defined in Docker Compose</li>
+<li>A Grafana dashboard showing at minimum: request rate, error rate, and p95 latency for the main service path</li>
+<li>Structured JSON log output from all custom services</li>
+<li>A final k6 load test with a written interpretation: what the latency distribution shows, how it compares to the Sprint 3 baseline, and where the bottleneck appears to be</li>
+<li>GitHub repository URL: code committed, README complete, system starts with a single command</li>
+<li>Recorded video demonstration (10 minutes or less): the system starting with <code>docker compose up</code>, at least one endpoint responding, the Grafana dashboard live during a k6 load test, and an explanation of one design decision and its trade-off</li>
+<li>Project poster: the problem, the architecture, the patterns demonstrated, and the key trade-offs, formatted as a one-page PDF</li>
+<li>Individual reflection: submitted separately by each team member covering what you contributed, what you learned, and what you would do differently</li>
+</ul>
+<h3 id="project">Project</h3>
+<p><strong><em>The capstone: a simulated scalable system that demonstrates the design, engineering, and measurement skills of the course.</em></strong></p>
+<p>The Project is the summative destination the entire course is aimed at. Working in a team, you choose a problem domain in the spirit of Computing for the Common Good and design a meaningful but achievable scalable application. You then build a simulation of that application: services that model realistic behavior using synthetic data, injected latency, and scripted failures, orchestrated with Docker Compose and measured under load with k6. The simulation is not a stripped-down version of a real system; it is the full architecture, with coordinated services, asynchronous pipelines, caching, and observability, implemented in a way that makes every pattern visible and every failure intentional. The goal is to demonstrate that you understand how such a system is designed, how its components interact, and how its behavior changes under load.</p>
+<p>You submit four deliverables: the source code in your shared GitHub repository, a recorded video walkthrough of the running system, a poster presenting the problem, the architecture, and the trade-offs you made, and an individual written reflection from each team member on their own contribution and what they learned. You are assessed on collaborative practice, on meeting the sprint deliverable deadlines that pace the project from Block 1, and on professional conduct throughout, with contribution again read from objective GitHub evidence and the grade trajectory-weighted across the term. Deployment to a public host is not required and is not taught here; the destination is a complete, multi-service simulation running under Docker Compose in the dev container and demonstrated on video.</p>
+<h2 id="schedule">Schedule</h2>
+<p>The course runs across the Spring 2027 semester. The dated calendar, with every due date, is posted on Canvas when the term opens. The 18 knowledge units are grouped into blocks, each about two weeks long; each block has a homework, a quiz, and a sprint that applies what the block before it covered.</p>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 16%" />
+<col style="width: 29%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Block</th>
+<th style="text-align: center;">KU</th>
+<th style="text-align: left;">Title</th>
+<th style="text-align: left;">Work</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>0</strong></td>
+<td style="text-align: center;">0A</td>
+<td style="text-align: left;">Development Environment Setup</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0B</td>
+<td style="text-align: left;">GitHub and Team Setup</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: center;">01</td>
+<td style="text-align: left;">Why Distributed Systems? Patterns, Trade-Offs, and the Design Mindset</td>
+<td style="text-align: left;">Homework 1; Sprint 0: Team Formation and Project Concept</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">02</td>
+<td style="text-align: left;">Core Concepts: APIs, Latency, Reliability, and Percentiles</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">03</td>
+<td style="text-align: left;">Idempotency, Delivery Semantics, and Data Consistency</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: center;">04</td>
+<td style="text-align: left;">Docker Fundamentals</td>
+<td style="text-align: left;">Homework 2; Sprint 1: Project Definition and Scalability Framing</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">05</td>
+<td style="text-align: left;">Docker Compose</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">06</td>
+<td style="text-align: left;">The Sidecar Pattern: Extending Services Without Changing Them</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">07</td>
+<td style="text-align: left;">The Ambassador Pattern: Proxying, Sharding, and Experimentation</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: center;">08</td>
+<td style="text-align: left;">The Adapter Pattern: Monitoring, Logging, and Normalization</td>
+<td style="text-align: left;">Homework 3; Sprint 2: First Containerized System</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">09</td>
+<td style="text-align: left;">Replicated Services: Stateless Scaling, Caching, and Rate Limiting</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">10</td>
+<td style="text-align: left;">Sharded Services: Consistent Hashing and Partitioning</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">11</td>
+<td style="text-align: left;">Scatter/Gather: Parallelism, Fan-Out, and Aggregation</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: center;">12</td>
+<td style="text-align: left;">Resilience and Failure Modes: Health Checks, Recovery, and Thundering Herd</td>
+<td style="text-align: left;">Homework 4; Sprint 3: Serving Patterns and First Load Test</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">13</td>
+<td style="text-align: left;">Functions, Event-Driven Processing, and the Decorator Pattern</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">14</td>
+<td style="text-align: left;">Work Queue Systems: Architecture, Workers, and Dynamic Scaling</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">15</td>
+<td style="text-align: left;">Event-Driven Batch Processing: Pub/Sub, Kafka, and Pipelines</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>5</strong></td>
+<td style="text-align: center;">16</td>
+<td style="text-align: left;">Coordinated Batch Processing: Joins, Reduce, and Barrier Synchronization</td>
+<td style="text-align: left;">Sprint 4: Async Processing and Resilience</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">17</td>
+<td style="text-align: left;">Ownership Election: Locks, Leases, and Consensus</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">18</td>
+<td style="text-align: left;">Observability: Metrics, Tracing, Dashboards, and Alerts</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>6</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">Project deliverables</td>
+<td style="text-align: left;">Sprint 5: Observability, Final Measurement, and Delivery</td>
+</tr>
+</tbody>
+</table>
+<h2 id="grades">Grades</h2>
+<p>All grades will be recorded and available in the Canvas Gradebook. Make sure you check your grades on a regular basis to ensure that they are correct. Assignments that are submitted to Gradescope will show your grade in Gradescope. Periodically those grades will be migrated into Canvas. This is a manual process, but we will try to do this on a regular basis.</p>
+<h2 id="grading-scale">Grading Scale</h2>
+<p><em>The number you earn maps to a letter with no curve and no surprises.</em></p>
+<p>Final grades are computed from the weighted categories in the Assignments section and converted to a letter using the scale below. Grades are not curved. Your final percentage is rounded to the nearest whole number once, at the end of the term, so an 89.5 becomes a 90 and an 89.4 does not.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Letter</th>
+<th style="text-align: left;">Range</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Letter</th>
+<th style="text-align: left;">Range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">93 to 100</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">73 to 76</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A-</td>
+<td style="text-align: left;">90 to 92</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">C-</td>
+<td style="text-align: left;">70 to 72</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B+</td>
+<td style="text-align: left;">87 to 89</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">D+</td>
+<td style="text-align: left;">67 to 69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">83 to 86</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">60 to 66</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B-</td>
+<td style="text-align: left;">80 to 82</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">below 60</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C+</td>
+<td style="text-align: left;">77 to 79</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>This is a three credit course, and the grade you earn carries the same weight toward your degree and your GPA as any other three credit course. There is no extra credit.</p>
+<h2 id="communication-1">Communication</h2>
+<p><em>One address, one required prefix, enough detail to get a useful answer on the first reply.</em></p>
+<p>Email <a href="mailto:tdr@umass.edu">tdr@umass.edu</a> for all course-related questions and requests. Every email must include <code>[426]</code> at the start of the subject line, for example <code>[426] Sprint 3 docker-compose question</code>. Emails without this prefix may be missed or delayed. Send from your verified UMass email address; replies go there.</p>
+<p>In the body of your message, name the category that fits your request so it can be routed and answered efficiently: <strong>Logistics</strong> for course mechanics, scheduling, and enrollment; <strong>Assignment</strong> for the content or requirements of a Knowledge Unit or Sprint; <strong>Technical</strong> for the dev environment, Docker, Compose, k6, Git, GitHub, or tooling; <strong>Grading</strong> for score discrepancies or rubric questions; <strong>Extension</strong> for late work and deadline changes; <strong>Accommodation</strong> for disability services, religious observance, and similar arrangements; <strong>Personal</strong> for private matters such as illness or anything that does not fit a label.</p>
+<p>When your request concerns a specific deliverable, name it exactly (for example Sprint 3, or KU 11 Sharded Services) rather than a vague reference. For Assignment, Technical, and Grading requests, paste direct links to your repository and to the specific pull request, commit, or failing Gradescope run. Copy any error message verbatim rather than describing it, and tell us what you have already tried so we do not suggest it back to you. End with the precise question you want answered.</p>
+<p>Reach out early. A request about a deadline, an accommodation, or a situation that may affect your work should arrive before the deadline passes, not after. The staff aim to respond within one business day on weekdays; do not expect responses on weekends or University holidays. We are glad to help when we hear from you in time.</p>
+<h2 id="course-policies">Course Policies</h2>
+<p><em>Engagement, late work, incompletes, and exemptions.</em></p>
+<p>This course has two scheduled lectures a week, and coming to them matters. The course also moves steadily: each unit builds on the one before it, and because this is a systems course, one misconfigured or missing service can block everything downstream. Your engagement is measured by the on time completion of quizzes and homework, and by steady, visible contribution to your team’s sprint work in GitHub.</p>
+<p>Late work is handled differently depending on what kind of work it is. Homework assignments may be turned in late for up to two days past the due date, with a deduction of ten percent per day; after two days they are no longer accepted and are scored as zero. Sprint deliverables and the final capstone submission are hard deadlines and are not eligible for the late allowance, because your teammates and the staff depend on that work being in place on time and because the schedule has no slack to absorb a slipped project milestone. If something is going to prevent you from meeting any deadline, email an Extension request to <a href="mailto:tdr@umass.edu">tdr@umass.edu</a> before the deadline passes. Proactive communication is the rule in this course, not a courtesy. We are far more able to help a student who writes before the deadline than one who writes after it.</p>
+<p>Incomplete grades follow university policy. An Incomplete (INC) may be granted only when a student who has been in good standing and has completed a substantial portion of the coursework is prevented by serious circumstances beyond their control from finishing on time. An Incomplete is never a substitute for a low grade and must be arranged with the instructor through a written agreement before the end of the term that specifies the remaining work and the completion date.</p>
+<p>There are no exemptions from individual assignments. Every student completes the same work, with the single exception of arrangements made through Disability Services or for documented religious observance, both of which are described in the sections below.</p>
+<h2 id="academic-honesty-and-collaboration">Academic Honesty and Collaboration</h2>
+<p><em>What honest work looks like here, what counts as collaboration, and how to disclose AI use.</em></p>
+<p>This statement is required by the University and is reproduced verbatim. Since the integrity of the academic enterprise of any institution of higher education requires honesty in scholarship and research, academic honesty is required of all students at the University of Massachusetts Amherst. Academic dishonesty is prohibited in all programs of the University. Academic dishonesty includes but is not limited to: cheating, fabrication, plagiarism, and facilitating dishonesty. Appropriate sanctions may be imposed on any student who has committed an act of academic dishonesty. Since students are expected to be familiar with this policy and the commonly accepted standards of academic integrity, ignorance of such standards is not normally sufficient evidence of lack of intent. For more information on the process and resolution of complaints, contact the Academic Honesty Office, 511 Goodell, (413) 577-6767, <a href="mailto:honesty@umass.edu">honesty@umass.edu</a>.</p>
+<p>Because this course is built around team projects, it helps to be explicit about where collaboration is expected and where it is not. Within your own project team, collaboration is the point: you share a repository, you co design, and you build together. Across teams, and on all individual work such as quizzes, homework, and the individual written reflection in the capstone, the work you submit must be your own. You may discuss concepts with classmates, but you may not copy another student’s code or homework submissions, and you may not share your own for copying. Submitting another person’s work as your own, or handing your work to someone else to submit, is facilitating dishonesty and is treated as a violation.</p>
+<h2 id="ai-statement">AI Statement</h2>
+<p>You may use AI tools, including large language models, to assist with coursework. Any use of AI must be disclosed. For each submission where AI was used, you must include a transcript of all AI interactions relevant to that submission, including the full prompts you sent and the full responses you received. Code generated or substantially modified by AI must be identified with inline comments at the point it appears. Submissions that use AI without disclosure, or that omit the required transcripts, will be treated as violations of the Academic Honesty Policy. AI is a tool you are learning to use professionally, and professional use means being able to account for every line you ship.</p>
+<h2 id="disability-accommodation-statement">Disability Accommodation Statement</h2>
+<p><em>Reasonable accommodations are available; the sooner you register, the sooner they apply.</em></p>
+<p>The following statement is required by the University and is reproduced verbatim. The University of Massachusetts Amherst is committed to providing an equal educational opportunity for all students. If you have a documented physical, psychological, or learning disability on file with Disability Services (DS), you may be eligible for reasonable academic accommodations to help you succeed in this course. If you have a documented disability that requires an accommodation, please notify me within the first two weeks of the semester so that we may make appropriate arrangements. For more information, consult the Disability Services website.</p>
+<p>Disability Services is located at 161 Whitmore Administration Building and can be reached at (413) 545-0892.</p>
+<h2 id="diversity-equity-and-inclusion">Diversity, Equity, and Inclusion</h2>
+<p><em>A learning environment that works only when everyone in it is respected.</em></p>
+<p>The Manning College of Information and Computer Sciences and this course are committed to a learning environment in which every student is welcomed and respected regardless of race, ethnicity, national origin, gender identity or expression, sexual orientation, disability, age, religion, socioeconomic background, or veteran status. Computing is built by teams, and the best computing is built by teams whose members bring different experiences to the problem. The Computing for the Common Good framing of this course rests on that premise: the systems you build are meant to serve real communities, which requires taking seriously perspectives other than your own. I expect every interaction in this course, in your teams, in your reflections, and in any communication with the staff, to be conducted with that respect. If anything in this course, including its examples, its assignments, or the conduct of a classmate, makes you feel excluded or unwelcome, please email me at <a href="mailto:tdr@umass.edu">tdr@umass.edu</a> so that I can address it.</p>
+<h2 id="title-ix-statement">Title IX Statement</h2>
+<p><em>A safe learning environment, and the resources that protect it.</em></p>
+<p>The following statement is required by the University and is reproduced verbatim. In accordance with Title IX of the Education Amendments of 1972 that prohibits gender-based discrimination in educational settings that receive federal funds, the University of Massachusetts Amherst is committed to providing a safe learning environment for all students, free from all forms of discrimination, including sexual assault, sexual harassment, domestic violence, dating violence, stalking, and retaliation. This includes interactions in person or online through digital platforms and social media. Title IX also protects against discrimination on the basis of pregnancy, childbirth, false pregnancy, miscarriage, abortion, or related conditions, including recovery. There are resources here on campus to support you. A summary of the available Title IX resources, both confidential and non-confidential, can be found at the following link: <a href="https://www.umass.edu/titleix/resources">https://www.umass.edu/titleix/resources</a>.</p>
+<h2 id="chosen-names-and-pronouns">Chosen Names and Pronouns</h2>
+<p><em>You tell us who you are, and we use it.</em></p>
+<p>I want to address you by the name and pronouns you use. If your chosen name or pronouns differ from what appears on the official roster, please email me at <a href="mailto:tdr@umass.edu">tdr@umass.edu</a> at the start of the term, and I will use them in all communication and feedback. UMass Amherst allows students to designate a chosen name and a pronoun in SPIRE, which then propagates to Canvas and class rosters, and I encourage you to set these if you have not already. If I ever get your name or pronouns wrong, a quick, private email is welcome and I will fix it.</p>
+<h2 id="student-support-resources">Student Support Resources</h2>
+<p><em>The course is hard by design; you do not have to navigate it alone.</em></p>
+<p>Help with the course material comes first from the instructor by email at <a href="mailto:tdr@umass.edu">tdr@umass.edu</a>, and from the CICS supplemental instruction and tutoring resources offered through the Manning College advising office, which you can find on the CICS undergraduate advising pages. Beyond the course, the University offers support for the rest of your life as a student. The Center for Counseling and Psychological Health (CCPH) provides confidential mental health support and can be reached at (413) 545-2337, with a counselor available at that number at any hour. The Dean of Students Office helps students navigate personal emergencies, illness, and other circumstances that disrupt coursework, and can advocate on your behalf with instructors. The Writing Center offers free help with written communication, useful for the project poster and your reflections. The W.E.B. Du Bois Library provides research and technical resources, and the University offers food, housing, and financial assistance for students facing insecurity through the Dean of Students Office. If you are struggling for any reason, academic or otherwise, reach out early, to me by email or to any of these offices directly. Asking for help in time is a strength, and it is what these resources exist for.</p>
+    </div>
+  </body>
+</html>

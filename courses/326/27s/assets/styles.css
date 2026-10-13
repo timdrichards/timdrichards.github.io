@@ -1,0 +1,261 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #303446;
+  color: #c6d0f5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  padding: 2rem;
+  line-height: 1.7;
+}
+
+.container {
+  width: 75%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #414559;
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 3rem;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 1px rgba(140, 170, 238, 0.3);
+  border: 1px solid #51576d;
+  text-align: left;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #8caaee;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(140, 170, 238, 0.3);
+}
+
+.semester {
+  font-size: 1.2rem;
+  color: #babbf1;
+  font-weight: 300;
+  letter-spacing: 3px;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.section-title {
+  text-align: left;
+  font-size: 1.5rem;
+  color: #ca9ee6;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #51576d;
+  padding-bottom: 0.5rem;
+}
+
+.description {
+  text-align: left;
+  color: #c6d0f5;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.status {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: #292c3c;
+  border-radius: 8px;
+  border-left: 4px solid #81c8be;
+  color: #a6d189;
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #51576d, transparent);
+  margin: 2rem 0;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #ca9ee6;
+  letter-spacing: 1px;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #51576d;
+}
+
+h3 {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #babbf1;
+  margin: 1.8rem 0 0.6rem;
+}
+
+h4 {
+  font-size: 1rem;
+  color: #babbf1;
+  margin: 1.4rem 0 0.4rem;
+}
+
+p,
+ul,
+ol,
+table,
+pre {
+  margin-bottom: 1rem;
+}
+
+ul,
+ol {
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.4rem;
+}
+
+a {
+  color: #99d1db;
+}
+
+a:hover {
+  color: #8caaee;
+}
+
+strong {
+  color: #e5c890;
+  font-weight: 600;
+}
+
+em {
+  color: #babbf1;
+}
+
+code {
+  font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: #292c3c;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+
+pre {
+  background: #292c3c;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+}
+
+blockquote {
+  border-left: 4px solid #51576d;
+  padding-left: 1rem;
+  margin: 1rem 0;
+}
+
+table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  padding: 0.45rem 0.8rem;
+  border-bottom: 1px solid #51576d;
+  vertical-align: top;
+  text-align: left;
+}
+
+th {
+  color: #ca9ee6;
+  font-weight: 500;
+}
+
+.button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  background: #8caaee;
+  color: #303446;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.button:hover {
+  background: #babbf1;
+  color: #303446;
+}
+
+.back {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.toc {
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  background: #292c3c;
+  border-radius: 8px;
+}
+
+.toc-title {
+  color: #ca9ee6;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.toc ul {
+  margin-bottom: 0;
+  columns: 2;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+
+  .container {
+    width: 100%;
+    padding: 1.5rem 1rem;
+  }
+
+  .toc ul {
+    columns: 1;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .semester {
+    font-size: 1rem;
+  }
+
+  .description {
+    text-align: left;
+  }
+}

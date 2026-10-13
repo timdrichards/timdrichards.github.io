@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="COMPSCI 326 Spring 2027 syllabus, UMass Amherst" />
+    <title>COMPSCI 326 Syllabus - Spring 2027</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+<p class="back"><a href="index.html">&larr; Course page</a></p>
+<h1>COMPSCI 326 Syllabus</h1>
+<div class="semester">Web Programming / Spring 2027</div>
+<nav class="toc">
+<div class="toc-title">Contents</div>
+<ul>
+<li><a href="#description" id="toc-description">Description</a></li>
+<li><a href="#staff" id="toc-staff">Staff</a></li>
+<li><a href="#learning-objectives" id="toc-learning-objectives">Learning Objectives</a></li>
+<li><a href="#time-commitment" id="toc-time-commitment">Time Commitment</a></li>
+<li><a href="#course-structure-synopsis" id="toc-course-structure-synopsis">Course Structure Synopsis</a></li>
+<li><a href="#development-environment" id="toc-development-environment">Development Environment</a></li>
+<li><a href="#assignments" id="toc-assignments">Assignments</a></li>
+<li><a href="#schedule" id="toc-schedule">Schedule</a></li>
+<li><a href="#grades" id="toc-grades">Grades</a></li>
+<li><a href="#grading-scale" id="toc-grading-scale">Grading Scale</a></li>
+<li><a href="#communication-1" id="toc-communication-1">Communication</a></li>
+<li><a href="#course-policies" id="toc-course-policies">Course Policies</a></li>
+<li><a href="#academic-honesty-and-collaboration" id="toc-academic-honesty-and-collaboration">Academic Honesty and Collaboration</a></li>
+<li><a href="#ai-statement" id="toc-ai-statement">AI Statement</a></li>
+<li><a href="#disability-accommodation-statement" id="toc-disability-accommodation-statement">Disability Accommodation Statement</a></li>
+<li><a href="#diversity-equity-and-inclusion" id="toc-diversity-equity-and-inclusion">Diversity, Equity, and Inclusion</a></li>
+<li><a href="#title-ix-statement" id="toc-title-ix-statement">Title IX Statement</a></li>
+<li><a href="#chosen-names-and-pronouns" id="toc-chosen-names-and-pronouns">Chosen Names and Pronouns</a></li>
+<li><a href="#student-support-resources" id="toc-student-support-resources">Student Support Resources</a></li>
+</ul>
+</nav>
+<p><em>Spring 2027. This is the current syllabus, carried forward from Fall 2026. Staff, office hours, rooms, and the dated calendar for Spring 2027 are posted on Canvas when the term opens; where Canvas and this page differ, Canvas is the one to follow.</em></p>
+<ul>
+<li><strong>Number:</strong> COMPSCI 326</li>
+<li><strong>Title:</strong> Web Programming</li>
+<li><strong>Instructor:</strong> Tim Richards</li>
+<li><strong>Semester:</strong> Spring 2027</li>
+<li><strong>Mode:</strong> In-person</li>
+<li><strong>Scheduled Meetings:</strong> Lecture twice a week, plus one Friday lab section (enroll in one). Days, times, and rooms are on SPIRE.</li>
+<li><strong>Exams:</strong> There are no exams in this course</li>
+<li><strong>Groups:</strong> There is group work in this course</li>
+<li><strong>Credits:</strong> 4</li>
+<li><strong>Prerequisites:</strong> COMPSCI 220 with a grade of C or better, or INFO 248 and CICS 210 (or COMPSCI 187) with a grade of C or better. If you are from another academic institution or have unique circumstances, you must submit an <a href="https://www.cics.umass.edu/academics/course-overrides/undergraduate-overrides">override request</a> to be considered for enrollment.</li>
+</ul>
+<h2 id="description">Description</h2>
+<p>The web is arguably today’s most important application platform. Web browsers run on practically every device, and even many phone applications are in fact web applications under the covers. This course covers a broad range of client-side web technologies, including HTTP itself, HTML5, CSS, and JavaScript; it additionally covers key concepts for the server side of web applications, including persistent storage and databases. This course is hands-on and heavily project-based; students will construct a substantial dynamic web application based on the concepts, technologies, and techniques presented in the knowledge units. This course satisfies the IE Requirement and an Elective for both the CS and INFORM Majors.</p>
+<p><em>This course is concept-first and experiential. You will build a real running server early in the course and a complete full-stack application by the last. Each knowledge unit earns the next one, and the team project runs alongside the entire course, so the skills you practice each week go directly into something you are building.</em></p>
+<h2 id="staff">Staff</h2>
+<ul>
+<li><strong>Instructor:</strong> Tim Richards</li>
+<li><strong>Teaching assistants and undergraduate course assistants:</strong> listed on Canvas when the term opens.</li>
+<li><strong>Office hours:</strong> the full schedule, with rooms and Zoom links, is posted on Canvas in the first week. Your Friday lab is also staffed by a TA and a UCA, so it is a good place to bring something you are stuck on.</li>
+</ul>
+<p>All course communication goes through the Canvas Inbox, not email. See the Communication section below for who to address a message to and what to include.</p>
+<h2 id="learning-objectives">Learning Objectives</h2>
+<p>By the end of this course, students will be able to:</p>
+<ol type="1">
+<li><p>Configure and use a reproducible, containerized development environment for consistent, team-based software development.</p></li>
+<li><p>Design and implement a server-side web application using a layered architecture that separates routing, request handling, and business logic.</p></li>
+<li><p>Write modern JavaScript using modules, asynchronous control flow, and functional programming idioms.</p></li>
+<li><p>Design semantic, accessible HTML and responsive CSS layouts.</p></li>
+<li><p>Apply distributed version control and collaborative code review practices to manage a shared codebase.</p></li>
+<li><p>Design and implement web APIs, and explain the request/response model underlying client-server communication.</p></li>
+<li><p>Persist application data using both file-based storage and a database, and reason about the tradeoffs between persistence strategies.</p></li>
+<li><p>Implement asynchronous client-server interactions that update a page without a full reload.</p></li>
+<li><p>Write automated tests that verify business logic independent of the user interface.</p></li>
+<li><p>Build accessible, responsive user interfaces using a modern, component-driven styling approach.</p></li>
+<li><p>Implement authentication and role-based authorization to control access to application resources.</p></li>
+<li><p>Plan, build, and present a complete full-stack web application as part of a team.</p></li>
+</ol>
+<h2 id="time-commitment">Time Commitment</h2>
+<p><em>Plan for roughly thirteen to fourteen hours a week, most of it self-paced around the scheduled meetings.</em></p>
+<p>UMass Amherst defines course workload by a standard credit hour rule. For a four-credit course, the University expects at least 180 hours of total work across the term. Spread across the semester’s instructional weeks, that comes to roughly thirteen to fourteen hours a week. The course covers 18 knowledge units, 10 labs, and a full team project arc.</p>
+<p>About two and a half of those hours each week are scheduled: the two weekly lectures (1 hour 15 minutes each) and the Friday lab section (50 minutes). The rest, roughly eleven to twelve hours, is self-paced knowledge-unit work, homework, and project time, distributed across the week around the scheduled meetings.</p>
+<p>Because each unit builds directly on the one before, and because this is a systems course where one missing dependency or one broken route can block everything downstream, steady weekly engagement matters more than raw hours in any one sitting. If your situation makes steady weekly engagement difficult, send me a Canvas Inbox message early in the term so we can be honest about whether the timing works for you.</p>
+<h2 id="course-structure-synopsis">Course Structure Synopsis</h2>
+<h3 id="course-delivery">Course Delivery</h3>
+<p>This course is in-person, blending scheduled meetings with the same hands-on, self-paced knowledge-unit work the course has always run on. Lecture is not where the material is delivered to you for the first time. You read the knowledge unit before the lecture on it, and we spend the time together clearing up what did not land and building something with it. The next section describes exactly how a meeting runs. The Friday lab section is dedicated time for that week’s Git lab, run in person. All course materials, including the full text of every knowledge unit, remain available on Canvas at any time; homework, quizzes, and project work are still completed on your own schedule within the posted deadlines. This course is designed to be experiential, meaning that you will learn by doing, and the course structure is built around active participation and hands-on activities, now including in-person ones.</p>
+<h3 id="what-a-class-meeting-looks-like">What a Class Meeting Looks Like</h3>
+<p>Every lecture follows the same four-part shape, so you always know what is coming. The whole thing rests on one assumption: <strong>you have read the knowledge unit before you walk in.</strong> Seventy-five minutes is not enough time to both deliver a unit and do anything with it, so we use the time for the part that is genuinely hard to do alone.</p>
+<ul>
+<li><strong>Reading check, and what it showed, about 30 minutes.</strong> A handful of short questions on the unit, due at <strong>8:00 AM on the morning of that unit’s lecture</strong>, so I can read your answers before class. It is graded on completion, not correctness, so an honest wrong answer is worth exactly as much as a right one. Every check ends by asking what did not make sense, and what you write there is what I open the class with. Guessing what I want to hear makes the class worse for you specifically.</li>
+<li><strong>In-class activity, about 30 minutes, in pairs.</strong> A small build with a real design decision in the middle of it, one where reasonable people disagree. You work in pairs, one driving and one navigating. See below for what is and is not expected here.</li>
+<li><strong>Discussion, about 10 minutes.</strong> We compare what different pairs decided and tie it back to the sprint your team is building.</li>
+<li><strong>Exit ticket, about 5 minutes.</strong> A few short questions submitted in Canvas before you leave. See below.</li>
+</ul>
+<p><strong>The in-class activity is not graded and nothing is submitted for it.</strong> The brief for each one is posted in Canvas under its unit, and it opens when that lecture starts. There is no submission box, no points, and no due date. It is there so you and your partner have the brief and the starter code in front of you while you work, and so you can go back to it afterwards. It is meant to be done during class, with a partner, not finished at home alone; the disagreement with your partner is the part that teaches you something, and you cannot have that by yourself later.</p>
+<p><strong>What you did in the activity is reported in the exit ticket.</strong> The exit ticket is a short set of questions that opens for the last fifteen minutes of class and closes five minutes after class ends, and it is where the activity actually gets recorded. It is deliberately not open before that, so that nobody spends the activity filling in the form instead of doing the work it asks about. It asks who your partner was, the word shown on the screen during class, a question about that day’s activity, and whether anything is still confusing, a question you did not get the chance to ask, or anything else you want me to know. Every answer to that last one is read before the next class. <strong>Everyone submits their own</strong>; it is not one per pair. It counts toward the Exit Tickets category, it is graded on completion rather than correctness, and because it can only be answered from inside the room it is also how attendance is taken.</p>
+<p>Exit tickets cannot be made up, including if you forgot to press submit, unless you have a documented excused absence. If something comes up, message me through the Canvas Inbox rather than letting it pass.</p>
+<h3 id="knowledge-units-kus">Knowledge Units (KUs)</h3>
+<p>The primary way in which learning takes place is through knowledge units (KUs). Each KU is a self-contained module that includes preparatory reading, hands-on activities, and exercises. You are expected to complete each KU in order, as they build upon one another. The course is deliberately concept-first: most units ask you to build or observe something before the underlying pattern is named, so that the name lands on an experience you already have rather than on an abstraction. Each KU will have a set of activities that you must complete, including coding exercises.</p>
+<h3 id="canvas">Canvas</h3>
+<p>Canvas is where you will find links to all of the course material. The syllabus and schedule can be found on Canvas. All assignments will be posted on Canvas. Grades will be posted to Canvas. Announcements will be posted on Canvas. If in doubt, go to Canvas to find what you are looking for and follow links from there.</p>
+<h3 id="gradescope">Gradescope</h3>
+<p>Homework assignments are submitted through Gradescope and graded automatically. When you submit, an autograder runs your code against a test suite and reports a score immediately; you do not have to wait for manual review to see how you did. If a test fails, the output includes enough information to diagnose and fix the issue before the deadline. You may resubmit as many times as you like before the deadline, and only your final submission is graded. Gradescope is accessible through Canvas.</p>
+<h3 id="communication">Communication</h3>
+<p>All course communication happens through the <strong>Canvas Inbox</strong>. <strong>Do not send email directly to the instructor or to the course staff.</strong> Administrative questions go to the instructor alone. Questions about the course material go to the entire course staff, so that whoever is free first can answer. Answers worth the whole class seeing are posted to a Frequently Asked Questions page on Canvas and kept up to date. See the full Communication section below for how to address a message and what to put in it.</p>
+<h3 id="spire">Spire</h3>
+<p>Final grades will be posted to Canvas before they are submitted to Spire. You are expected to check your grades in both places to ensure that everything adds up. You are responsible for ensuring that your grades are accurate and that you have received credit for all assignments that you submitted by the posted deadline. If you notice any discrepancies, send the instructor a Canvas Inbox message immediately.</p>
+<h2 id="development-environment">Development Environment</h2>
+<p>This course uses development containers (devcontainers) to provide a consistent development environment for all students. Devcontainers are a way to package and distribute development environments using Docker containers. This allows you to have a consistent environment across different machines and operating systems, and ensures that you have all the necessary tools and dependencies installed.</p>
+<p>You are not required to know much about Docker or devcontainers to begin, but you will need to have Docker installed on your machine, and over the course of the term you will come to understand containers as the production deployment model for modern web applications. You are required to use the devcontainer for all course-related work, including coding exercises, assignments, and the project.</p>
+<p>The core software you will need to install is VS Code, Docker Desktop, and the VS Code Remote Containers extension. The devcontainer is configured to include all the necessary tools and dependencies for the course, including Node.js, npm, and any other libraries or frameworks that are required. You should not install this software right now, as you will be instructed on how to do so as part of the course setup unit.</p>
+<h2 id="assignments">Assignments</h2>
+<p>We use several different methods to scaffold your learning and assess your understanding of the material covered in this course. We outline the various methods and the kind of assessment below so you can better understand and plan your learning path. We categorize assignments as either being formative (F), summative (S), or a combination (FS). A purely formative assignment is designed to build your understanding, low stakes, and doesn’t have any or very little impact on your grade. A summative assignment is designed to measure your understanding of the material. A combination of formative/summative contains aspects of low stakes assessment with measurement.</p>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 52%" />
+<col style="width: 15%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>Assessment Type</th>
+<th>Count</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Exercises</strong></td>
+<td>Short activities built into each KU</td>
+<td>F</td>
+<td>many</td>
+<td>0%</td>
+</tr>
+<tr class="even">
+<td><strong>Participation</strong></td>
+<td>Small participatory tasks</td>
+<td></td>
+<td></td>
+<td>4%</td>
+</tr>
+<tr class="odd">
+<td><strong>Exit Tickets</strong></td>
+<td>In-class work, one per lecture, lowest three dropped</td>
+<td>F</td>
+<td>26</td>
+<td>8%</td>
+</tr>
+<tr class="even">
+<td><strong>Lab Exit Tickets</strong></td>
+<td>In lab, one per lab section meeting, lowest three dropped</td>
+<td>F</td>
+<td>10</td>
+<td>3%</td>
+</tr>
+<tr class="odd">
+<td><strong>Reading Checks</strong></td>
+<td>Before each lecture, lowest two dropped</td>
+<td>F</td>
+<td>18</td>
+<td>5%</td>
+</tr>
+<tr class="even">
+<td><strong>Quizzes</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>9%</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Quiz</td>
+<td>F</td>
+<td>6</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Homework</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>22%</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Homework</td>
+<td>FS</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Labs</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>7%</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Lab</td>
+<td>F</td>
+<td>10</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Sprints</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>23%</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Sprint 0: Team Formation</td>
+<td>F</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Sprint 1: First Running Server</td>
+<td>FS</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Sprint 2: First Feature, First Vertical Slice</td>
+<td>FS</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Sprint 3: Database, Tests, and a Real Frontend</td>
+<td>FS</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Sprint 4: Security, Authorization, and Pre-Demo Audit</td>
+<td>FS</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Project</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19%</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>GitHub Repository URL</td>
+<td>S</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Recorded Video Demonstration</td>
+<td>S</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Project Poster</td>
+<td>S</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Reflection</td>
+<td>S</td>
+<td>1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="participation">Participation</h3>
+<p><strong><em>Small, low-stakes tasks spread across the term that keep you engaged with the course and your peers.</em></strong></p>
+<p>Participation tasks appear throughout the weekly modules and take a variety of forms: discussion posts, short reflection forms, surveys, and other brief activities. They are not timed and not difficult; the expectation is simply that you show up and engage. Each task is graded on completion. Together, participation tasks make up four percent of your final grade. What counts as a participation task will be clearly labeled in each module on Canvas. Exit tickets are counted separately, in their own category. See below.</p>
+<p><strong>Exit tickets: eight percent.</strong> The exit ticket you submit at the end of each lecture is its own category, worth eight percent of your final grade. That is not a score for being in the room. It records the in-class work: who you paired with, and what your pair decided and why. Showing up and not doing that work does not earn it.</p>
+<p><strong>The lowest three are dropped automatically</strong>, for everyone, with no reason needed and nothing to request. That covers illness, an interview, a bad morning, and a phone that would not submit. Beyond three, each further absence costs about a third of one percent, so an occasional miss stays cheap. What it will not survive is not coming: a student who misses every lecture but does everything else perfectly finishes at 92, which is an A minus rather than an A. That is deliberate. This course is built around what happens in the room, and a grade that says you mastered it without ever being there would not be telling the truth.</p>
+<p><strong>Lab exit tickets: three percent.</strong> Friday lab has its own short exit ticket, in its own category, worth three percent. It works the same way as the lecture one and is graded the same way, on submitting it rather than on what it says. The window differs by section, because the two lab sections meet at different times: it opens fifteen minutes before your own section ends and closes five minutes after. <strong>The lowest three of the ten are dropped</strong>, automatically and for everyone, which is what covers an illness, a conflict, or a morning that simply went wrong. Missing lab does not put an A out of reach on its own, unlike missing lecture; the two together do.</p>
+<p><strong>Reading checks: five percent.</strong> The short check due at 8:00 AM before each lecture is also its own category, worth five percent. It is graded on completion, so an honest wrong answer scores exactly what a right one does, and the whole thing takes about five minutes. <strong>The lowest two are dropped automatically</strong>, same as the exit tickets and for the same reasons, so an overslept morning costs nothing. Beyond two, each further miss costs about a third of one percent.</p>
+<p>These two categories are the two halves of the same bargain: prepare before class, do the work during it. Together they are thirteen percent of your grade, which is a deliberate statement about where the learning in this course actually happens. Unlike the exit tickets, never doing the reading checks does not by itself put an A out of reach, because the reading is a means rather than the thing being measured. It will cost you real points, and it will cost you far more than that in class.</p>
+<h3 id="exercises">Exercises</h3>
+<p><strong><em>Practice embedded in every unit, not graded, but expected.</em></strong></p>
+<p>Exercises are short activities built into each knowledge unit. They are not submitted and they do not count toward your grade. The goal is practice: try something, get it wrong safely, and learn from it. You are expected to do the exercises; they exist to make the hands-on work in the knowledge units land, not to generate a score.</p>
+<h3 id="quizzes">Quizzes</h3>
+<p><strong><em>A timed, summative check on the preceding two weeks’ material, taken at your own pace in the days after that block closes.</em></strong></p>
+<p>Roughly every other week you complete a timed quiz covering the knowledge units and labs since the last one. Each quiz is multiple choice, and you have twenty minutes per attempt, so focus on answering the questions within that time. You may take each quiz up to three times; your highest score is recorded. The quiz for the final week is cumulative across the full course. Together the six quizzes make up nine percent of your final grade. Quizzes are available on Canvas.</p>
+<h3 id="homework">Homework</h3>
+<p><strong><em>Four hands-on assignments that build the skills the project depends on.</em></strong></p>
+<p>There are four homework assignments across the term, one every two weeks from Week 2 through Week 10. Each is a hands-on task that involves building real web software: a running Express server, styled HTML pages, a JSON API with file and database persistence, and a tested and styled full-stack application. Homework is submitted through Gradescope and graded automatically against a rubric; you will see your score as soon as the autograder runs. Together the four assignments make up twenty-two percent of your final grade. Your scores from Gradescope will be periodically synced to Canvas.</p>
+<p>Homework is organized into four assignments:</p>
+<ul>
+<li><strong>Homework 1 (Units 01-03, Labs 01-02):</strong> Server running, routes, and HTML served from Express.</li>
+<li><strong>Homework 2 (Units 04-07, Labs 03-04):</strong> CSS layout, JSON API, and HTTP fundamentals.</li>
+<li><strong>Homework 3 (Units 08-11, Labs 05-06):</strong> Forms with fetch, modules and middleware, and CRUD against a file.</li>
+<li><strong>Homework 4 (Units 12-15, Labs 07-08):</strong> Real database with MongoDB and Mongoose, tests with Jest, HTMX interactions, and Tailwind styling.</li>
+</ul>
+<p>Each homework is assigned the Friday its last prerequisite lab is done and gets a full two weeks, due the Thursday right before the next homework is assigned. Homework ends after Homework 4, in Week 10. Knowledge units finish in Week 10; the weeks after that are devoted entirely to the team project, with no new units, quizzes, or homework.</p>
+<h3 id="labs">Labs</h3>
+<p><strong><em>Ten Git workflow sessions, graded on completion and subject to the same late-work policy as Homework.</em></strong></p>
+<p>Git and GitHub are not supplementary tools in this course; they are the medium through which all work is done and reviewed. Every homework submission, every sprint milestone, and every line of project code lives in a repository. Employers read GitHub profiles the way they once read resumes. The ability to commit cleanly, branch deliberately, resolve conflicts without losing work, and navigate a project’s history is not a nice-to-have for a web programmer; it is a baseline expectation. This course treats Git as a first-class skill and the labs are where that skill is built.</p>
+<p>Labs run alongside the knowledge units and build the Git and GitHub skills the project depends on. There are ten labs, one per week across Weeks 1 through 10, run during the scheduled Friday lab section, each designed to fit in the section’s fifty minutes. Each lab teaches one Git skill in sequence: committing and pushing, branching and pull requests, merging and conflict resolution, reading history, stashing, interactive rebase, bisect, tagging, cherry-pick, and working across branches with worktree. The skills compound: each lab assumes you can do everything from the previous ones.</p>
+<p>Each lab has four sections: Context (why this lab belongs here and what sprint it feeds into), Setup (the exact repository and branch state to start from), Tasks (numbered steps, each with a specific command and an observable outcome), and Success Condition (a one or two sentence definition of done that can be verified by inspection).</p>
+<p>Labs are submitted through Gradescope. An autograder inspects your repository and checks that you reached the success condition; your commit messages and branch names are not evaluated against a rubric. Labs are graded on completion, not correctness. Together the ten labs make up seven percent of your final grade.</p>
+<h3 id="sprints">Sprints</h3>
+<p><strong><em>A real full-stack web application built incrementally: each sprint applies only what the units taught so far have covered.</em></strong></p>
+<p>The Sprints are the team project itself, carried forward in stages rather than assembled at the end. Each sprint is due once the knowledge units that inform it are covered, so the application grows in lockstep with the course material. You cannot design the full architecture at the start; you do not yet know the patterns. Instead the application is extended one layer at a time: Sprint 0 forms the team and stakes out a domain idea; Sprint 1 produces the first running server; Sprint 2 delivers the first complete feature as a vertical slice; Sprint 3 replaces file storage with a database and adds tests and a styled frontend; Sprint 4 secures the application; and Sprint 5 polishes, documents, and delivers the four capstone artifacts.</p>
+<p>Sprints 0 and 1 are half-weight (each worth half a full sprint); Sprints 2, 3, and 4 are full-weight. Sprint 5 is graded as the Project (20%) rather than as part of the Sprints category.</p>
+<p>Sprints introduce no new instruction. They are where you apply the current state of the knowledge units to the web application your team is building. Teams are assigned by the instructor and are 3 to 4 members. Because this course has a separate lab sequence, the professional workflow skills that labs carry, clean commits, pull requests, code review, conflict resolution, are practiced in labs and then applied directly inside the sprints. Team contribution is assessed against objective GitHub evidence: your commits, the pull requests you authored and reviewed, and the merge history. Impressions are not graded; the record is.</p>
+<h4 id="sprint-0-team-formation-and-project-foundation-due-early-in-week-2">Sprint 0: Team Formation and Project Foundation, due early in Week 2</h4>
+<p>Week 1 covers setting up the development environment and GitHub. Sprint 0 is about getting organized as a team and staking out a project idea while that setup is still fresh. No architecture decisions are required yet.</p>
+<ul>
+<li>Shared GitHub repository created with all team members added as collaborators</li>
+<li>README with team roster and working agreement</li>
+<li>A short paragraph describing the domain the team wants to build and a first guess at what makes it an interesting project from a Computing for the Common Good standpoint</li>
+</ul>
+<h4 id="sprint-1-first-running-server-due-end-of-week-3">Sprint 1: First Running Server, due end of Week 3</h4>
+<p>Weeks 1-2 cover the devcontainer, Express routing, and serving real HTML. Sprint 1 asks the team to apply that to the project. No database, no frontend polish; just a running server on <code>main</code> that the whole team can start.</p>
+<ul>
+<li>Shared GitHub repository with all team members as collaborators and branch protection on <code>main</code></li>
+<li>A running Express server with at least two routes: a home page and one domain-relevant page</li>
+<li>A <code>README.md</code> that explains the project and tells a new contributor how to run it</li>
+</ul>
+<h4 id="sprint-2-first-feature-first-vertical-slice-due-end-of-week-7">Sprint 2: First Feature, First Vertical Slice, due end of Week 7</h4>
+<p>Weeks 4-6 cover forms with fetch, modules and middleware, CRUD against a file, and the layered architecture. Sprint 2 is the first time the team writes feature code. The goal is one complete vertical slice: a user can complete the primary action of the application from form to response.</p>
+<ul>
+<li>At least one feature implemented end-to-end: form in the browser, POST to the server, business logic in a service, persistence to a JSON file, response rendered on the page</li>
+<li>Routes, controller, service, and repository in separate files</li>
+<li>All team members have contributed commits and at least one merged pull request</li>
+</ul>
+<h4 id="sprint-3-database-tests-and-a-real-frontend-due-end-of-week-9">Sprint 3: Database, Tests, and a Real Frontend, due end of Week 9</h4>
+<p>Weeks 6-8 cover the database swap, service-layer tests, HTMX, and Tailwind. Sprint 3 extends the existing application with all three.</p>
+<ul>
+<li>File-based repository replaced with a MongoDB (Mongoose) repository; no other layer changed</li>
+<li>Jest tests for every business rule in the service layer; tests must pass</li>
+<li>At least one HTMX interaction replacing a full page reload</li>
+<li>Visual design applied with Tailwind CSS; the application must be usable on mobile and desktop</li>
+</ul>
+<h4 id="sprint-4-security-authorization-and-pre-demo-audit-due-end-of-week-11">Sprint 4: Security, Authorization, and Pre-Demo Audit, due end of Week 11</h4>
+<p>Weeks 8-10 cover accessibility, authentication, and authorization. Sprint 4 secures the application and runs an accessibility audit.</p>
+<ul>
+<li>Session- or token-based authentication; at least two user roles</li>
+<li>Authorization rules enforced in the service layer; role-based access on at least one resource</li>
+<li>Accessibility audit completed: keyboard navigation works end-to-end, all form controls are labeled, color contrast meets WCAG AA on primary surfaces</li>
+<li>Health check route (<code>GET /health</code>) returning JSON status</li>
+</ul>
+<h4 id="sprint-5-final-polish-and-delivery-due-at-the-end-of-the-term">Sprint 5: Final Polish and Delivery, due at the end of the term</h4>
+<p>Knowledge units finish in Week 10. The weeks after that carry no new instruction: time for the team to finish the application, raise the floor on what is already built, and deliver the four capstone artifacts that together constitute the Project (20%). All deliverables are due by the course end date.</p>
+<ul>
+<li>All tests passing; no console errors on startup</li>
+<li><code>README.md</code> complete: setup instructions, environment variables, how to seed the database, how to run tests</li>
+<li>GitHub repository URL: the repository must be in a state a new contributor could clone and run with a single command</li>
+<li>Recorded video demonstration (10 minutes or less): the application starting from a clean state, at least two authenticated user flows shown end-to-end, and an explanation of one design decision and its trade-off</li>
+<li>Project poster: one page (PDF) covering the problem the application addresses, the architecture, the key patterns demonstrated, and the trade-offs the team made</li>
+<li>Reflection: submitted individually by each team member (not as a group); three sections: what you contributed (with specific GitHub evidence: commit links and PR links), what you learned, and what you would do differently</li>
+</ul>
+<h3 id="project">Project</h3>
+<p><strong><em>The capstone: a complete full-stack web application that demonstrates the design, engineering, and craft of the course.</em></strong></p>
+<p>The Project is the summative destination the entire course is aimed at. Working in a team, you choose a problem domain in the spirit of Computing for the Common Good and build an application that serves real users: real authentication, a real database, a real frontend built with HTMX and Tailwind. The application is not a simulation; it is a complete, working piece of software that runs on a single command and demonstrates every major pattern the course covers.</p>
+<p>You submit four deliverables as part of Sprint 5: the source code in your shared GitHub repository, a recorded video walkthrough of the running application, a poster presenting the problem, the architecture, and the trade-offs you made, and an individual written reflection from each team member on their own contribution and what they learned. You are assessed on collaborative practice, on meeting the sprint deliverable deadlines that pace the project from Week 1, and on professional conduct throughout, with contribution read from objective GitHub evidence and the grade weighted across the term. Deployment to a public host is not required and is not taught here; the destination is a complete application running in the dev container and demonstrated on video.</p>
+<h2 id="schedule">Schedule</h2>
+<p>The course runs across the Spring 2027 semester. The dated week-by-week calendar, with every due date, is posted on Canvas when the term opens. The sequence below is the plan: two knowledge units a week to match the two weekly lectures, one Git lab each Friday, and a sprint due each time the units it needs are done.</p>
+<p><strong>All 18 units are covered by Week 10.</strong> The weeks after that carry no new units or quizzes: they are for the team project.</p>
+<p><strong>Markers:</strong> (A) assigned, the team or the individual assignment can start, since the units it needs are done; (D) due. Sprint 0 is the exception, assigned on day one before any unit content, since it is just team formation.</p>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 22%" />
+<col style="width: 16%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Week</th>
+<th style="text-align: left;">Units</th>
+<th style="text-align: left;">Lab</th>
+<th style="text-align: left;">Assignments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: left;">01 Hello Web; 02 Routes and Responses</td>
+<td style="text-align: left;">Lab 01 First Commit, First Push</td>
+<td style="text-align: left;">Sprint 0 (A)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: left;">03 Serving HTML and Templates; 04 Designing with CSS</td>
+<td style="text-align: left;">Lab 02 Branching and the Pull Request</td>
+<td style="text-align: left;">Sprint 0 (D), Sprint 1 (A), Homework 1 (A)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: left;">05 JSON: Data’s Native Language; 06 HTTP: The Protocol Underneath</td>
+<td style="text-align: left;">Lab 03 Pulling, Merging, and Resolving Conflicts</td>
+<td style="text-align: left;">Sprint 1 (D)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: left;">07 Living with Asynchrony; 08 Forms and Fetch</td>
+<td style="text-align: left;">Lab 04 Reading History with Log and Diff</td>
+<td style="text-align: left;">Homework 1 (D), Homework 2 (A)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>5</strong></td>
+<td style="text-align: left;">09 Modules and Middleware; 10 CRUD Against a File</td>
+<td style="text-align: left;">Lab 05 Stashing Work and Switching Context</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>6</strong></td>
+<td style="text-align: left;">11 Routes, Controllers, Services, Repositories; 12 From File to Real Database</td>
+<td style="text-align: left;">Lab 06 Cleaning History with Interactive Rebase</td>
+<td style="text-align: left;">Sprint 2 (A), Homework 2 (D), Homework 3 (A)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>7</strong></td>
+<td style="text-align: left;">13 Tests as Specifications; 14 Partial Reloads with HTMX</td>
+<td style="text-align: left;">Lab 07 Finding Bugs with Bisect</td>
+<td style="text-align: left;">Sprint 2 (D)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>8</strong></td>
+<td style="text-align: left;">15 Designing with Tailwind; 16 Accessibility as a Default</td>
+<td style="text-align: left;">Lab 08 Marking Stable Work with Tags</td>
+<td style="text-align: left;">Sprint 3 (A), Homework 3 (D), Homework 4 (A)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>9</strong></td>
+<td style="text-align: left;">17 Cookies, Sessions, and Tokens</td>
+<td style="text-align: left;">Lab 09 Moving Targeted Commits with Cherry-Pick</td>
+<td style="text-align: left;">Sprint 3 (D)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>10</strong></td>
+<td style="text-align: left;">18 Authorization, Roles, and Rules</td>
+<td style="text-align: left;">Lab 10 Working Across Branches with Worktree</td>
+<td style="text-align: left;">Sprint 4 (A), Homework 4 (D)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>11 to end</strong></td>
+<td style="text-align: left;">No new units, project work</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Sprint 4 (D), Sprint 5 (A), then Sprint 5 (D) at the end of the term</td>
+</tr>
+</tbody>
+</table>
+<p>Week 9 and Week 10 each have one lecture without a new unit, kept for review and help time. Spring holidays and recess are on the University academic calendar; the Canvas calendar accounts for them.</p>
+<h2 id="grades">Grades</h2>
+<p>All grades will be recorded and available in the Canvas Gradebook. Make sure you check your grades on a regular basis to ensure that they are correct. Homework and labs are graded by Gradescope, which you reach through the assignment in Canvas. Those scores are transferred into the Canvas Gradebook, so Canvas stays the single place to check where you stand.</p>
+<h2 id="grading-scale">Grading Scale</h2>
+<p><em>The number you earn maps to a letter with no curve and no surprises.</em></p>
+<p>Final grades are computed from the weighted categories in the Assignments section and converted to a letter using the scale below. Grades are not curved. Your final percentage is rounded to the nearest whole number once, at the end of the term, so an 89.5 becomes a 90 and an 89.4 does not.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Letter</th>
+<th style="text-align: left;">Range</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Letter</th>
+<th style="text-align: left;">Range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">93 to 100</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">73 to 76</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A-</td>
+<td style="text-align: left;">90 to 92</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">C-</td>
+<td style="text-align: left;">70 to 72</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B+</td>
+<td style="text-align: left;">87 to 89</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">D+</td>
+<td style="text-align: left;">67 to 69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">83 to 86</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">60 to 66</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B-</td>
+<td style="text-align: left;">80 to 82</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">below 60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C+</td>
+<td style="text-align: left;">77 to 79</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>This is a four-credit course, and the grade you earn carries the same weight toward your degree and your GPA as any other four-credit course. There is no extra credit.</p>
+<h2 id="communication-1">Communication</h2>
+<p><em>One channel, the right recipients, enough detail to get a useful answer on the first reply.</em></p>
+<p>All course communication happens through the <strong>Canvas Inbox</strong>, the messaging tool built into Canvas. <strong>Do not send email directly to the instructor or to any member of the course staff.</strong> The addresses in the Staff section are listed for the record; they are not the way to reach us about this course, and a message sent to them may go unanswered.</p>
+<p>The reason is not preference. Canvas keeps every course conversation attached to this course and in one place, which means a question does not get buried under the rest of a working inbox, any of us can pick up a conversation the others have already seen, and there is a single record to check when a question about a deadline or a grade comes up later. Email does none of that.</p>
+<h3 id="who-to-address-the-message-to">Who to address the message to</h3>
+<p>This is the part that decides how fast you get an answer, so it is worth getting right.</p>
+<ul>
+<li><strong>Administrative questions go to the instructor alone.</strong> Deadlines and extensions, grades and rubrics, enrollment, teams, accommodations, illness, and anything personal or private belongs in a message addressed only to me.</li>
+<li><strong>Questions about the course material go to the entire course staff.</strong> Add me and every TA and UCA listed in the Staff section as recipients. The dev environment, Docker, Node.js, Git and GitHub, the knowledge units, lab and homework content, and debugging your own code all belong here. Addressing all of us is not noise; it means whoever is free first answers you, which is almost always sooner than waiting on any one person.</li>
+<li><strong>Questions about your team project’s code or repository go on GitHub.</strong> Open an issue or comment on the pull request and mention your team’s liaison by their GitHub username; problems within your team go to your liaison in a private Canvas message. The liaisons are announced on Canvas once teams are set.</li>
+</ul>
+<p>If you are genuinely unsure which one a question is, send it to the whole staff. Nobody will mind, and I will move it if it turns out to be something private.</p>
+<h3 id="how-to-send-one">How to send one</h3>
+<p>Open <strong>Inbox</strong> from the global navigation on the left edge of Canvas, click the compose icon, and choose this course. To reach the whole staff at once, click the address book icon beside the <strong>To</strong> field and pick the <strong>Teachers</strong> and <strong>Teaching Assistants</strong> groups rather than typing names one at a time.</p>
+<p>Turn on notifications so you see a reply. Under <strong>Account</strong>, then <strong>Notifications</strong>, set <strong>Conversation Message</strong> to notify you immediately. Canvas will then tell you when a reply arrives, which is the one piece of setup this whole arrangement depends on.</p>
+<h3 id="what-to-put-in-it">What to put in it</h3>
+<p>Give the message a specific subject line naming what it is about, for example <code>Sprint 3 branch protection question</code> or <code>Unit 11 layered architecture question</code>, rather than <code>Question</code> or <code>Help</code>. A specific subject line is also what makes a conversation findable weeks later, by you as much as by us.</p>
+<p>In the body, name the deliverable exactly, Sprint 3 or Unit 11 rather than a vague reference. For questions about the material, your code, or a grade, paste direct links to your repository and to the specific pull request, commit, or failing run. Copy any error message verbatim rather than describing it, and tell us what you have already tried so we do not suggest it back to you. End with the precise question you want answered.</p>
+<p>Here is what that looks like in practice, for the two shapes a question usually takes. Sprints, Labs, and the Project have a GitHub repository, so the message links to it. Exercises and Homework do not, so the message pastes the code in directly.</p>
+<p><strong>Example 1: a Sprint question, where there is a repository to link.</strong> This is a question about the material, so it goes to the whole staff rather than to me alone.</p>
+<p><strong>To:</strong> <code>Teachers</code> <code>Teaching Assistants</code></p>
+<p><strong>Subject:</strong> Sprint 3 Mongoose connection refused in the dev container</p>
+<p>Our team is stuck on the Sprint 3 repository swap, the one that replaces the file repository with a Mongoose one. The server starts, but every request to <code>/entries</code> hangs for about thirty seconds and then the terminal prints:</p>
+<p><code>MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017</code></p>
+<p>Repository: <code>github.com/team-cactus/326-project</code><br />
+Failing commit: <code>github.com/team-cactus/326-project/commit/8c41f2a</code></p>
+<p>I have already checked that the Mongo container is running: <code>dc-up mongo</code> reports no errors and <code>docker ps</code> lists it. I also tried changing the connection string to <code>mongodb://localhost:27017/devdb</code> and got the identical error. Line 12 of <code>server.js</code> currently has the fallback exactly as the Unit 12 page gives it, <code>mongodb://dev:devpassword@mongo:27017/devdb</code>.</p>
+<p>What I do not understand is why the error says <code>127.0.0.1</code> when our connection string says <code>mongo</code>. Does that mean <code>MONGODB_URI</code> is not being read at all, or is this a container networking problem we should be looking at instead?</p>
+<p>That message names the deliverable, quotes the error instead of describing it, links the exact commit rather than the repository alone, rules out the two things we would otherwise have suggested first, and ends with one answerable question. It takes a few minutes to write and it can be answered in a single reply.</p>
+<p>Compare it to <em>our database is not working, any ideas?</em> That version cannot be answered at all. The only honest reply is a request for everything in the message above, which costs you a day and gets you no further than you were.</p>
+<p><strong>Example 2: a Homework question, where there is no repository.</strong> Exercises and Homework submit through Gradescope, not GitHub, so instead of a link, paste the function itself, not the whole file, just the part that is actually in question.</p>
+<p><strong>To:</strong> <code>Teachers</code> <code>Teaching Assistants</code></p>
+<p><strong>Subject:</strong> Homework 2 Part 2, POST /logs assigns a duplicate id after a delete</p>
+<p>On Homework 2 Part 2, <code>POST /logs</code> works the first few times, but once I delete an entry and add a new one, the new entry gets an id that already belongs to another log. Here is the handler:</p>
+<pre><code>app.post(&#39;/logs&#39;, (req, res) =&gt; {
+  const { siteId, action, quantity, unit } = req.body;
+  if (!siteId || !action || !quantity || !unit) {
+    return res.status(400).json({ error: &#39;siteId, action, quantity, and unit are required&#39; });
+  }
+  const newLog = {
+    id: logs.length + 1,
+    siteId,
+    action,
+    quantity,
+    unit,
+  };
+  logs.push(newLog);
+  res.status(201).json(newLog);
+});</code></pre>
+<p>To reproduce: start with the three seed logs (ids 1 through 3), <code>DELETE /logs/2</code>, then <code>POST /logs</code> a new entry. It comes back with <code>id: 3</code>, which collides with the log that already has id 3, since the array only has two entries left at that point.</p>
+<p>The assignment says to assign the new entry an id one higher than the current highest id in logs, so I do not think <code>logs.length + 1</code> is what it is asking for, but I am not sure what the right replacement looks like once ids and array positions can disagree after a delete.</p>
+<p>Is the fix to compute the highest existing id directly, and if so, is there a cleaner way to do that than sorting the whole array on every <code>POST</code>?</p>
+<p>This one pastes only the handler in question, not the whole file, states the exact steps that reproduce the bug, quotes what the assignment actually requires, and names the specific line the student suspects rather than asking us to find it. That is the difference a repository link makes when there is no repository: the code itself has to do the work the commit link did in the first example.</p>
+<h3 id="answers-the-whole-class-needs">Answers the whole class needs</h3>
+<p>When a question turns out to be one that many of you have, the answer does not stay in a single conversation. It goes on the Frequently Asked Questions page on Canvas, which is updated regularly through the term. Check it before you write, especially in the days before a deadline: your question may already be answered there, and reading the answer beats waiting for one.</p>
+<h3 id="timing">Timing</h3>
+<p>Reach out early. A message about a deadline, an accommodation, or a situation that may affect your work should arrive before the deadline passes, not after. The staff aim to respond within one business day on weekdays; do not expect responses on weekends or University holidays.</p>
+<h2 id="course-policies">Course Policies</h2>
+<p><em>Engagement, late work, incompletes, and exemptions.</em></p>
+<p>This course has scheduled meetings (lecture twice a week, lab on Friday), and attendance at both factors into your Participation grade. Attendance alone is not the whole picture, though: the course moves steadily across the semester, each week builds on the one before, and because this is a building course, one missing piece can block everything downstream. Your engagement is measured by showing up, by the on-time completion of quizzes and homework, and by steady, visible contribution to your team’s project in GitHub.</p>
+<p>Late work is handled differently depending on what kind of work it is. Homework assignments and labs may be turned in late for up to two days past the due date, with a deduction of ten percent per day; after two days they are no longer accepted and are scored as zero. Sprint deliverables and the final project submission are hard deadlines and are not eligible for the late allowance, because your teammates and the staff depend on that work being in place on time and because the schedule has no slack to absorb a slipped milestone. If something is going to prevent you from meeting any deadline, send me a Canvas Inbox message requesting an extension before the deadline passes. Proactive communication is the rule in this course, not a courtesy.</p>
+<p>Incomplete grades follow university policy. An Incomplete (INC) may be granted only when a student who has been in good standing and has completed a substantial portion of the coursework is prevented by serious circumstances beyond their control from finishing on time. An Incomplete is never a substitute for a low grade and must be arranged with the instructor through a written agreement before the end of the term that specifies the remaining work and the completion date.</p>
+<p>There are no exemptions from individual assignments. Every student completes the same work, with the single exception of arrangements made through Disability Services or for documented religious observance, both of which are described in the sections below.</p>
+<h2 id="academic-honesty-and-collaboration">Academic Honesty and Collaboration</h2>
+<p><em>What honest work looks like here, what counts as collaboration, and how to disclose AI use.</em></p>
+<p>This statement is required by the University and is reproduced verbatim. Since the integrity of the academic enterprise of any institution of higher education requires honesty in scholarship and research, academic honesty is required of all students at the University of Massachusetts Amherst. Academic dishonesty is prohibited in all programs of the University. Academic dishonesty includes but is not limited to: cheating, fabrication, plagiarism, and facilitating dishonesty. Appropriate sanctions may be imposed on any student who has committed an act of academic dishonesty. Since students are expected to be familiar with this policy and the commonly accepted standards of academic integrity, ignorance of such standards is not normally sufficient evidence of lack of intent. For more information on the process and resolution of complaints, contact the Academic Honesty Office, 511 Goodell, (413) 577-6767, <a href="mailto:honesty@umass.edu">honesty@umass.edu</a>.</p>
+<p>Because this course is built around a team project, it helps to be explicit about where collaboration is expected and where it is not. Within your own project team, collaboration is the point: you share a repository, you co-design, and you build together. Across teams, and on all individual work such as quizzes, homework, and the individual reflection, the work you submit must be your own. You may discuss concepts with classmates, but you may not copy another student’s code or homework submissions, and you may not share your own for copying. Submitting another person’s work as your own, or handing your work to someone else to submit, is facilitating dishonesty and is treated as a violation.</p>
+<h2 id="ai-statement">AI Statement</h2>
+<p><em>AI is a tool you may learn with. It is not a tool that does your work.</em></p>
+<p>You are here to build real fluency with web programming. That fluency comes from writing code, reading error messages, tracing a problem to its source, and getting to a solution yourself. An AI that produces the work for you skips exactly that, and leaves you with something you cannot explain and a skill you did not build.</p>
+<p>So the rule for this course is simple, and it holds everywhere:</p>
+<p><strong>No AI may write code, prose, or designs that are being evaluated.</strong> Not on homework, not on labs, not on your team project, not on the poster or the video or the reflection. Not if you retype it in your own words afterward. There is one exception, for parts of a project that no rubric line assesses, and it has its own section below.</p>
+<p>Everything below is about what AI <em>may</em> do, which is more than you might expect.</p>
+<h3 id="the-levels">The levels</h3>
+<p>Every assignment in this course is tagged Level 0, 1, or 2. The level tells you what an AI tool is allowed to contribute. Level 3 is not a tag on an assignment; it is a carve-out you can declare inside a sprint or the project, described further down.</p>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 54%" />
+<col style="width: 23%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Level</td>
+<td style="text-align: left;">What AI may do</td>
+<td style="text-align: left;">What it may never do</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Level 0: No AI</strong></td>
+<td style="text-align: left;">Nothing. Do not use an AI tool on this.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Level 1: General questions</strong></td>
+<td style="text-align: left;">Answer general questions about JavaScript, Express, HTTP, Git, or any other topic the course covers.</td>
+<td style="text-align: left;">See your code, your error output, or the assignment text.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Level 2: Show and critique</strong></td>
+<td style="text-align: left;">Look at work you already wrote and tell you what is wrong with it or how it could be better.</td>
+<td style="text-align: left;">Tell you what to write.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Level 3: Unrestricted, on declared support work</strong></td>
+<td style="text-align: left;">Anything at all, including writing the code, but only on parts of a project that you have declared and that no rubric line assesses.</td>
+<td style="text-align: left;">Touch anything a rubric assesses, or go undeclared.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>This course never goes above Level 2 on anything being evaluated.</strong> Higher levels exist in the wider world, where AI writes code that ships. That is real professional practice and you will meet it. You are not going to meet it here, on the work that is assessed, because this course exists to build the judgment that makes that practice safe, and you cannot build it by skipping it. Level 3 is the deliberate exception and it is narrow: it applies only to parts of your project that are not being assessed at all.</p>
+<h3 id="which-level-am-i-at">Which level am I at?</h3>
+<p>Two questions. Ask them in order.</p>
+<ol type="1">
+<li><strong>Did the AI produce anything specific to my assignment?</strong> Code, prose, a structure, a plan, a diagram. If yes, you are above Level 2 and above what this course permits, <strong>whether or not you typed it out yourself.</strong></li>
+<li><strong>Did the AI look at my work, my error output, or the assignment?</strong> If yes, that is Level 2. If no, that is Level 1.</li>
+</ol>
+<p>Question 1 is the one that matters. “Specific to my assignment” is the whole test.</p>
+<p>Asking <em>“how does an Express route handler work?”</em> is general. Writing the canonical three lines afterward is fine, because there is only one way to write them and you now know it. Asking <em>“write the route for my entries endpoint”</em> is specific, and so is <em>“give me the steps to build this assignment.”</em> Typing out the answer yourself does not change that.</p>
+<h3 id="where-each-level-applies">Where each level applies</h3>
+<table>
+<colgroup>
+<col style="width: 64%" />
+<col style="width: 35%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Assignment</td>
+<td style="text-align: left;">Level</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Quizzes 1-6</td>
+<td style="text-align: left;"><strong>Level 0</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Homework 1 and 2</td>
+<td style="text-align: left;"><strong>Level 1</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Homework 3 and 4</td>
+<td style="text-align: left;"><strong>Level 2</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Labs 1-10</td>
+<td style="text-align: left;"><strong>Level 1</strong>, plus the rule below</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sprints 0-5, including README and diagrams</td>
+<td style="text-align: left;"><strong>Level 2</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Project: repository, video, poster, reflection</td>
+<td style="text-align: left;"><strong>Level 2</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Reading checks, exit tickets, and the Team Formation Survey</td>
+<td style="text-align: left;"><strong>Level 0</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Discussions and Reflections</td>
+<td style="text-align: left;"><strong>Level 2</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Homework 1 and 2 are stricter on purpose.</strong> At that stage, reading an error message and working out what caused it <em>is</em> the skill being built. So on those two, describe your problem in your own words if you want to ask about it. Do not paste your code or your error output. That restriction lifts at Homework 3, once the work becomes integrating things rather than getting them to run at all.</p>
+<p><strong>Labs have their own rule.</strong> Use AI to understand what <code>git bisect</code> or an interactive rebase actually does, as much as you like. But the commits, branches, merges, and rebases in your repository have to be operations you actually performed.</p>
+<h3 id="editor-autocomplete">Editor autocomplete</h3>
+<p><strong>Turn it off for coursework.</strong> GitHub Copilot, Cursor’s tab completion, and anything like them write code directly into your file, which is above this course’s ceiling on every assignment.</p>
+<p>This is the item most likely to catch you out, because these tools are on by default and easy to forget about. If you use one for work outside this course, disable it for this repository, or use a separate editor profile.</p>
+<h3 id="what-you-do-not-need-to-worry-about">What you do not need to worry about</h3>
+<p>Some things are not covered by any of this:</p>
+<ul>
+<li><strong>Seed data, fixtures, sample content, boilerplate config, and code formatting.</strong> None of these build a skill this course assesses. Generating forty rows of plausible test data is fine. Generating the code that reads them is not.</li>
+<li><strong>AI answers that arrive without you asking</strong>, like search-result summaries or an AI-written answer on a forum. Treat them as ordinary sources. You do not need to disclose reading one, but see “Facts are yours” below.</li>
+<li><strong>Anything covered by an accommodation.</strong> See below.</li>
+</ul>
+<h3 id="level-3-parts-that-are-not-being-evaluated">Level 3: parts that are not being evaluated</h3>
+<p>Your project will end up containing things that make it work but that no rubric line asks about. Something that sends a mail. Something that turns an address into coordinates. A deploy configuration, a one-off script that imported your starting data, a scheduled job. These are real engineering, they are often the interesting part, and none of them is a skill this course measures.</p>
+<p><strong>On those parts you may use AI however you like</strong>, including having it write the whole thing. Ask it to design the integration, generate the client, explain the API, write the config. There is no restriction and no ceiling, and using it that way is never academic dishonesty here.</p>
+<p>What makes this workable is the boundary, so the boundary is strict:</p>
+<ul>
+<li><strong>If a rubric criterion covers it, it is not Level 3.</strong> Every sprint and every project artifact publishes its rubric with the assignment, before you build. Read it. Your layered architecture, your repository and validation, your tests, your database work, your HTMX and styling, your authentication and authorization, your README and system diagram, your video and poster and reflection: all assessed, all capped at Level 2. Level 3 is what is left over.</li>
+<li><strong>You declare it, before it is graded, in writing.</strong> In your own <code>ai-disclosure/</code> file, list each part: what it is, where it lives in the repository, what job it does, why no rubric line covers it, and what the AI did. Mark it in the code too, with a comment at the top of the file, so whoever reads it knows without cross-referencing.</li>
+<li><strong>It earns you nothing.</strong> It is not assessed, so there are no points in it. It does not count toward Individual Contribution Evidence, and it cannot be the decision you write up for Design Decision and Trade-off, because you did not make that decision. A sprint where your only contribution is Level 3 work is a sprint where you contributed nothing assessable.</li>
+<li><strong>It still has to work.</strong> Not being assessed is not the same as not mattering. If your evaluated feature depends on it and it is broken, the evaluated feature is broken.</li>
+<li><strong>You are still responsible for it.</strong> It is in your repository and running in your project. If it leaks a key, mishandles data, or does something you cannot explain, that is yours to answer for. Do not ship what you have not read.</li>
+</ul>
+<p><strong>Where the dishonesty actually lies.</strong> Using AI on declared support work is not dishonest, no matter how much of it AI wrote. Three things are: declaring something as support when a rubric line does cover it; presenting AI-written support code as your own work, in your reflection, your video, or a conversation with me; and not declaring it at all. The first is the one to be careful about, because it is the one you might do by accident. If you are not sure whether something falls inside a rubric line, <strong>ask before you build it</strong>, not after it is graded. Asking is free and I will answer the same day.</p>
+<p><strong>Level 3 applies to Sprints and the Project only.</strong> Homework, labs, quizzes, reading checks, and exit tickets have no unassessed parts; the whole artifact is the thing being measured, so there is nothing to declare. It is also narrower than the list in the previous section: seed data, fixtures, sample content, boilerplate config, and formatting need no declaration at all. Level 3 is for the parts big enough that someone reading your repository would otherwise reasonably assume you wrote them.</p>
+<h3 id="disclosing-what-you-used">Disclosing what you used</h3>
+<p>Where it goes depends on what you are handing in. For anything submitted from a <strong>team repository</strong>, which is the sprints and the Project, add <code>ai-disclosure/&lt;your-name&gt;.md</code>, lowercase kebab case, for example <code>ai-disclosure/tim-richards.md</code>. One file per person, you write your own, and nobody has to merge with anybody. For anything you submit as <strong>your own archive</strong>, which is Homework, put one <code>AI-DISCLOSURE.md</code> at the root of the zip. Either way: one entry per thing you used AI for.</p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 93%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Level</td>
+<td style="text-align: left;">What to write</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Level 1</strong></td>
+<td style="text-align: left;">One sentence: what you asked about. No transcript.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Level 2</strong></td>
+<td style="text-align: left;">A few sentences: what you asked, what it said, what you changed and why. Include the exchange if you have it. If the tool does not produce a transcript, describe what it looked at.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Level 3</td>
+<td style="text-align: left;">What the part is, where it lives in the repository, what job it does, why no rubric line covers it, and what the AI did. No transcript needed. Declare it before the work is graded, not after.</td>
+</tr>
+</tbody>
+</table>
+<p>That is the whole requirement. Level 1 is deliberately cheap, because asking a general question is a normal part of learning and making you write a report about it would just stop you from disclosing it.</p>
+<p><strong>On a team repository, write your own section, covering your own commits.</strong> You are not responsible for disclosing what a teammate did, and <strong>you will not be penalized for a teammate’s omission that you could not reasonably have known about.</strong> Talk to each other when you merge.</p>
+<p>Write it as you go and submit it with your work. <strong>On a team repository the file accumulates, it is not rewritten.</strong> It lives there all term, so put a heading for each sprint and write underneath it rather than replacing what is already there. Earlier sprints stay as a record; when a sprint is graded, only that sprint’s section is read.</p>
+<h3 id="you-may-be-asked-to-explain-your-own-work">You may be asked to explain your own work</h3>
+<p>Any week, in lecture or in your lab section, you may be asked to walk through a specific piece of something you submitted: what it does, why you wrote it that way, what you would have done instead.</p>
+<p>This is low stakes. It is not a test and it is not an accusation. It is folded into that assignment’s existing grade and there is no separate studying for it, because the point is simply whether the work is yours to explain. If you did it, you will be fine.</p>
+<p>You will not know in advance which piece. That is the whole design, and it is why the policy above can stay short: being able to explain your own work is the thing that actually matters, and it is much easier to check than anything else.</p>
+<p>If a live conversation is a barrier for you, ask and we will find another format.</p>
+<h3 id="facts-are-yours">Facts are yours</h3>
+<p>This one applies at every level, including Level 0.</p>
+<p><strong>Any claim of fact in your work is yours.</strong> If an AI told you how sessions work, or what a trade-off costs, or gave you a source, and you did not check it, and it is wrong, that is your error.</p>
+<p>This matters more than it sounds. When AI writes wrong code, the compiler or the test suite usually tells you within seconds. <strong>Nothing tells you when it writes wrong prose.</strong> A confident, incorrect sentence in a README, a reflection, a poster, or a video script will pass every automated check this course has and land in your grade. Check what you repeat.</p>
+<h3 id="accommodations-and-writing-in-another-language">Accommodations, and writing in another language</h3>
+<p><strong>Accommodations arranged through Disability Services override every level above.</strong> You do not need to make a case to me, and you do not need to disclose accommodated use in your disclosure file. It is not a disclosure event and it will never come up in any review of your work. If the explain-your-work conversation is a barrier, tell me and we will use a different format.</p>
+<p><strong>If English is not your first language, help with grammar and phrasing is fine</strong> on the reflections, discussions, README prose, and the individual reflection. Those exist to assess your thinking and your account of your own work, not your command of English prose. The substance has to be yours; the polish does not have to be.</p>
+<h3 id="if-something-does-not-add-up">If something does not add up</h3>
+<p>If your disclosure and your work do not seem to match, <strong>the first thing that happens is that I ask you about it.</strong> That is a conversation, not an accusation, and nothing is decided before it. Most of the time the answer is that the policy was unclear or something got left out, and we fix it and move on.</p>
+<p>Only two things escalate past that: a disclosure that actively contradicts your work, or refusing to engage with the question at all.</p>
+<p><strong>And if you realize you went over the line, tell me before I ask.</strong> If you disclose it yourself, honestly and unprompted, we handle it as an academic matter for that piece of work, which may mean reduced credit or redoing it. It does not become an academic honesty referral. I would much rather you tell me.</p>
+<h3 id="how-i-use-ai-in-this-course">How I use AI in this course</h3>
+<p>AI tools were used in building some of this course’s materials, alongside my own writing, editing, and review. I direct that work, I check it, and I am accountable for what it produces. Where a tool gets something wrong, that is my error and not the tool’s.</p>
+<p>I mention it because I am asking you to disclose your own use, and a rule that runs in only one direction is not one anyone should respect. The reason it is not a double standard is narrow and specific: your submission is an instrument for measuring what you can do, and my materials are not. Nobody is trying to determine, from a syllabus, whether I can write a syllabus unaided.</p>
+<p>What I owe you in exchange is a straight answer. <strong>Ask me, about anything in this course, how I checked that a given claim was true</strong>, and you will get one. If something here is wrong, I want to hear about it.</p>
+<h2 id="disability-accommodation-statement">Disability Accommodation Statement</h2>
+<p><em>Reasonable accommodations are available; the sooner you register, the sooner they apply.</em></p>
+<p>The following statement is required by the University and is reproduced verbatim. The University of Massachusetts Amherst is committed to providing an equal educational opportunity for all students. If you have a documented physical, psychological, or learning disability on file with Disability Services (DS), you may be eligible for reasonable academic accommodations to help you succeed in this course. If you have a documented disability that requires an accommodation, please notify me within the first two weeks of the semester so that we may make appropriate arrangements. For more information, consult the Disability Services website.</p>
+<p>Disability Services is located at 161 Whitmore Administration Building and can be reached at (413) 545-0892.</p>
+<h2 id="diversity-equity-and-inclusion">Diversity, Equity, and Inclusion</h2>
+<p><em>A learning environment that works only when everyone in it is respected.</em></p>
+<p>The Manning College of Information and Computer Sciences and this course are committed to a learning environment in which every student is welcomed and respected regardless of race, ethnicity, national origin, gender identity or expression, sexual orientation, disability, age, religion, socioeconomic background, or veteran status. Computing is built by teams, and the best computing is built by teams whose members bring different experiences to the problem. The Computing for the Common Good framing of this course rests on that premise: the applications you build are meant to serve real communities, which requires taking seriously perspectives other than your own. I expect every interaction in this course, in your teams, in your reflections, and in any communication with the staff, to be conducted with that respect. If anything in this course, including its examples, its assignments, or the conduct of a classmate, makes you feel excluded or unwelcome, please send me a Canvas Inbox message so that I can address it.</p>
+<h2 id="title-ix-statement">Title IX Statement</h2>
+<p><em>A safe learning environment, and the resources that protect it.</em></p>
+<p>The following statement is required by the University and is reproduced verbatim. In accordance with Title IX of the Education Amendments of 1972 that prohibits gender-based discrimination in educational settings that receive federal funds, the University of Massachusetts Amherst is committed to providing a safe learning environment for all students, free from all forms of discrimination, including sexual assault, sexual harassment, domestic violence, dating violence, stalking, and retaliation. This includes interactions in person or online through digital platforms and social media. Title IX also protects against discrimination on the basis of pregnancy, childbirth, false pregnancy, miscarriage, abortion, or related conditions, including recovery. There are resources here on campus to support you. A summary of the available Title IX resources, both confidential and non-confidential, can be found at the following link: <a href="https://www.umass.edu/titleix/resources">https://www.umass.edu/titleix/resources</a>.</p>
+<h2 id="chosen-names-and-pronouns">Chosen Names and Pronouns</h2>
+<p><em>You tell us who you are, and we use it.</em></p>
+<p>I want to address you by the name and pronouns you use. If your chosen name or pronouns differ from what appears on the official roster, please send me a Canvas Inbox message at the start of the term, and I will use them in all communication and feedback. UMass Amherst allows students to designate a chosen name and a pronoun in SPIRE, which then propagates to Canvas and class rosters, and I encourage you to set these if you have not already. If I ever get your name or pronouns wrong, a quick, private Canvas Inbox message is welcome and I will fix it.</p>
+<h2 id="student-support-resources">Student Support Resources</h2>
+<p><em>The course is hard by design; you do not have to navigate it alone.</em></p>
+<p>Help with the course material comes first from the course staff, through a Canvas Inbox message addressed to all of us, and from the CICS supplemental instruction and tutoring resources offered through the Manning College advising office, which you can find on the CICS undergraduate advising pages. Beyond the course, the University offers support for the rest of your life as a student. The Center for Counseling and Psychological Health (CCPH) provides confidential mental health support and can be reached at (413) 545-2337, with a counselor available at that number at any hour. The Dean of Students Office helps students navigate personal emergencies, illness, and other circumstances that disrupt coursework, and can advocate on your behalf with instructors. The Writing Center offers free help with written communication, useful for the project poster and the individual reflection. The W.E.B. Du Bois Library provides research and technical resources, and the University offers food, housing, and financial assistance for students facing insecurity through the Dean of Students Office. If you are struggling for any reason, academic or otherwise, reach out early, to me through the Canvas Inbox or to any of these offices directly. Asking for help in time is a strength, and it is what these resources exist for.</p>
+    </div>
+  </body>
+</html>
