@@ -582,3 +582,83 @@ img[data-zoomable]:focus-visible {
   nav.site-nav ul { gap: 0.35rem var(--space-2); flex-wrap: wrap; }
   .site-header .wrap { flex-wrap: wrap; row-gap: 0.5rem; }
 }
+
+/* ---------- Course pages (courses/<course>/<term>/, built by _src/build-courses.py) ---------- */
+.course .prose strong { font-weight: 600; color: var(--forest); }
+
+.course .prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-3);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.course .prose th,
+.course .prose td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  text-align: left;
+}
+
+.course .prose thead th {
+  color: var(--forest);
+  font-weight: 600;
+  border-bottom: 2px solid var(--sage-soft);
+  background: var(--bg-alt);
+}
+
+.course .prose code { overflow-wrap: anywhere; }
+
+.course .toc {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+}
+
+.course .toc-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin: 0 0 var(--space-1);
+}
+
+.course .toc ul { margin: 0; padding-left: 1.1rem; columns: 2; column-gap: var(--space-3); }
+.course .toc li { margin-bottom: 0.2rem; break-inside: avoid; }
+
+@media (max-width: 640px) {
+  .course .toc ul { columns: 1; }
+}
+
+.course .button {
+  display: inline-block;
+  margin: var(--space-2) 0;
+  padding: 0.65rem 1.3rem;
+  border-radius: 0.5rem;
+  background: var(--forest);
+  color: var(--bg);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s var(--ease);
+}
+
+.course .button:hover,
+.course .button:focus-visible { background: var(--clay); color: var(--bg); }
+
+.course .status {
+  margin: var(--space-3) 0 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-alt);
+  border-left: 3px solid var(--sage);
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.course .status p { margin: 0; color: inherit; }
