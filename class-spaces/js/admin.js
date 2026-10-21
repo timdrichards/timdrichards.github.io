@@ -35,11 +35,13 @@ async function checkAdmin() {
 function route() {
   clearInterval(liveTimer);
   liveTimer = null;
-  document.body.classList.remove("projecting");
-  if (!session) return showLogin();
-  if (!isAdmin) return showNotAdmin();
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   const [view, id, sub] = parts;
+  // Keep the full-width projector layout while moving between class-view tabs or into the
+  // projector, so the page doesn't shrink and stretch while the next view loads.
+  if (!session || !isAdmin || !["c", "p"].includes(view)) document.body.classList.remove("projecting");
+  if (!session) return showLogin();
+  if (!isAdmin) return showNotAdmin();
   const go = {
     s: () => (sub === "new" ? showActivityForm({ spaceId: id }) : showSpace(id)),
     e: () => showActivityForm({ activityId: id }),
