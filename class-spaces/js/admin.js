@@ -161,6 +161,7 @@ async function showSpace(id) {
           <a class="button primary" href="#/s/${id}/new">New activity</a>
           <button id="export-json">Export JSON</button>
           <button id="close-all">Close all</button>
+          <button id="copy-space">Copy space</button>
           <button id="edit-space">Edit</button>
         </div></div>
       <ul class="acts">${acts.map((a, i) => `
@@ -201,6 +202,22 @@ async function showSpace(id) {
   };
   app.querySelector("#export-json").onclick = () => exportSpaceJson(space, acts);
   app.querySelector("#edit-space").onclick = () => editSpace(space);
+  app.querySelector("#copy-space").onclick = () => copySpace(space, acts);
+}
+
+// A new space with the same activities (new codes, all closed, no responses), then edit its title and date.
+async function copySpace(space, acts) {
+  const copy = must(await sb.from("spaces").insert({
+    title: `${space.title} (copy)`.slice(0, 200), course: space.course, meets_on: null,
+  }).select().single());
+  if (acts.length) {
+    must(await sb.from("activities").insert(acts.map((a, i) => ({
+      space_id: copy.id, kind: a.kind, title: a.title, prompt: a.prompt, config: a.config,
+      position: i, is_open: false,
+    }))));
+  }
+  location.hash = `#/s/${copy.id}`;
+  editSpace(copy);
 }
 
 function editSpace(space) {
@@ -409,6 +426,7 @@ async function showProjector(id) {
   const pref = (k, d) => store.get(`cs.proj.${act.id}.${k}`, d);
   let showQrPanel = pref("qr", true);
   let showRes = pref("res", act.kind !== "card");
+  let showNames = pref("names", false);
   document.body.classList.add("projecting");
   app.innerHTML = `
     <div class="proj">
@@ -417,6 +435,7 @@ async function showProjector(id) {
         <button id="t-open"></button>
         <button id="t-qr">QR (Q)</button>
         <button id="t-res">Results (R)</button>
+        ${act.kind === "card" ? `<button id="t-names">Group names (N)</button>` : ""}
         <button id="t-fs">Full screen (F)</button>
       </div>
       <div class="proj-body">
@@ -437,6 +456,7 @@ async function showProjector(id) {
     app.querySelector("#pres").hidden = !showRes;
     app.querySelector("#t-qr").classList.toggle("on", showQrPanel);
     app.querySelector("#t-res").classList.toggle("on", showRes);
+    app.querySelector("#t-names")?.classList.toggle("on", showNames);
     app.querySelector(".proj-body").classList.toggle("no-qr", !showQrPanel);
     const b = app.querySelector("#t-open");
     b.textContent = act.is_open ? "Close" : "Open";
@@ -445,10 +465,13 @@ async function showProjector(id) {
   const flip = (k) => {
     if (k === "qr") { showQrPanel = !showQrPanel; store.set(`cs.proj.${act.id}.qr`, showQrPanel); }
     if (k === "res") { showRes = !showRes; store.set(`cs.proj.${act.id}.res`, showRes); }
+    if (k === "names") { showNames = !showNames; store.set(`cs.proj.${act.id}.names`, showNames); draw(); }
     layout();
   };
   app.querySelector("#t-qr").onclick = () => flip("qr");
   app.querySelector("#t-res").onclick = () => flip("res");
+  const tn = app.querySelector("#t-names");
+  if (tn) tn.onclick = () => flip("names");
   app.querySelector("#t-fs").onclick = fullscreen;
   app.querySelector("#t-open").onclick = async () => {
     act = must(await sb.from("activities").update({ is_open: !act.is_open }).eq("id", act.id).select().single());
@@ -460,6 +483,7 @@ async function showProjector(id) {
     if (e.target.closest("input, textarea, select")) return;
     if (e.key === "q" || e.key === "Q") flip("qr");
     if (e.key === "r" || e.key === "R") flip("res");
+    if ((e.key === "n" || e.key === "N") && act.kind === "card") flip("names");
     if (e.key === "f" || e.key === "F") fullscreen();
   };
   document.addEventListener("keydown", onKey);
@@ -471,8 +495,8 @@ async function showProjector(id) {
     app.querySelector("#status").innerHTML = act.is_open
       ? `<span class="pill open">Open</span> <span>${n} response${n === 1 ? "" : "s"}</span>`
       : `<span class="pill">Closed</span> <span>${n} response${n === 1 ? "" : "s"}</span>`;
-    // No group labels on the projector: the chart and cards never show them.
-    app.querySelector("#pres").innerHTML = renderResults(act, responses, { big: true });
+    // Group labels stay off the projector unless the Names toggle is on (cards only).
+    app.querySelector("#pres").innerHTML = renderResults(act, responses, { big: true, names: showNames });
   };
   await draw();
   liveTimer = setInterval(() => draw().catch(console.error), LIVE_MS);

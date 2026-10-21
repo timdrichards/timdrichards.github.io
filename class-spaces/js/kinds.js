@@ -69,10 +69,11 @@ function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, Math.round(n))); }
 // ---------------------------------------------------------------- results
 
 // Charts take only visible responses. `big` is the projector size.
-export function renderResults(act, responses, { big = false } = {}) {
+// `names` puts each card's group label on it (the projector's Names toggle; off by default).
+export function renderResults(act, responses, { big = false, names = false } = {}) {
   const shown = responses.filter((r) => !r.hidden);
   const c = act.config || {};
-  if (act.kind === "card") return renderCards(c, shown, big);
+  if (act.kind === "card") return renderCards(c, shown, big, names);
   if (act.kind === "poll") return renderPoll(c, shown);
   if (act.kind === "scale") return renderScale(c, shown);
   if (act.kind === "sort") return renderSort(c, shown);
@@ -83,9 +84,9 @@ function emptyNote(n) {
   return n ? "" : `<p class="muted empty">No responses yet.</p>`;
 }
 
-function renderCards(c, rows, big) {
+function renderCards(c, rows, big, names = false) {
   const tags = c.tags || [];
-  const card = (r) => `<div class="card-resp">${esc(r.body.text)}</div>`;
+  const card = (r) => `<div class="card-resp">${names && r.group_label ? `<div class="card-group">${esc(r.group_label)}</div>` : ""}${esc(r.body.text)}</div>`;
   const newest = [...rows].reverse();
   if (!tags.length) {
     return `<p class="n">${rows.length} card${rows.length === 1 ? "" : "s"}</p>

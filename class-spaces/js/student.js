@@ -57,7 +57,8 @@ function render() {
   const f = app.querySelector("#f");
   WIRE[act.kind]?.(f, c);
   const again = f.querySelector("#newname");
-  if (again) again.onclick = () => { store.set(randomKey(), randomGroupName()); render(); };
+  if (again) again.onclick = () => claimName(true);
+  if ((c.group || "optional") === "random" && !claimed && !store.get(postedKey(), false)) claimName(false);
   f.onsubmit = (e) => { e.preventDefault(); send(f, c); };
 }
 
@@ -71,10 +72,26 @@ const NOUN = ["Badger", "Comet", "Falcon", "Fox", "Gecko", "Heron", "Koala", "Ly
 const pick = (xs) => xs[Math.floor(Math.random() * xs.length)];
 const randomGroupName = () => `${pick(ADJ)} ${pick(NOUN)}`;
 const randomKey = () => "cs.rgroup." + (act.space || "");
+const postedKey = () => "cs.rposted." + (act.space || "");
 function randomName() {
   let n = store.get(randomKey());
   if (!n) { n = randomGroupName(); store.set(randomKey(), n); }
   return n;
+}
+
+// Ask the server for a name no other device in this space has (claim_group_name in schema.sql).
+// If the function is not there yet, the locally picked name stands.
+let claimed = false;
+async function claimName(fresh) {
+  claimed = true;
+  const { data, error } = await sb.rpc("claim_group_name", { p_code: code, p_device: deviceId(), p_fresh: !!fresh });
+  if (!error && typeof data === "string" && data) store.set(randomKey(), data);
+  else if (fresh) store.set(randomKey(), randomGroupName());
+  const badge = app.querySelector(".group-badge");
+  if (!badge) return;
+  const n = randomName();
+  badge.querySelector("strong").textContent = n;
+  badge.querySelector('input[name="group"]').value = n;
 }
 
 function groupField(c) {
@@ -82,11 +99,13 @@ function groupField(c) {
   if (mode === "off") return "";
   if (mode === "random") {
     const n = randomName();
+    // Once this device has posted under the name, keep it: no "New name" button.
+    const locked = store.get(postedKey(), false);
     return `<div class="group-badge">
         <span class="muted small">Your group name</span>
         <strong>${esc(n)}</strong>
         <input type="hidden" name="group" value="${esc(n)}">
-        <button type="button" id="newname" class="link small">New name</button>
+        ${locked ? "" : `<button type="button" id="newname" class="link small">New name</button>`}
       </div>
       <p class="muted small">Tell your group this name. Use the same device, so every post today is under it.</p>`;
   }
@@ -127,10 +146,18 @@ const FORMS = {
   },
 };
 
+// Card text is kept as a draft on this device until it is sent, so a closed activity
+// or a reload never loses what a student typed.
+const draftKey = () => "cs.draft." + code;
 const WIRE = {
   card: (f) => {
     const len = f.querySelector("#len");
-    f.text.addEventListener("input", () => { len.textContent = f.text.value.length; });
+    const draft = store.get(draftKey(), "");
+    if (draft) { f.text.value = draft; len.textContent = draft.length; }
+    f.text.addEventListener("input", () => {
+      len.textContent = f.text.value.length;
+      store.set(draftKey(), f.text.value);
+    });
   },
 };
 
@@ -182,7 +209,12 @@ async function send(f, c) {
     return;
   }
   msg.classList.add("ok");
+  if (c.group === "random" && !store.get(postedKey(), false)) {
+    store.set(postedKey(), true);
+    f.querySelector("#newname")?.remove();
+  }
   if (act.kind === "card") {
+    store.set(draftKey(), "");
     const left = data.limit - data.used;
     msg.textContent = left > 0 ? `Sent. You can add ${left} more.` : "Sent. That was your last one.";
     f.text.value = "";
