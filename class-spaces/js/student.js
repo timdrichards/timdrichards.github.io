@@ -1,4 +1,5 @@
-// Student page: <site>/?code. No login. Can read one activity's prompt and submit; nothing else,
+// Student page: <site>/?code, where code is an activity code or a space's join code (a list of
+// the space's activities, open ones first). No login. Can read one activity's prompt and submit; nothing else,
 // except two kinds that show posts on purpose: dot voting (the cards to vote on) and the
 // question queue (questions and their votes), never with group names.
 
@@ -21,7 +22,7 @@ function showJoin(msg = "") {
   app.innerHTML = `<div class="panel">
     <h1>Class Spaces</h1>
     <form id="join" class="stack-form">
-      <label>Activity code<input name="code" autocomplete="off" autocapitalize="none" maxlength="12" required></label>
+      <label>Code<input name="code" autocomplete="off" autocapitalize="none" maxlength="12" required></label>
       ${msg ? `<p class="error">${esc(msg)}</p>` : ""}
       <button class="primary">Go</button>
     </form></div>`;
@@ -37,12 +38,51 @@ async function fetchActivity() {
   return data;
 }
 
+async function fetchSpace() {
+  const { data, error } = await sb.rpc("get_space", { p_code: code });
+  if (error) throw error;
+  return data;
+}
+
+// A space's join code: every activity in the teacher's order, the open ones as big buttons on top.
+// Checks every few seconds, so a newly opened activity shows up without a reload.
+function spaceView(space) {
+  document.title = `${space.title} · Class Spaces`;
+  let shown = "";
+  const draw = (sp) => {
+    const key = JSON.stringify(sp);
+    if (key === shown) return;
+    shown = key;
+    const open = sp.activities.filter((a) => a.is_open);
+    const closed = sp.activities.filter((a) => !a.is_open);
+    app.innerHTML = `<header class="s-head"><div class="muted small">Class Spaces</div><h1>${esc(sp.title)}</h1></header>
+      <section class="panel"><h2 class="sub">Open now</h2>
+        ${open.length ? `<ul class="space-list">${open.map((a) => `<li><a class="space-act open" href="?${encodeURIComponent(a.code)}">
+          <span class="space-act-title">${esc(a.title)}</span><span class="space-act-go">Open</span></a></li>`).join("")}</ul>`
+          : `<p class="muted">Nothing is open yet. This page updates by itself.</p>`}
+      </section>
+      ${closed.length ? `<section class="panel"><h2 class="sub">Not open</h2><ul class="space-list">${closed.map((a) =>
+        `<li class="space-act closed"><span class="space-act-title">${esc(a.title)}</span><span class="muted small">closed</span></li>`).join("")}</ul></section>` : ""}`;
+  };
+  draw(space);
+  liveTimer = setInterval(async () => {
+    let sp;
+    try { sp = await fetchSpace(); } catch { return; }
+    if (sp) draw(sp);
+  }, 4000);
+}
+
 async function load() {
   let data;
   try { data = await fetchActivity(); } catch (e) {
     app.innerHTML = `<div class="panel"><p class="error">${esc(errorText(e))}</p></div>`; return;
   }
-  if (!data) { showJoin(`No activity with code "${code}".`); return; }
+  if (!data) {
+    let space = null;
+    try { space = await fetchSpace(); } catch { /* get_space not installed yet */ }
+    if (space) { spaceView(space); return; }
+    showJoin(`Nothing has the code "${code}".`); return;
+  }
   act = data;
   document.title = `${act.title} · Class Spaces`;
   render();
@@ -143,7 +183,8 @@ function groupField(c) {
 }
 
 function header() {
-  return `<header class="s-head"><div class="muted small">${esc(act.space)}</div>
+  const back = act.space_code ? `<a class="back-link" href="?${encodeURIComponent(act.space_code)}">← All activities</a>` : "";
+  return `<header class="s-head">${back}<div class="muted small">${esc(act.space)}</div>
     <h1>${esc(act.title)}</h1>${act.prompt ? `<p class="prompt">${esc(act.prompt)}</p>` : ""}</header>`;
 }
 

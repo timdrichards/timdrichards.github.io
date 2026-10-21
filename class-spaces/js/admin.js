@@ -156,7 +156,8 @@ async function showSpace(id) {
   app.innerHTML = `${nav(` / ${esc(space.title)}`)}
     <div class="page">
       <div class="head-row"><div><h1>${esc(space.title)}</h1>
-        <p class="muted">${esc([space.course, fmtDate(space.meets_on)].filter(Boolean).join(" · "))}${space.archived ? " · archived" : ""}</p></div>
+        <p class="muted">${esc([space.course, fmtDate(space.meets_on)].filter(Boolean).join(" · "))}${space.archived ? " · archived" : ""}</p>
+        ${space.code ? `<p>Join code <strong class="space-code">${esc(space.code)}</strong>: students see every activity, open ones on top. <button id="space-qr">QR</button></p>` : ""}</div>
         <div class="btns">
           <a class="button primary" href="#/s/${id}/new">New activity</a>
           <button id="export-json">Export JSON</button>
@@ -203,6 +204,8 @@ async function showSpace(id) {
   app.querySelector("#export-json").onclick = () => exportSpaceJson(space, acts);
   app.querySelector("#edit-space").onclick = () => editSpace(space);
   app.querySelector("#copy-space").onclick = () => copySpace(space, acts);
+  const sq = app.querySelector("#space-qr");
+  if (sq) sq.onclick = () => showQr(space.code, `${space.title}: all activities`);
 }
 
 // A new space with the same activities (new codes, all closed, no responses), then edit its title and date.
