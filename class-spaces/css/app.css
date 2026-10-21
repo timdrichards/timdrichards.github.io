@@ -288,18 +288,25 @@ body.projecting main { max-width: none; padding: 0; }
 .back-link { display: inline-block; margin-bottom: 6px; font-weight: 600; text-decoration: none; }
 .space-code { font-family: ui-monospace, Menlo, monospace; font-weight: 700; }
 
-/* class view: a tab per activity above the projector layout */
-.ctop { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; margin-bottom: 12px; }
-.ctabs { display: flex; gap: 6px; flex-wrap: wrap; flex: 1 1 60%; }
-.ctab { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
-  background: var(--surface); color: var(--text); text-decoration: none; font-size: 15px; max-width: 320px; }
-.ctab-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ctab-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--empty); flex: none; }
-.ctab.open .ctab-dot { background: var(--ok); }
-.ctab.open { border-color: var(--ok); }
-.ctab-n { font-weight: 700; font-variant-numeric: tabular-nums; background: var(--surface-2); border-radius: 999px; padding: 0 8px; flex: none; }
-.ctab.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.ctab.on .ctab-n { background: rgba(255,255,255,.22); }
-.ctab.on.open .ctab-dot { background: #7ee2ad; }
-.class-view .proj-tools { flex: 0 1 auto; }
+/* class view: a tab strip, one tab per activity, above the projector layout */
+.ctop { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.ctabs { display: flex; gap: 6px; overflow-x: auto; border-bottom: 2px solid var(--border); padding: 4px 2px 0; scrollbar-width: thin; }
+.ctab { position: relative; flex: 0 0 auto; display: flex; flex-direction: column; gap: 6px; min-width: 150px; max-width: 260px;
+  padding: 10px 16px 12px; margin-bottom: -2px; border: 2px solid transparent; border-bottom: none; border-radius: 12px 12px 0 0;
+  background: var(--surface-2); color: var(--text-2); text-decoration: none; font-size: 15px; line-height: 1.25; transition: background .15s; }
+.ctab:hover { background: var(--surface); color: var(--text); }
+.ctab-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
+.ctab-state { display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--text-2); }
+.ctab-state::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--empty); }
+.ctab.open .ctab-state { color: var(--ok); }
+.ctab.open .ctab-state::before { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+.ctab-n { color: var(--text-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ctab-n strong { font-size: 17px; color: var(--text); }
+.ctab-title { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: inherit; }
+.ctab-num { display: inline-block; min-width: 1.5em; margin-right: 6px; padding: 0 5px; border-radius: 5px; background: var(--border);
+  color: var(--text-2); font-size: 12px; font-weight: 700; text-align: center; vertical-align: 1px; }
+.ctab.on { background: var(--bg); color: var(--text); border-color: var(--border); box-shadow: inset 0 3px 0 var(--accent); }
+.ctab.on .ctab-num { background: var(--accent); color: var(--accent-ink); }
+.ctab.on::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--bg); }
+.class-view .proj-tools { justify-content: flex-end; }
 .proj-codes { text-align: center; font-size: .95em; }

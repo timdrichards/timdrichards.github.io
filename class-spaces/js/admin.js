@@ -630,10 +630,11 @@ async function showClass(spaceId, actId) {
     app.querySelector("#tabs").innerHTML = acts.map((a, i) => `
       <a role="tab" href="#/c/${spaceId}/${a.id}" class="ctab ${a.is_open ? "open" : ""} ${a.id === act.id ? "on" : ""}"
          aria-selected="${a.id === act.id}" title="${esc(a.title)} (code ${esc(a.code)})">
-        <span class="ctab-dot" aria-hidden="true"></span>
-        <span class="ctab-title">${esc(a.title)}</span>
-        <span class="ctab-n" aria-label="${count(a)} responses">${count(a)}</span>
-        <span class="sr">${a.is_open ? "open" : "closed"}</span>
+        <span class="ctab-top">
+          <span class="ctab-state">${a.is_open ? "Open" : "Closed"}</span>
+          <span class="ctab-n"><strong>${count(a)}</strong> ${count(a) === 1 ? "post" : "posts"}</span>
+        </span>
+        <span class="ctab-title"><span class="ctab-num">${i + 1}</span>${esc(a.title)}</span>
       </a>`).join("");
   };
   const layout = () => {
