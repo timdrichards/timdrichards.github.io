@@ -341,7 +341,7 @@ async function loadActivity(id) {
 }
 
 const loadResponses = (activityId) => fetchAll(() => sb.from("responses")
-  .select("id, body, group_label, hidden, created_at, updated_at").eq("activity_id", activityId)
+  .select("id, body, group_label, device, hidden, created_at, updated_at").eq("activity_id", activityId)
   .order("created_at").order("id"));
 
 function responseText(act, r) {
@@ -355,8 +355,35 @@ function responseText(act, r) {
       return j === null || j === undefined ? null : `${it}: ${c.buckets?.[j]}`;
     }).filter(Boolean).join("; ");
   }
+  if (act.kind === "vote") {
+    return `Round ${r.body.round || 1}: ${c.options?.[r.body.choice] ?? r.body.choice}` + (r.body.confidence ? ` (sure ${r.body.confidence}/3)` : "");
+  }
+  if (act.kind === "dots") return `${(r.body.picks || []).length} vote(s)`;
+  if (act.kind === "slider") return `${r.body.value} of 100`;
+  if (act.kind === "qa") return r.body.upvote ? "▲ upvote" : r.body.text;
+  if (act.kind === "rank") return (r.body.order || []).map((i, k) => `${k + 1}. ${c.items?.[i] ?? i}`).join("  ");
+  if (act.kind === "quiz") return `${r.body.correct ? "Right" : "Wrong"}: ${r.body.answer}`;
+  if (act.kind === "hotspot") return (r.body.points || []).map((p) => `(${p.x}, ${p.y})`).join(" ");
+  if (act.kind === "ticket") return `${r.body.value}: ${r.body.text}`;
   return JSON.stringify(r.body);
 }
+
+// Data a chart needs beyond its own responses: dot voting reads its source cards.
+async function loadExtra(act) {
+  if (act.kind !== "dots" || !act.config?.source) return {};
+  const src = must(await sb.from("activities").select("id").eq("space_id", act.space_id)
+    .eq("code", act.config.source).eq("kind", "card").maybeSingle());
+  if (!src) return { cards: [] };
+  const rs = await loadResponses(src.id);
+  return { cards: rs.filter((r) => !r.hidden).map((r) => ({ id: r.id, text: r.body.text, tag: r.body.tag })) };
+}
+
+// Vote, discuss, vote again: move the activity between round 1 and round 2.
+async function flipRound(act) {
+  const round = act.config?.round === 2 ? 1 : 2;
+  return must(await sb.from("activities").update({ config: { ...act.config, round } }).eq("id", act.id).select().single());
+}
+const roundLabel = (act) => (act.config?.round === 2 ? "Back to round 1" : "Start round 2");
 
 async function showResults(id) {
   let { act, space } = await loadActivity(id);
@@ -371,6 +398,7 @@ async function showResults(id) {
         </div>
         <div class="btns">
           <button id="toggle"></button>
+          ${act.kind === "vote" ? `<button id="round"></button>` : ""}
           <a class="button" href="#/p/${act.id}">Projector</a>
           <button id="qr">QR</button>
           <a class="button" href="#/e/${act.id}">Edit</a>
@@ -394,6 +422,11 @@ async function showResults(id) {
     act = must(await sb.from("activities").update({ is_open: !act.is_open }).eq("id", act.id).select().single());
     drawToggle();
   };
+  const roundBtn = app.querySelector("#round");
+  if (roundBtn) {
+    roundBtn.textContent = roundLabel(act);
+    roundBtn.onclick = async () => { act = await flipRound(act); roundBtn.textContent = roundLabel(act); draw(); };
+  }
   app.querySelector("#qr").onclick = () => showQr(act.code, act.title);
   app.querySelector("#csv").onclick = () => download(`${slug(space.title)}-${act.code}.csv`,
     toCsv(activityCsvRows(space, act, responses)), "text/csv");
@@ -403,7 +436,7 @@ async function showResults(id) {
 
   const draw = async () => {
     responses = await loadResponses(act.id);
-    app.querySelector("#chart").innerHTML = renderResults(act, responses);
+    app.querySelector("#chart").innerHTML = renderResults(act, responses, { extra: await loadExtra(act) });
     app.querySelector("#rows").innerHTML = [...responses].reverse().map((r) => `
       <tr class="${r.hidden ? "hidden-resp" : ""}">
         <td class="nowrap">${fmtTime(r.created_at)}</td>
@@ -466,6 +499,7 @@ async function showProjector(id) {
         <button id="t-qr">QR (Q)</button>
         <button id="t-res">Results (R)</button>
         ${act.kind === "card" ? `<button id="t-names">Group names (N)</button>` : ""}
+        ${act.kind === "vote" ? `<button id="t-round"></button>` : ""}
         <button id="t-fs">Full screen (F)</button>
       </div>
       <div class="proj-body">
@@ -502,6 +536,11 @@ async function showProjector(id) {
   app.querySelector("#t-res").onclick = () => flip("res");
   const tn = app.querySelector("#t-names");
   if (tn) tn.onclick = () => flip("names");
+  const tr = app.querySelector("#t-round");
+  if (tr) {
+    tr.textContent = roundLabel(act);
+    tr.onclick = async () => { act = await flipRound(act); tr.textContent = roundLabel(act); draw(); };
+  }
   app.querySelector("#t-fs").onclick = fullscreen;
   app.querySelector("#t-open").onclick = async () => {
     act = must(await sb.from("activities").update({ is_open: !act.is_open }).eq("id", act.id).select().single());
@@ -526,7 +565,7 @@ async function showProjector(id) {
       ? `<span class="pill open">Open</span> <span>${n} response${n === 1 ? "" : "s"}</span>`
       : `<span class="pill">Closed</span> <span>${n} response${n === 1 ? "" : "s"}</span>`;
     // Group labels stay off the projector unless the Names toggle is on (cards only).
-    app.querySelector("#pres").innerHTML = renderResults(act, responses, { big: true, names: showNames });
+    app.querySelector("#pres").innerHTML = renderResults(act, responses, { big: true, names: showNames, extra: await loadExtra(act) });
   };
   await draw();
   liveTimer = setInterval(() => draw().catch(console.error), LIVE_MS);
