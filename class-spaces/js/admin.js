@@ -269,8 +269,9 @@ async function showActivityForm({ spaceId, activityId }) {
         <fieldset id="kind-fields" ${locked ? "disabled" : ""}></fieldset>
         ${locked ? `<p class="muted small">Options are locked because this activity has ${count} responses. Title and prompt can still change.</p>` : ""}
         <label>Group label<select name="group">
-          <option value="optional">Ask for an optional group label</option>
-          <option value="off" ${act?.config?.group === "off" ? "selected" : ""}>Don't ask</option>
+          ${[["optional", "Ask for an optional group name"], ["required", "Require a group name"],
+             ["random", "Give each group a random name (e.g. Teal Otter)"], ["off", "Don't ask"]]
+            .map(([v, t]) => `<option value="${v}" ${(act?.config?.group || "optional") === v ? "selected" : ""}>${t}</option>`).join("")}
         </select></label>
         <p id="err" class="error"></p>
         <div class="btns">

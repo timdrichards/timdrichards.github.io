@@ -46,19 +46,52 @@ function render() {
     return;
   }
   const c = act.config || {};
-  const groupField = c.group === "off" ? "" : `
-    <label class="group">Group (optional)<input name="group" maxlength="40" autocomplete="off" value="${esc(store.get("cs.group", ""))}"></label>`;
   app.innerHTML = `${header()}
     <form id="f" class="panel stack-form" novalidate>
+      ${groupField(c)}
       ${FORMS[act.kind](c)}
-      ${groupField}
       <p id="msg" class="msg" role="status" aria-live="polite"></p>
       <button class="primary big" id="send">Send</button>
       <p class="muted small">Anonymous. Only your teacher sees responses.</p>
     </form>`;
   const f = app.querySelector("#f");
   WIRE[act.kind]?.(f, c);
+  const again = f.querySelector("#newname");
+  if (again) again.onclick = () => { store.set(randomKey(), randomGroupName()); render(); };
   f.onsubmit = (e) => { e.preventDefault(); send(f, c); };
+}
+
+// Group label modes (activity config.group): "off", "optional", "required", or "random".
+// Random: this device gets a name like "Teal Otter", kept for every activity in the same space,
+// so a group that posts from one device shows up under one name all class.
+const ADJ = ["Amber", "Brave", "Bright", "Calm", "Clever", "Coral", "Cosmic", "Crimson", "Golden", "Jade",
+  "Lucky", "Lunar", "Mighty", "Misty", "Nimble", "Quiet", "Rapid", "Silver", "Sunny", "Swift", "Teal", "Witty"];
+const NOUN = ["Badger", "Comet", "Falcon", "Fox", "Gecko", "Heron", "Koala", "Lynx", "Maple", "Meteor", "Otter",
+  "Owl", "Panda", "Pebble", "Puffin", "Quokka", "Raven", "Robin", "Salmon", "Sparrow", "Tiger", "Walrus"];
+const pick = (xs) => xs[Math.floor(Math.random() * xs.length)];
+const randomGroupName = () => `${pick(ADJ)} ${pick(NOUN)}`;
+const randomKey = () => "cs.rgroup." + (act.space || "");
+function randomName() {
+  let n = store.get(randomKey());
+  if (!n) { n = randomGroupName(); store.set(randomKey(), n); }
+  return n;
+}
+
+function groupField(c) {
+  const mode = c.group || "optional";
+  if (mode === "off") return "";
+  if (mode === "random") {
+    const n = randomName();
+    return `<div class="group-badge">
+        <span class="muted small">Your group name</span>
+        <strong>${esc(n)}</strong>
+        <input type="hidden" name="group" value="${esc(n)}">
+        <button type="button" id="newname" class="link small">New name</button>
+      </div>
+      <p class="muted small">Tell your group this name. Use the same device, so every post today is under it.</p>`;
+  }
+  const req = mode === "required";
+  return `<label class="group">Group name${req ? "" : " (optional)"}<input name="group" maxlength="40" autocomplete="off" ${req ? "required" : ""} value="${esc(store.get("cs.group", ""))}"></label>`;
 }
 
 function header() {
@@ -135,7 +168,8 @@ async function send(f, c) {
   if (!body) { msg.textContent = "Pick an answer first."; msg.classList.add("error"); return; }
   if (act.kind === "card" && !body.text.trim()) { msg.textContent = "Write something first."; msg.classList.add("error"); return; }
   const group = f.group ? f.group.value.trim() : "";
-  if (f.group) store.set("cs.group", group);
+  if (c.group === "required" && !group) { msg.textContent = "Add your group name first."; msg.classList.add("error"); return; }
+  if (f.group && c.group !== "random") store.set("cs.group", group);
   btn.disabled = true;
   const { data, error } = await sb.rpc("submit_response", {
     p_code: code, p_body: body, p_group: group || null, p_device: deviceId(),
