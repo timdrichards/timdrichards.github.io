@@ -287,3 +287,19 @@ body.projecting main { max-width: none; padding: 0; }
 .space-act.closed { color: var(--text-2); background: var(--surface-2); }
 .back-link { display: inline-block; margin-bottom: 6px; font-weight: 600; text-decoration: none; }
 .space-code { font-family: ui-monospace, Menlo, monospace; font-weight: 700; }
+
+/* class view: a tab per activity above the projector layout */
+.ctop { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; margin-bottom: 12px; }
+.ctabs { display: flex; gap: 6px; flex-wrap: wrap; flex: 1 1 60%; }
+.ctab { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--text); text-decoration: none; font-size: 15px; max-width: 320px; }
+.ctab-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ctab-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--empty); flex: none; }
+.ctab.open .ctab-dot { background: var(--ok); }
+.ctab.open { border-color: var(--ok); }
+.ctab-n { font-weight: 700; font-variant-numeric: tabular-nums; background: var(--surface-2); border-radius: 999px; padding: 0 8px; flex: none; }
+.ctab.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.ctab.on .ctab-n { background: rgba(255,255,255,.22); }
+.ctab.on.open .ctab-dot { background: #7ee2ad; }
+.class-view .proj-tools { flex: 0 1 auto; }
+.proj-codes { text-align: center; font-size: .95em; }

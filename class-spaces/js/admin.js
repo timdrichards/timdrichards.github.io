@@ -1,5 +1,6 @@
 // Admin app: login, spaces, activities, results, projector, export.
 // Routes (hash): #/  #/s/<space>  #/s/<space>/new  #/e/<activity>  #/a/<activity>  #/p/<activity>
+//                 #/c/<space>[/<activity>]  class view: one tab per activity, live
 
 import { sb, configured, esc, store, studentUrl, shortLabel, qrSvg, notConfiguredHtml, fetchAll, errorText } from "./common.js";
 import { KINDS, renderResults, activityCsvRows, toCsv } from "./kinds.js";
@@ -44,6 +45,7 @@ function route() {
     e: () => showActivityForm({ activityId: id }),
     a: () => showResults(id),
     p: () => showProjector(id),
+    c: () => showClass(id, sub),
   }[view];
   (go || showSpaces)().catch(fail);
 }
@@ -118,7 +120,7 @@ async function showSpaces() {
       <div class="head-row"><h1>Spaces</h1>
         <label class="check small"><input type="checkbox" id="arch" ${showArchived ? "checked" : ""}> Show archived</label></div>
       <ul class="list">${list.map((s) => `
-        <li><a href="#/s/${s.id}"><strong>${esc(s.title)}</strong></a>
+        <li><a href="#/c/${s.id}"><strong>${esc(s.title)}</strong></a> <a class="small" href="#/s/${s.id}">Manage</a>
           <span class="muted">${esc([s.course, fmtDate(s.meets_on)].filter(Boolean).join(" · "))}
           · ${s.activities[0]?.count ?? 0} activities${s.archived ? " · archived" : ""}</span></li>`).join("")
         || `<li class="muted">No spaces yet.</li>`}</ul>
@@ -159,7 +161,8 @@ async function showSpace(id) {
         <p class="muted">${esc([space.course, fmtDate(space.meets_on)].filter(Boolean).join(" · "))}${space.archived ? " · archived" : ""}</p>
         ${space.code ? `<p>Join code <strong class="space-code">${esc(space.code)}</strong>: students see every activity, open ones on top. <button id="space-qr">QR</button></p>` : ""}</div>
         <div class="btns">
-          <a class="button primary" href="#/s/${id}/new">New activity</a>
+          <a class="button primary" href="#/c/${id}">Class view</a>
+          <a class="button" href="#/s/${id}/new">New activity</a>
           <button id="export-json">Export JSON</button>
           <button id="close-all">Close all</button>
           <button id="copy-space">Copy space</button>
@@ -572,6 +575,137 @@ async function showProjector(id) {
   };
   await draw();
   liveTimer = setInterval(() => draw().catch(console.error), LIVE_MS);
+}
+
+// ---------------------------------------------------------------- class view
+// One browser tab for a whole class: a tab per activity (green when open, with a live response
+// count), and the chosen activity in projector style below. Arrow keys move between tabs.
+
+async function showClass(spaceId, actId) {
+  const space = must(await sb.from("spaces").select("*").eq("id", spaceId).single());
+  const loadActs = async () => must(await sb.from("activities")
+    .select("id, code, kind, title, prompt, config, is_open, position, space_id, created_at, responses(count)")
+    .eq("space_id", spaceId).eq("responses.hidden", false).order("position").order("created_at"));
+  let acts = await loadActs();
+  if (!acts.length) { location.hash = `#/s/${spaceId}`; return; }
+  let act = acts.find((a) => a.id === actId) || acts.find((a) => a.is_open) || acts[0];
+  if (act.id !== actId) history.replaceState(null, "", `#/c/${spaceId}/${act.id}`);
+  const joinUrl = space.code ? studentUrl(space.code) : studentUrl(act.code);
+  const pref = (k, d) => store.get(`cs.class.${k}`, d);
+  let showQrPanel = pref("qr", true);
+  let showRes = pref("res", true);
+  let showNames = store.get(`cs.proj.${act.id}.names`, false);
+  document.body.classList.add("projecting");
+  app.innerHTML = `
+    <div class="proj class-view">
+      <div class="ctop">
+        <nav class="ctabs" id="tabs" role="tablist" aria-label="Activities"></nav>
+        <div class="proj-tools">
+          <a href="#/s/${spaceId}" class="button">Manage</a>
+          <a href="#/a/${act.id}" class="button">Responses</a>
+          <button id="t-open"></button>
+          <button id="t-qr">QR (Q)</button>
+          <button id="t-res">Results (R)</button>
+          ${act.kind === "card" ? `<button id="t-names">Group names (N)</button>` : ""}
+          ${act.kind === "vote" ? `<button id="t-round"></button>` : ""}
+          <button id="t-fs">Full screen (F)</button>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-main">
+          <h1 class="proj-title">${esc(act.title)}</h1>
+          ${act.prompt ? `<p class="proj-prompt">${esc(act.prompt)}</p>` : ""}
+          <div class="proj-status" id="status"></div>
+          <section class="results big" id="pres"></section>
+        </div>
+        <aside class="proj-qr" id="pqr">
+          <div class="qr">${qrSvg(joinUrl, 10)}</div>
+          <div class="proj-url">${esc(shortLabel(joinUrl))}</div>
+          ${space.code ? `<div class="proj-codes">Join code <strong>${esc(space.code)}</strong><br><span class="muted">this activity: ${esc(act.code)}</span></div>` : ""}
+        </aside>
+      </div>
+    </div>`;
+  const count = (a) => a.responses?.[0]?.count ?? 0;
+  const drawTabs = () => {
+    app.querySelector("#tabs").innerHTML = acts.map((a, i) => `
+      <a role="tab" href="#/c/${spaceId}/${a.id}" class="ctab ${a.is_open ? "open" : ""} ${a.id === act.id ? "on" : ""}"
+         aria-selected="${a.id === act.id}" title="${esc(a.title)} (code ${esc(a.code)})">
+        <span class="ctab-dot" aria-hidden="true"></span>
+        <span class="ctab-title">${esc(a.title)}</span>
+        <span class="ctab-n" aria-label="${count(a)} responses">${count(a)}</span>
+        <span class="sr">${a.is_open ? "open" : "closed"}</span>
+      </a>`).join("");
+  };
+  const layout = () => {
+    app.querySelector("#pqr").hidden = !showQrPanel;
+    app.querySelector("#pres").hidden = !showRes;
+    app.querySelector("#t-qr").classList.toggle("on", showQrPanel);
+    app.querySelector("#t-res").classList.toggle("on", showRes);
+    app.querySelector("#t-names")?.classList.toggle("on", showNames);
+    app.querySelector(".proj-body").classList.toggle("no-qr", !showQrPanel);
+    const b = app.querySelector("#t-open");
+    b.textContent = act.is_open ? "Close" : "Open";
+    b.className = act.is_open ? "danger" : "primary";
+  };
+  const flip = (k) => {
+    if (k === "qr") { showQrPanel = !showQrPanel; store.set("cs.class.qr", showQrPanel); }
+    if (k === "res") { showRes = !showRes; store.set("cs.class.res", showRes); }
+    if (k === "names") { showNames = !showNames; store.set(`cs.proj.${act.id}.names`, showNames); draw(); }
+    layout();
+  };
+  app.querySelector("#t-qr").onclick = () => flip("qr");
+  app.querySelector("#t-res").onclick = () => flip("res");
+  const tn = app.querySelector("#t-names");
+  if (tn) tn.onclick = () => flip("names");
+  const tr = app.querySelector("#t-round");
+  if (tr) {
+    tr.textContent = roundLabel(act);
+    tr.onclick = async () => { act = { ...act, ...(await flipRound(act)) }; tr.textContent = roundLabel(act); draw(); };
+  }
+  app.querySelector("#t-fs").onclick = fullscreen;
+  app.querySelector("#t-open").onclick = async () => {
+    const row = must(await sb.from("activities").update({ is_open: !act.is_open }).eq("id", act.id).select().single());
+    act = { ...act, ...row };
+    acts = acts.map((a) => (a.id === act.id ? { ...a, is_open: act.is_open } : a));
+    layout();
+    drawTabs();
+    draw();
+  };
+  const onKey = (e) => {
+    if (!app.querySelector(".class-view")) { document.removeEventListener("keydown", onKey); return; }
+    if (e.target.closest("input, textarea, select") || e.metaKey || e.ctrlKey || e.altKey) return;
+    const i = acts.findIndex((a) => a.id === act.id);
+    if (e.key === "ArrowRight" && i < acts.length - 1) location.hash = `#/c/${spaceId}/${acts[i + 1].id}`;
+    if (e.key === "ArrowLeft" && i > 0) location.hash = `#/c/${spaceId}/${acts[i - 1].id}`;
+    if (e.key === "q" || e.key === "Q") flip("qr");
+    if (e.key === "r" || e.key === "R") flip("res");
+    if ((e.key === "n" || e.key === "N") && act.kind === "card") flip("names");
+    if (e.key === "f" || e.key === "F") fullscreen();
+  };
+  document.addEventListener("keydown", onKey);
+  drawTabs();
+  layout();
+
+  const draw = async () => {
+    const responses = await loadResponses(act.id);
+    const n = responses.filter((r) => !r.hidden).length;
+    app.querySelector("#status").innerHTML = `${act.is_open ? `<span class="pill open">Open</span>` : `<span class="pill">Closed</span>`}
+      <span>${n} response${n === 1 ? "" : "s"}</span><span class="muted">code ${esc(act.code)}</span>`;
+    app.querySelector("#pres").innerHTML = renderResults(act, responses, { big: true, names: showNames, extra: await loadExtra(act) });
+  };
+  const tick = async () => {
+    acts = await loadActs();
+    const fresh = acts.find((a) => a.id === act.id);
+    if (fresh) {
+      const changed = fresh.is_open !== act.is_open;
+      act = { ...act, ...fresh };
+      if (changed) layout();
+    }
+    drawTabs();
+    await draw();
+  };
+  await draw();
+  liveTimer = setInterval(() => tick().catch(console.error), LIVE_MS);
 }
 
 function fullscreen() {
