@@ -376,6 +376,7 @@ async function showResults(id) {
           <a class="button" href="#/e/${act.id}">Edit</a>
           <button id="csv">CSV</button>
           <button id="json">JSON</button>
+          <button id="wipe" class="danger">Delete all posts</button>
         </div></div>
       <section class="panel results" id="chart"></section>
       <h2>Responses</h2>
@@ -398,6 +399,7 @@ async function showResults(id) {
     toCsv(activityCsvRows(space, act, responses)), "text/csv");
   app.querySelector("#json").onclick = () => download(`${slug(space.title)}-${act.code}.json`,
     JSON.stringify(exportShape(space, [{ ...act, responses: responses }]), null, 2), "application/json");
+  app.querySelector("#wipe").onclick = () => confirmWipe(act, responses.length, () => draw());
 
   const draw = async () => {
     responses = await loadResponses(act.id);
@@ -416,6 +418,34 @@ async function showResults(id) {
   };
   await draw();
   liveTimer = setInterval(() => draw().catch(console.error), LIVE_MS);
+}
+
+// Permanently delete every post in one activity (for clearing test posts). The database
+// allows it only for the admin and only while the activity is closed (delete_responses in schema.sql).
+function confirmWipe(act, count, done) {
+  const closedFirst = act.is_open
+    ? `<p class="error">This activity is open. Close it first, so nobody posts while you delete.</p>` : "";
+  dlg.innerHTML = `<form method="dialog" class="stack-form" id="wf">
+    <h2>Delete all posts?</h2>
+    <p>This permanently deletes all <strong>${count}</strong> post${count === 1 ? "" : "s"} in
+      <strong>${esc(act.title)}</strong> (code ${esc(act.code)}). It cannot be undone. Download a CSV first if you might want them.</p>
+    ${closedFirst}
+    <label>Type <strong>delete</strong> to confirm<input name="word" autocomplete="off" ${act.is_open ? "disabled" : ""}></label>
+    <p id="werr" class="error"></p>
+    <div class="btns"><button value="cancel" formnovalidate>Cancel</button>
+      <button value="go" class="danger" ${act.is_open ? "disabled" : ""}>Delete all posts</button></div>
+  </form>`;
+  const f = dlg.querySelector("#wf");
+  f.onsubmit = async (e) => {
+    if (e.submitter?.value !== "go") return;
+    e.preventDefault();
+    if (f.word.value.trim().toLowerCase() !== "delete") { f.querySelector("#werr").textContent = 'Type "delete" to confirm.'; return; }
+    const { error } = await sb.rpc("delete_responses", { p_activity: act.id });
+    if (error) { f.querySelector("#werr").textContent = error.message; return; }
+    dlg.close();
+    done();
+  };
+  dlg.showModal();
 }
 
 // ---------------------------------------------------------------- projector
