@@ -169,6 +169,21 @@ function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, Math.round(n))); }
 // Charts take only visible responses. `big` is the projector size.
 // `names` puts each card's group label on it (the projector's Names toggle; off by default).
 // `extra.cards` is the dot-voting source: [{id, text, tag}] of visible cards.
+// Activity kinds where Tim can pick single posts for the screen (activities.screen = 'picked').
+export const PICKABLE = new Set(["card", "qa"]);
+
+// The responses the projector and class view may show: never hidden ones, and in 'picked'
+// mode only picked posts (for the question queue, picked questions and their upvotes).
+export function forScreen(act, responses) {
+  const shown = responses.filter((r) => !r.hidden);
+  if (act.screen !== "picked" || !PICKABLE.has(act.kind)) return shown;
+  if (act.kind === "qa") {
+    const ids = new Set(shown.filter((r) => r.body.text && r.picked).map((r) => r.id));
+    return shown.filter((r) => ids.has(r.id) || ids.has(r.body.upvote));
+  }
+  return shown.filter((r) => r.picked);
+}
+
 export function renderResults(act, responses, { big = false, names = false, extra = {} } = {}) {
   const shown = responses.filter((r) => !r.hidden);
   const c = act.config || {};

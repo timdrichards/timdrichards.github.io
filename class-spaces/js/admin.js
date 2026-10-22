@@ -3,7 +3,7 @@
 //                 #/c/<space>[/<activity>]  class view: one tab per activity, live
 
 import { sb, configured, esc, store, studentUrl, shortLabel, qrSvg, notConfiguredHtml, fetchAll, errorText } from "./common.js";
-import { KINDS, renderResults, activityCsvRows, toCsv } from "./kinds.js";
+import { KINDS, PICKABLE, forScreen, renderResults, activityCsvRows, toCsv } from "./kinds.js";
 
 const app = document.getElementById("app");
 const dlg = document.getElementById("dlg");
@@ -220,7 +220,7 @@ async function copySpace(space, acts) {
   }).select().single());
   if (acts.length) {
     must(await sb.from("activities").insert(acts.map((a, i) => ({
-      space_id: copy.id, kind: a.kind, title: a.title, prompt: a.prompt, config: a.config,
+      space_id: copy.id, kind: a.kind, title: a.title, prompt: a.prompt, config: a.config, guide: a.guide || {},
       position: i, is_open: false,
     }))));
   }
@@ -298,6 +298,13 @@ async function showActivityForm({ spaceId, activityId }) {
              ["random", "Give each group a random name (e.g. Teal Otter)"], ["off", "Don't ask"]]
             .map(([v, t]) => `<option value="${v}" ${(act?.config?.group || "optional") === v ? "selected" : ""}>${t}</option>`).join("")}
         </select></label>
+        <fieldset class="guide-edit">
+          <legend>Answer guide <span class="muted small">(only you see this, on the activity's admin page; never students or the projector)</span></legend>
+          <label>Notes for you<textarea name="guide_notes" rows="3" maxlength="4000"
+            placeholder="What this activity is for, what a good answer looks like, where to take the discussion">${esc(act?.guide?.notes)}</textarea></label>
+          <div id="pairs"></div>
+          <button type="button" id="add-pair">Add a likely answer</button>
+        </fieldset>
         <p id="err" class="error"></p>
         <div class="btns">
           <a class="button" href="${act ? `#/a/${act.id}` : `#/s/${space.id}`}">Cancel</a>
@@ -313,6 +320,30 @@ async function showActivityForm({ spaceId, activityId }) {
   draw();
   f.kind.onchange = () => { kind = f.kind.value; draw(); };
 
+  // Answer guide rows: "if they say" / "you might say". Editable even when options are locked.
+  const pairsBox = f.querySelector("#pairs");
+  const pairRow = (p = {}) => `<div class="pair-row">
+      <label>If they say<textarea data-if rows="2" maxlength="1000">${esc(p.if)}</textarea></label>
+      <label>You might say<textarea data-say rows="2" maxlength="1000">${esc(p.say)}</textarea></label>
+      <button type="button" class="small" data-drop aria-label="Remove this answer">Remove</button>
+    </div>`;
+  const wirePairs = () => pairsBox.querySelectorAll("[data-drop]").forEach((b) => b.onclick = () => b.closest(".pair-row").remove());
+  pairsBox.innerHTML = (act?.guide?.pairs || []).map(pairRow).join("");
+  wirePairs();
+  f.querySelector("#add-pair").onclick = () => {
+    if (pairsBox.querySelectorAll(".pair-row").length >= 30) return;
+    pairsBox.insertAdjacentHTML("beforeend", pairRow());
+    wirePairs();
+    pairsBox.lastElementChild.querySelector("textarea").focus();
+  };
+  const readGuide = () => {
+    const pairs = [...pairsBox.querySelectorAll(".pair-row")]
+      .map((r) => ({ if: r.querySelector("[data-if]").value.trim(), say: r.querySelector("[data-say]").value.trim() }))
+      .filter((p) => p.if || p.say).slice(0, 30);
+    const notes = f.guide_notes.value.trim();
+    return notes || pairs.length ? { notes, pairs } : {};
+  };
+
   f.onsubmit = async (e) => {
     e.preventDefault();
     const err = f.querySelector("#err");
@@ -320,7 +351,7 @@ async function showActivityForm({ spaceId, activityId }) {
     config.group = f.group.value;
     const problem = locked ? null : KINDS[kind].check(config);
     if (problem) { err.textContent = problem; return; }
-    const row = { title: f.title.value.trim(), prompt: f.prompt.value.trim(), config };
+    const row = { title: f.title.value.trim(), prompt: f.prompt.value.trim(), config, guide: readGuide() };
     try {
       if (act) {
         must(await sb.from("activities").update(row).eq("id", act.id));
@@ -349,7 +380,7 @@ async function loadActivity(id) {
 }
 
 const loadResponses = (activityId) => fetchAll(() => sb.from("responses")
-  .select("id, body, group_label, device, hidden, created_at, updated_at").eq("activity_id", activityId)
+  .select("id, body, group_label, device, hidden, picked, created_at, updated_at").eq("activity_id", activityId)
   .order("created_at").order("id"));
 
 function responseText(act, r) {
@@ -393,6 +424,22 @@ async function flipRound(act) {
 }
 const roundLabel = (act) => (act.config?.round === 2 ? "Back to round 1" : "Start round 2");
 
+// Tim's private answer guide (activities.guide), shown on the admin page only, never projected.
+function guideHtml(act) {
+  const g = act.guide || {};
+  const pairs = (g.pairs || []).filter((p) => p.if || p.say);
+  if (!g.notes && !pairs.length) {
+    return `<p class="muted small guide-empty">No answer guide yet. <a href="#/e/${act.id}">Add one</a>: what students might say, and how you might answer.</p>`;
+  }
+  return `<details class="panel guide" open>
+    <summary>Answer guide <span class="muted small">only you see this · <a href="#/e/${act.id}">edit</a></span></summary>
+    ${g.notes ? `<p class="guide-notes">${esc(g.notes)}</p>` : ""}
+    ${pairs.length ? `<dl class="guide-pairs">${pairs.map((p) => `
+      <div class="guide-pair"><dt>If they say</dt><dd class="guide-if">${esc(p.if)}</dd>
+        <dt>You might say</dt><dd class="guide-say">${esc(p.say)}</dd></div>`).join("")}</dl>` : ""}
+  </details>`;
+}
+
 async function showResults(id) {
   let { act, space } = await loadActivity(id);
   const url = studentUrl(act.code);
@@ -414,8 +461,15 @@ async function showResults(id) {
           <button id="json">JSON</button>
           <button id="wipe" class="danger">Delete all posts</button>
         </div></div>
+      ${guideHtml(act)}
       <section class="panel results" id="chart"></section>
       <h2>Responses</h2>
+      ${PICKABLE.has(act.kind) ? `<div class="screen-mode" role="group" aria-label="What the projector shows">
+        <span>On screen:</span>
+        <button data-screen="all">All posts</button>
+        <button data-screen="picked">Only the ones I pick</button>
+        <span class="muted small" id="pick-n"></span>
+      </div>` : ""}
       <table class="resp"><thead><tr><th>Time</th><th>Group</th><th>Response</th><th></th></tr></thead><tbody id="rows"></tbody></table>
     </div>`;
   wireNav();
@@ -442,20 +496,50 @@ async function showResults(id) {
     JSON.stringify(exportShape(space, [{ ...act, responses: responses }]), null, 2), "application/json");
   app.querySelector("#wipe").onclick = () => confirmWipe(act, responses.length, () => draw());
 
+  // Picking for the screen (cards, question queue): the projector, on any device, shows only
+  // picked posts while the activity's screen mode is "picked". Picking the first post switches it.
+  const pickable = PICKABLE.has(act.kind);
+  const setScreen = async (mode) => {
+    act = must(await sb.from("activities").update({ screen: mode }).eq("id", act.id).select().single());
+    drawScreen();
+  };
+  const drawScreen = () => {
+    if (!pickable) return;
+    app.querySelectorAll("[data-screen]").forEach((b) => {
+      b.classList.toggle("on", b.dataset.screen === act.screen);
+      b.setAttribute("aria-pressed", String(b.dataset.screen === act.screen));
+    });
+    const posts = responses.filter((r) => !r.hidden && !r.body?.upvote);
+    const k = posts.filter((r) => r.picked).length;
+    app.querySelector("#pick-n").textContent = act.screen === "picked"
+      ? `${k} of ${posts.length} picked; only those are on screen`
+      : `all ${posts.length} visible posts are on screen${k ? ` (${k} picked, for when you switch)` : ""}`;
+  };
+  app.querySelectorAll("[data-screen]").forEach((b) => b.onclick = () => setScreen(b.dataset.screen));
+
   const draw = async () => {
     responses = await loadResponses(act.id);
     app.querySelector("#chart").innerHTML = renderResults(act, responses, { extra: await loadExtra(act) });
     app.querySelector("#rows").innerHTML = [...responses].reverse().map((r) => `
-      <tr class="${r.hidden ? "hidden-resp" : ""}">
+      <tr class="${r.hidden ? "hidden-resp" : ""} ${r.picked && !r.hidden ? "picked-resp" : ""}">
         <td class="nowrap">${fmtTime(r.created_at)}</td>
         <td>${esc(r.group_label || "")}</td>
         <td>${esc(responseText(act, r))}</td>
-        <td><button class="small" data-hide="${r.id}" data-to="${!r.hidden}">${r.hidden ? "Unhide" : "Hide"}</button></td>
+        <td class="row-btns">${pickable && !r.body?.upvote ? `<button class="small pick ${r.picked ? "on" : ""}" data-pick="${r.id}"
+              data-to="${!r.picked}" aria-pressed="${r.picked}" ${r.hidden ? "disabled" : ""}>${r.picked ? "On screen ✓" : "Pick"}</button>` : ""}
+          <button class="small" data-hide="${r.id}" data-to="${!r.hidden}">${r.hidden ? "Unhide" : "Hide"}</button></td>
       </tr>`).join("") || `<tr><td colspan="4" class="muted">None yet.</td></tr>`;
     app.querySelectorAll("[data-hide]").forEach((b) => b.onclick = async () => {
       must(await sb.from("responses").update({ hidden: b.dataset.to === "true" }).eq("id", b.dataset.hide));
       draw();
     });
+    app.querySelectorAll("[data-pick]").forEach((b) => b.onclick = async () => {
+      const on = b.dataset.to === "true";
+      must(await sb.from("responses").update({ picked: on }).eq("id", b.dataset.pick));
+      if (on && act.screen !== "picked") await setScreen("picked");
+      draw();
+    });
+    drawScreen();
   };
   await draw();
   liveTimer = setInterval(() => draw().catch(console.error), LIVE_MS);
@@ -570,13 +654,15 @@ async function showProjector(id) {
   layout();
 
   const draw = async () => {
+    const fresh = must(await sb.from("activities").select("is_open, screen, config").eq("id", act.id).single());
+    const reopened = fresh.is_open !== act.is_open;
+    act = { ...act, ...fresh };
+    if (reopened) layout();
     const responses = await loadResponses(act.id);
-    const n = responses.filter((r) => !r.hidden).length;
-    app.querySelector("#status").innerHTML = act.is_open
-      ? `<span class="pill open">Open</span> <span>${n} response${n === 1 ? "" : "s"}</span>`
-      : `<span class="pill">Closed</span> <span>${n} response${n === 1 ? "" : "s"}</span>`;
+    app.querySelector("#status").innerHTML = `${act.is_open ? `<span class="pill open">Open</span>` : `<span class="pill">Closed</span>`}
+      <span>${screenCount(act, responses)}</span>`;
     // Group labels stay off the projector unless the Names toggle is on (cards only).
-    app.querySelector("#pres").innerHTML = renderResults(act, responses, { big: true, names: showNames, extra: await loadExtra(act) });
+    app.querySelector("#pres").innerHTML = screenResults(act, responses, { names: showNames, extra: await loadExtra(act) });
   };
   await draw();
   liveTimer = setInterval(() => draw().catch(console.error), LIVE_MS);
@@ -589,7 +675,7 @@ async function showProjector(id) {
 async function showClass(spaceId, actId) {
   const space = must(await sb.from("spaces").select("*").eq("id", spaceId).single());
   const loadActs = async () => must(await sb.from("activities")
-    .select("id, code, kind, title, prompt, config, is_open, position, space_id, created_at, responses(count)")
+    .select("id, code, kind, title, prompt, config, is_open, screen, position, space_id, created_at, responses(count)")
     .eq("space_id", spaceId).eq("responses.hidden", false).order("position").order("created_at"));
   let acts = await loadActs();
   if (!acts.length) { location.hash = `#/s/${spaceId}`; return; }
@@ -698,10 +784,9 @@ async function showClass(spaceId, actId) {
 
   const draw = async () => {
     const responses = await loadResponses(act.id);
-    const n = responses.filter((r) => !r.hidden).length;
     app.querySelector("#status").innerHTML = `${act.is_open ? `<span class="pill open">Open</span>` : `<span class="pill">Closed</span>`}
-      <span>${n} response${n === 1 ? "" : "s"}</span><span class="muted">code ${esc(act.code)}</span>`;
-    app.querySelector("#pres").innerHTML = renderResults(act, responses, { big: true, names: showNames, extra: await loadExtra(act) });
+      <span>${screenCount(act, responses)}</span><span class="muted">code ${esc(act.code)}</span>`;
+    app.querySelector("#pres").innerHTML = screenResults(act, responses, { names: showNames, extra: await loadExtra(act) });
   };
   const tick = async () => {
     acts = await loadActs();
@@ -718,6 +803,22 @@ async function showClass(spaceId, actId) {
   liveTimer = setInterval(() => tick().catch(console.error), LIVE_MS);
 }
 
+// What the projected views show, and their count line, honouring "Only picked" (activities.screen).
+const picking = (act) => act.screen === "picked" && PICKABLE.has(act.kind);
+function screenCount(act, responses) {
+  const n = responses.filter((r) => !r.hidden && !r.body?.upvote).length;
+  if (!picking(act)) return `${n} response${n === 1 ? "" : "s"}`;
+  const k = forScreen(act, responses).filter((r) => !r.body?.upvote).length;
+  return `${k} of ${n} on screen`;
+}
+function screenResults(act, responses, opts) {
+  const rows = forScreen(act, responses);
+  if (picking(act) && !rows.some((r) => !r.body?.upvote)) {
+    return `<p class="res-hidden muted">Nothing picked yet. Pick posts on the admin page and they appear here.</p>`;
+  }
+  return renderResults(act, rows, { big: true, ...opts });
+}
+
 function fullscreen() {
   if (document.fullscreenElement) document.exitFullscreen();
   else document.documentElement.requestFullscreen?.();
@@ -730,7 +831,7 @@ function exportShape(space, acts) {
     exported_at: new Date().toISOString(),
     space: { id: space.id, title: space.title, course: space.course, meets_on: space.meets_on },
     activities: acts.map((a) => ({
-      id: a.id, code: a.code, kind: a.kind, title: a.title, prompt: a.prompt, config: a.config,
+      id: a.id, code: a.code, kind: a.kind, title: a.title, prompt: a.prompt, config: a.config, guide: a.guide || {},
       opened_at: a.opened_at, closed_at: a.closed_at,
       responses: a.responses.map((r) => ({
         created_at: r.created_at, updated_at: r.updated_at, group: r.group_label, hidden: r.hidden, body: r.body,

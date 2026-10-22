@@ -312,3 +312,23 @@ body.projecting main { max-width: none; padding: 0; }
 .proj-codes { text-align: center; font-size: .95em; }
 .res-hidden { font-size: 1em; margin: 24px 0; }
 .res-hidden[hidden] { display: none; }
+
+/* picking posts for the screen, on the admin page */
+.screen-mode { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; }
+.screen-mode button.on, button.pick.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+td.row-btns { white-space: nowrap; text-align: right; }
+td.row-btns button + button { margin-left: 6px; }
+tr.picked-resp td { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+/* answer guide: private notes for Tim on the admin page */
+.guide summary { cursor: pointer; font-weight: 700; font-size: 1.05rem; }
+.guide-notes { white-space: pre-wrap; margin: 12px 0 0; }
+.guide-pairs { margin: 12px 0 0; display: grid; gap: 10px; }
+.guide-pair { display: grid; grid-template-columns: max-content 1fr; gap: 2px 12px; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); }
+.guide-pair dt { color: var(--text-2); font-size: .875rem; font-weight: 600; padding-top: 2px; }
+.guide-pair dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.guide-pair .guide-say { font-weight: 600; }
+.guide-empty { margin: 8px 0 0; }
+.guide-edit { border-top: 1px solid var(--border); padding-top: 12px; }
+.pair-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; }
+@media (max-width: 600px) { .pair-row { grid-template-columns: 1fr; } .guide-pair { grid-template-columns: 1fr; } }
