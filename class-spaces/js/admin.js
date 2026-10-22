@@ -505,7 +505,7 @@ async function showProjector(id) {
         <a href="#/a/${act.id}" class="button">Exit</a>
         <button id="t-open"></button>
         <button id="t-qr">QR (Q)</button>
-        <button id="t-res">Results (R)</button>
+        <button id="t-res"></button>
         ${act.kind === "card" ? `<button id="t-names">Group names (N)</button>` : ""}
         ${act.kind === "vote" ? `<button id="t-round"></button>` : ""}
         <button id="t-fs">Full screen (F)</button>
@@ -516,6 +516,7 @@ async function showProjector(id) {
           ${act.prompt ? `<p class="proj-prompt">${esc(act.prompt)}</p>` : ""}
           <div class="proj-status" id="status"></div>
           <section class="results big" id="pres"></section>
+          <p class="res-hidden muted" id="pres-off">Responses are hidden. Press R or Show responses to put them on screen.</p>
         </div>
         <aside class="proj-qr" id="pqr">
           <div class="qr">${qrSvg(url, 10)}</div>
@@ -526,8 +527,10 @@ async function showProjector(id) {
   const layout = () => {
     app.querySelector("#pqr").hidden = !showQrPanel;
     app.querySelector("#pres").hidden = !showRes;
+    app.querySelector("#pres-off").hidden = showRes;
     app.querySelector("#t-qr").classList.toggle("on", showQrPanel);
     app.querySelector("#t-res").classList.toggle("on", showRes);
+    app.querySelector("#t-res").textContent = showRes ? "Hide responses (R)" : "Show responses (R)";
     app.querySelector("#t-names")?.classList.toggle("on", showNames);
     app.querySelector(".proj-body").classList.toggle("no-qr", !showQrPanel);
     const b = app.querySelector("#t-open");
@@ -604,10 +607,11 @@ async function showClass(spaceId, actId) {
         <nav class="ctabs" id="tabs" role="tablist" aria-label="Activities"></nav>
         <div class="proj-tools">
           <a href="#/s/${spaceId}" class="button">Manage</a>
-          <a href="#/a/${act.id}" class="button">Responses</a>
+          <a href="#/a/${act.id}" target="_blank" rel="noopener" class="button"
+             title="Admin page in a new browser tab: group names, hide, export. Not for the projector.">Moderate ↗</a>
           <button id="t-open"></button>
           <button id="t-qr">QR (Q)</button>
-          <button id="t-res">Results (R)</button>
+          <button id="t-res"></button>
           ${act.kind === "card" ? `<button id="t-names">Group names (N)</button>` : ""}
           ${act.kind === "vote" ? `<button id="t-round"></button>` : ""}
           <button id="t-fs">Full screen (F)</button>
@@ -619,6 +623,7 @@ async function showClass(spaceId, actId) {
           ${act.prompt ? `<p class="proj-prompt">${esc(act.prompt)}</p>` : ""}
           <div class="proj-status" id="status"></div>
           <section class="results big" id="pres"></section>
+          <p class="res-hidden muted" id="pres-off">Responses are hidden. Press R or Show responses to put them on screen.</p>
         </div>
         <aside class="proj-qr" id="pqr">
           <div class="qr">${qrSvg(joinUrl, 10)}</div>
@@ -642,8 +647,10 @@ async function showClass(spaceId, actId) {
   const layout = () => {
     app.querySelector("#pqr").hidden = !showQrPanel;
     app.querySelector("#pres").hidden = !showRes;
+    app.querySelector("#pres-off").hidden = showRes;
     app.querySelector("#t-qr").classList.toggle("on", showQrPanel);
     app.querySelector("#t-res").classList.toggle("on", showRes);
+    app.querySelector("#t-res").textContent = showRes ? "Hide responses (R)" : "Show responses (R)";
     app.querySelector("#t-names")?.classList.toggle("on", showNames);
     app.querySelector(".proj-body").classList.toggle("no-qr", !showQrPanel);
     const b = app.querySelector("#t-open");
