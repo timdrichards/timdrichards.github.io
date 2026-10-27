@@ -237,7 +237,7 @@ async function ask(question) {
     box.classList.remove("pending");
     box.innerHTML = `${format(data.answer)}
       ${data.entries?.length ? `<div class="ask-links"><span class="muted small">Read more:</span>
-        <ul>${data.entries.map((e) => `<li><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title)}</a>${e.kind === "page" ? ` <span class="muted small">(course page)</span>` : ""}</li>`).join("")}</ul></div>` : ""}
+        <ul>${data.entries.map((e) => `<li><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(String(e.title).replace(/`/g, ""))}</a>${e.kind === "page" ? ` <span class="muted small">(course page)</span>` : ""}</li>`).join("")}</ul></div>` : ""}
       ${data.id ? rateHtml() : ""}`;
     dressCode(box);
     if (data.id) wireRating(box, data.id);

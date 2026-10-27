@@ -28,7 +28,7 @@ export async function showFaq(ctx) {
 function render() {
   const { ctx, settings, questions, sessions, range } = state;
   const s = settings || {};
-  const titles = new Map((s.faq_entries || []).map((e) => [e.id, e.q]));
+  const titles = new Map((s.faq_entries || []).map((e) => [e.id, String(e.q).replace(/`/g, "")]));
   const link = new URL("ask.html", location.href);
   link.search = s.join_code ? `?${s.join_code}` : "";
   ctx.app.innerHTML = `${ctx.nav(` / <span>FAQ assistant</span>`)}
@@ -319,7 +319,7 @@ function wire(s) {
 function wireLog() {
   const { ctx } = state;
   const panel = ctx.app.querySelector("#log-panel");
-  const titles = new Map((state.settings?.faq_entries || []).map((e) => [e.id, e.q]));
+  const titles = new Map((state.settings?.faq_entries || []).map((e) => [e.id, String(e.q).replace(/`/g, "")]));
   const redraw = () => { panel.innerHTML = logHtml(titles); wireLog(); };
   panel.querySelectorAll("[data-filter]").forEach((b) => { b.onclick = () => { state.filter = b.dataset.filter; state.shown = PAGE_ROWS; redraw(); }; });
   const search = panel.querySelector("#search");
