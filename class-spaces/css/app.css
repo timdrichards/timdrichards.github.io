@@ -332,3 +332,47 @@ tr.picked-resp td { background: color-mix(in srgb, var(--accent) 10%, transparen
 .guide-edit { border-top: 1px solid var(--border); padding-top: 12px; }
 .pair-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; }
 @media (max-width: 600px) { .pair-row { grid-template-columns: 1fr; } .guide-pair { grid-template-columns: 1fr; } }
+
+/* FAQ assistant (ask.html) */
+.ask-wrap { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.ask-head p { margin: .25rem 0 0; }
+.ask-log { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+.ask-item { display: flex; flex-direction: column; gap: 8px; }
+.ask-q { align-self: flex-end; max-width: 85%; background: var(--accent); color: var(--accent-ink); padding: 10px 14px; border-radius: 14px 14px 4px 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ask-a { align-self: flex-start; max-width: 92%; background: var(--surface); border: 1px solid var(--border); padding: 10px 14px; border-radius: 14px 14px 14px 4px; overflow-wrap: anywhere; }
+.ask-a p { margin: 0 0 .5rem; }
+.ask-a p:last-of-type { margin-bottom: 0; }
+.ask-a.failed { border-color: var(--danger); }
+.ask-links { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+.ask-links ul { margin: 4px 0 0; padding-left: 1.2rem; }
+.ask-links li { margin: 2px 0; }
+.ask-rate { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.ask-rate button { min-width: 44px; }
+.ask-wrap [hidden] { display: none !important; }
+.ask-miss { flex-basis: 100%; display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.ask-form { position: sticky; bottom: 0; background: var(--bg); padding: 8px 0; display: flex; flex-direction: column; gap: 8px; }
+.ask-privacy { margin: 0; }
+
+/* FAQ assistant dashboard (admin #/faq) */
+.kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 12px 0; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; }
+.kpi .v { font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: .8rem; color: var(--text-2); }
+.chart { display: flex; align-items: flex-end; gap: 3px; height: 140px; padding-top: 18px; }
+.chart .c { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-width: 0; height: 100%; }
+.chart .b { width: 100%; background: var(--series-1); border-radius: 3px 3px 0 0; min-height: 1px; position: relative; }
+.chart .b.down { background: var(--series-2); }
+.chart .t { font-size: .7rem; color: var(--text-2); margin-top: 4px; white-space: nowrap; overflow: hidden; }
+.chart .n { font-size: .7rem; font-variant-numeric: tabular-nums; }
+.faq-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
+.faq-filters input[type="search"] { max-width: 280px; }
+table.faqq td { vertical-align: top; }
+table.faqq td.qa { min-width: 260px; }
+table.faqq .ans { color: var(--text-2); white-space: pre-wrap; margin-top: 4px; font-size: .9rem; }
+table.faqq tr.attn td:first-child { box-shadow: inset 3px 0 0 var(--series-2); }
+table.faqq select { width: auto; padding: 4px 8px; }
+.tag { display: inline-block; font-size: .72rem; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-2); margin: 2px 2px 0 0; }
+.tag.bad { border-color: var(--series-2); color: var(--series-2); }
+.tag.good { border-color: var(--ok); color: var(--ok); }
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 800px) { .cols-2 { grid-template-columns: 1fr; } }

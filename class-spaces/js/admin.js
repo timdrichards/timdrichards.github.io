@@ -1,9 +1,10 @@
 // Admin app: login, spaces, activities, results, projector, export.
-// Routes (hash): #/  #/s/<space>  #/s/<space>/new  #/e/<activity>  #/a/<activity>  #/p/<activity>
+// Routes (hash): #/  #/faq (FAQ assistant)  #/s/<space>  #/s/<space>/new  #/e/<activity>  #/a/<activity>  #/p/<activity>
 //                 #/c/<space>[/<activity>]  class view: one tab per activity, live
 
 import { sb, configured, esc, store, studentUrl, shortLabel, qrSvg, notConfiguredHtml, fetchAll, errorText } from "./common.js";
 import { KINDS, PICKABLE, forScreen, renderResults, activityCsvRows, toCsv } from "./kinds.js";
+import { showFaq } from "./faq-dashboard.js";
 
 const app = document.getElementById("app");
 const dlg = document.getElementById("dlg");
@@ -48,6 +49,7 @@ function route() {
     a: () => showResults(id),
     p: () => showProjector(id),
     c: () => showClass(id, sub),
+    faq: () => showFaq({ app, dlg, sb, store, nav, wireNav, must, download, fail }),
   }[view];
   (go || showSpaces)().catch(fail);
 }
@@ -60,7 +62,7 @@ function fail(e) {
 
 function nav(crumbs = "") {
   return `<nav class="top"><a href="#/" class="brand">Class Spaces</a>${crumbs}
-    <span class="spacer"></span><span class="muted small">${esc(session?.user?.email || "")}</span>
+    <span class="spacer"></span><a href="#/faq" class="small">FAQ assistant</a><span class="muted small">${esc(session?.user?.email || "")}</span>
     <button class="link" id="signout">Sign out</button></nav>`;
 }
 
