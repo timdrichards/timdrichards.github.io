@@ -97,14 +97,14 @@ function showChat(info) {
   app.innerHTML = `<div class="ask-wrap">
     <header class="ask-head">
       <h1>326 FAQ Assistant</h1>
-      <p class="muted small">Answers come only from the <a href="${FAQ_PAGE}" target="_blank" rel="noopener">course FAQ</a>${
-        updated ? ` (${info.entries} questions, updated ${esc(updated)})` : ""}.
+      <p class="muted small">Answers come only from the <a href="${FAQ_PAGE}" target="_blank" rel="noopener">course FAQ</a>, the syllabus and the unit pages${
+        updated ? ` (updated ${esc(updated)})` : ""}.
         It explains ideas and points you to the right answer; it will not write your code or answer quiz questions.</p>
     </header>
     <ol class="ask-log" id="log" aria-live="polite"></ol>
     <form id="ask" class="ask-form">
       <label class="sr" for="q">Your question</label>
-      <textarea id="q" name="q" rows="2" maxlength="1000" placeholder="Ask about the course, a unit, an error…" required></textarea>
+      <textarea id="q" name="q" rows="2" maxlength="1000" placeholder="Ask about the course, a unit, its code, an error…" required></textarea>
       <div class="btns">
         <button class="primary" id="send">Ask</button>
         <button type="button" class="link small" id="fresh">New conversation</button>
@@ -164,8 +164,8 @@ async function ask(question) {
     turns.push({ q: question, a: data.answer });
     box.classList.remove("pending");
     box.innerHTML = `${format(data.answer)}
-      ${data.entries?.length ? `<div class="ask-links"><span class="muted small">Read more in the FAQ:</span>
-        <ul>${data.entries.map((e) => `<li><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title)}</a></li>`).join("")}</ul></div>` : ""}
+      ${data.entries?.length ? `<div class="ask-links"><span class="muted small">Read more:</span>
+        <ul>${data.entries.map((e) => `<li><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title)}</a>${e.kind === "page" ? ` <span class="muted small">(course page)</span>` : ""}</li>`).join("")}</ul></div>` : ""}
       ${data.id ? rateHtml() : ""}`;
     if (data.id) wireRating(box, data.id);
   } catch (e) {

@@ -247,7 +247,7 @@ function settingsHtml(s, studentLink) {
         <p><span class="pill ${s.is_open ? "open" : ""}">${s.is_open ? "Open" : "Closed"}</span>
           Join code <strong class="space-code">${esc(s.join_code || "")}</strong></p>
         <p class="small"><a href="${esc(studentLink)}" target="_blank" rel="noopener">${esc(shortLabel(studentLink))}</a></p>
-        <p class="small muted">FAQ: ${(s.faq_entries || []).length} questions, version ${esc(s.faq_version || "–")}, loaded ${esc(updated)}.
+        <p class="small muted">Material: ${(s.faq_entries || []).filter((e) => e.kind !== "page").length} FAQ answers and ${(s.faq_entries || []).filter((e) => e.kind === "page").length} course page sections, version ${esc(s.faq_version || "–")}, loaded ${esc(updated)}.
           Model ${esc(s.model || "")}. Limits: ${s.per_device_hour}/hour and ${s.per_device_day}/day per device, ${s.daily_cap}/day in all.</p>
         <div class="btns">
           <button class="${s.is_open ? "" : "primary"}" id="toggle">${s.is_open ? "Close" : "Open"}</button>
@@ -292,8 +292,9 @@ function wire(s) {
       if (typeof doc.text !== "string" || !doc.text.trim() || !Array.isArray(doc.entries) || !doc.entries.length) {
         throw new Error("That is not an FAQ assistant file (it needs text and entries). Make it with export_for_notebook.py --assistant.");
       }
-      if (!confirm(`Load this FAQ: ${doc.entries.length} questions, version ${doc.version || "?"}? It replaces the current one at once.`)) return;
-      await save({ faq_text: doc.text, faq_entries: doc.entries.map((x) => ({ id: String(x.id), q: String(x.q), section: x.section ? String(x.section) : null })),
+      if (!confirm(`Load this file: ${doc.entries.length} entries, version ${doc.version || "?"}? It replaces the current material at once.`)) return;
+      await save({ faq_text: doc.text, faq_entries: doc.entries.map((x) => ({ id: String(x.id), q: String(x.q), section: x.section ? String(x.section) : null,
+                                                         kind: x.kind === "page" ? "page" : "faq", url: x.url ? String(x.url) : null })),
                    faq_version: String(doc.version || f.name), faq_updated_at: new Date().toISOString() });
     } catch (x) { err(x); }
   };
