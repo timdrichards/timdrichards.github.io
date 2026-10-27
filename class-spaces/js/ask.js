@@ -174,9 +174,24 @@ function showChat(info) {
         <span>Saved <strong>without your name</strong>.<span class="wide-only"> Nothing personal; grades and extensions go to the Canvas Inbox.</span></span>
         <span class="spacer"></span><span id="count"></span>
         <button type="button" class="link small ask-quota" id="quota" aria-live="polite" title="About the limits"></button>
+        <button type="button" class="link small" id="feedback">Send feedback</button>
         <button type="button" class="link small" id="fresh">New conversation</button>
       </div>
     </div></form>
+    <dialog id="fb-dlg" class="ask-dlg">
+      <form method="dialog" id="fb" class="stack-form">
+        <h3>Help improve the assistant</h3>
+        <p class="muted small">What would make it more useful? Something it got wrong, a question it couldn't answer, an idea. Sent without your name.</p>
+        <label>About<select name="kind">
+          <option value="idea">An idea or suggestion</option>
+          <option value="problem">Something didn't work or was wrong</option>
+          <option value="praise">Something that helped</option>
+          <option value="other">Something else</option></select></label>
+        <label>Your feedback<textarea name="message" rows="4" maxlength="2000" required></textarea></label>
+        <p class="error" id="fb-err"></p>
+        <div class="btns"><button class="primary" value="send">Send</button><button value="cancel" formnovalidate>Cancel</button></div>
+      </form>
+    </dialog>
   </div>`;
   const form = app.querySelector("#ask");
   const q = app.querySelector("#q");
@@ -197,6 +212,31 @@ function showChat(info) {
   };
   quotaInfo = info;
   refreshQuota();
+  const dlg = app.querySelector("#fb-dlg");
+  const fb = app.querySelector("#fb");
+  app.querySelector("#feedback").onclick = () => {
+    fb.reset();
+    app.querySelector("#fb-err").textContent = "";
+    dlg.showModal();
+    fb.message.focus();
+  };
+  fb.onsubmit = async (e) => {
+    if (e.submitter?.value !== "send") return;
+    e.preventDefault();
+    const fbErr = app.querySelector("#fb-err");
+    const btn = e.submitter;
+    btn.disabled = true;
+    const { error } = await sb.rpc("faq_send_feedback", { p_code: code, p_device: device, p_session: visitId(),
+      p_kind: fb.kind.value, p_message: fb.message.value.trim() });
+    btn.disabled = false;
+    if (error) { fbErr.textContent = errorText(error); return; }
+    dlg.close();
+    const err = app.querySelector("#err");
+    err.classList.remove("error");
+    err.classList.add("muted", "small");
+    err.textContent = "Thanks for the feedback. The course staff read every one.";
+    setTimeout(() => { if (err.textContent.startsWith("Thanks for the feedback")) err.textContent = ""; }, 6000);
+  };
   app.querySelector("#fresh").onclick = () => {
     turns.length = 0;
     app.querySelector("#log").innerHTML = "";

@@ -16,12 +16,15 @@ export async function showFaq(ctx) {
   const { app, sb } = ctx;
   const range = ctx.store.get("faq.range", "7");
   const since = range === "all" ? null : new Date(Date.now() - Number(range) * 86400000).toISOString();
-  const [settings, questions, sessions] = await Promise.all([
+  const [settings, questions, sessions, feedback] = await Promise.all([
     sb.from("faq_settings").select("*").eq("id", 1).maybeSingle().then(ctx.must),
     fetchAll(() => { let q = sb.from("faq_questions").select("*").order("asked_at", { ascending: false }); return since ? q.gte("asked_at", since) : q; }),
     fetchAll(() => { let q = sb.from("faq_sessions").select("*").order("started_at", { ascending: false }); return since ? q.gte("started_at", since) : q; }),
+    fetchAll(() => { let q = sb.from("faq_feedback").select("*").order("created_at", { ascending: false }); return since ? q.gte("created_at", since) : q; })
+      .catch(() => []),   // before the schema adds faq_feedback
   ]);
-  state = { ctx, settings, questions, sessions, range, filter: state?.filter || "all", search: state?.search || "", shown: PAGE_ROWS };
+  state = { ctx, settings, questions, sessions, feedback, range, filter: state?.filter || "all", search: state?.search || "",
+            shown: PAGE_ROWS, fbArchived: state?.fbArchived || false };
   render();
 }
 
@@ -53,7 +56,8 @@ function render() {
     <div class="panel"><h3>Devices</h3>${devicesHtml(sessions)}
       <h3 style="margin-top:16px">Answer time</h3>${latencyHtml(questions)}</div>
   </div>
-  <div class="panel" id="log-panel">${logHtml(titles)}</div>`;
+  <div class="panel" id="log-panel">${logHtml(titles)}</div>
+  <div class="panel" id="fb-panel">${feedbackHtml()}</div>`;
   ctx.wireNav();
   wire(s);
 }
@@ -117,6 +121,7 @@ function kpisHtml(questions, sessions) {
     ${tile(k.declined, "declined under the AI policy")}
     ${tile(fmtPct(k.followUps, k.questions), "follow-up questions")}
     ${tile(k.errors, "errors")}
+    ${tile((state.feedback || []).length, "feedback messages")}
     ${tile(`$${k.cost.toFixed(2)}`, "estimated cost", "From token counts at Haiku-class prices; the Anthropic console has the real bill")}
   </div>`;
 }
@@ -185,9 +190,10 @@ function latencyHtml(questions) {
 
 // ---------------------------------------------------------------- the log
 
-const needsAttention = (q) => q.review_status === "new" && (q.error || q.covered === false || q.rating === -1);
+const needsAttention = (q) => !q.archived_at && q.review_status === "new" && (q.error || q.covered === false || q.rating === -1);
 const FILTERS = {
   all: ["All", () => true],
+  archived: ["Archived", (q) => Boolean(q.archived_at)],
   attn: ["Needs attention", needsAttention],
   new: ["Not reviewed", (q) => q.review_status === "new"],
   down: ["👎", (q) => q.rating === -1],
@@ -197,17 +203,21 @@ const FILTERS = {
   errors: ["Errors", (q) => Boolean(q.error)],
 };
 
+// Archived questions (downloaded and fed back) appear only under the Archived filter.
+const inView = (k, q) => (k === "archived" ? Boolean(q.archived_at) : !q.archived_at && FILTERS[k][1](q));
+
 function filtered() {
-  const [, keep] = FILTERS[state.filter] || FILTERS.all;
+  const k = FILTERS[state.filter] ? state.filter : "all";
   const s = state.search.toLowerCase();
-  return state.questions.filter((q) => keep(q) && (!s || `${q.question} ${q.answer || ""} ${q.feedback || ""} ${q.review_note || ""}`.toLowerCase().includes(s)));
+  return state.questions.filter((q) => inView(k, q) && (!s || `${q.question} ${q.answer || ""} ${q.feedback || ""} ${q.review_note || ""}`.toLowerCase().includes(s)));
 }
 
 function logHtml(titles) {
   const rows = filtered();
-  const counts = Object.fromEntries(Object.entries(FILTERS).map(([k, [, f]]) => [k, state.questions.filter(f).length]));
+  const counts = Object.fromEntries(Object.keys(FILTERS).map((k) => [k, state.questions.filter((q) => inView(k, q)).length]));
   return `<div class="head-row"><h3>Questions</h3>
-      <div class="btns"><button class="small" id="csv">Download CSV</button><button class="small" id="json">Download JSON</button></div></div>
+      <div class="btns"><button class="small" id="csv">Download CSV</button><button class="small" id="json">Download JSON</button>
+        <button class="small primary" id="archive" title="Download every question and piece of feedback not yet archived, then mark them archived">Download and archive</button></div></div>
     <div class="faq-filters">
       ${Object.entries(FILTERS).map(([k, [l]]) => `<button class="small ${state.filter === k ? "on" : ""}" data-filter="${k}">${l} (${counts[k]})</button>`).join("")}
       <input type="search" id="search" placeholder="Search questions, answers, feedback" value="${esc(state.search)}">
@@ -255,6 +265,8 @@ function settingsHtml(s, studentLink) {
           <button id="qr">QR code</button>
           <label class="button">Load FAQ file<input type="file" id="faqfile" accept=".json,application/json" hidden></label>
           <button id="limits">Limits and model</button>
+          <span class="spacer"></span>
+          <button class="danger" id="delall">Delete all questions</button>
         </div>
         <p class="error" id="set-err"></p>
       </div>
@@ -313,7 +325,75 @@ function wire(s) {
       save({ per_device_hour: +f.h.value, per_device_day: +f.d.value, daily_cap: +f.cap.value, model: f.model.value.trim() }).catch(err);
     };
   };
+  $("#delall").onclick = async () => {
+    const n = state.questions.length;
+    const typed = prompt(`Delete every question, visit and piece of feedback the assistant has logged (${n} questions in this period, and any older ones)? This cannot be undone. Download first if you want a copy. Type delete to confirm.`);
+    if (typed === null) return;
+    const { data, error } = await ctx.sb.rpc("faq_delete_all", { p_confirm: typed.trim().toLowerCase() });
+    if (error) return err(error);
+    alert(`Deleted ${data.questions} questions, ${data.visits} visits and ${data.feedback} pieces of feedback.`);
+    await showFaq(ctx);
+  };
   wireLog();
+  wireFeedback();
+}
+
+// Download everything not yet archived (questions and feedback, whatever the period shown), then
+// mark it archived as one batch, so it leaves the review list but stays in the counts.
+async function downloadAndArchive() {
+  const { ctx } = state;
+  const qs = await fetchAll(() => ctx.sb.from("faq_questions").select("*").is("archived_at", null).order("asked_at"));
+  const fb = await fetchAll(() => ctx.sb.from("faq_feedback").select("*").is("archived_at", null).order("created_at")).catch(() => []);
+  if (!qs.length && !fb.length) return alert("Nothing new to archive.");
+  if (!confirm(`Download ${qs.length} questions and ${fb.length} pieces of feedback, then mark them archived?`)) return;
+  const now = new Date().toISOString();
+  const batch = now.slice(0, 16).replace("T", " ");
+  const strip = (r) => { const { device, ...rest } = r; return rest; };
+  ctx.download(`faq-archive-${now.slice(0, 10)}.json`, JSON.stringify({
+    exported_at: now, batch, faq_version: state.settings?.faq_version || null,
+    note: "FAQ assistant questions and feedback, without device ids. Review: what the FAQ is missing, answers rated down, and the feedback.",
+    questions: qs.map(strip), feedback: fb.map(strip),
+  }, null, 2), "application/json");
+  for (const [table, rows] of [["faq_questions", qs], ["faq_feedback", fb]]) {
+    for (let i = 0; i < rows.length; i += 200) {
+      const ids = rows.slice(i, i + 200).map((r) => r.id);
+      const { error } = await ctx.sb.from(table).update({ archived_at: now, archive_batch: batch }).in("id", ids);
+      if (error) return alert(`The download worked, but archiving stopped: ${errorText(error)}`);
+    }
+  }
+  await showFaq(ctx);
+}
+
+function feedbackHtml() {
+  const rows = (state.feedback || []).filter((f) => (state.fbArchived ? f.archived_at : !f.archived_at));
+  const label = { idea: "Idea", problem: "Problem", praise: "Praise", other: "Other" };
+  return `<div class="head-row"><h3>Feedback from students (${(state.feedback || []).filter((f) => !f.archived_at).length})</h3>
+      <label class="check small"><input type="checkbox" id="fb-arch" ${state.fbArchived ? "checked" : ""}> Show archived</label></div>
+    ${rows.length ? `<table class="resp faqq"><thead><tr><th>When</th><th>About</th><th>Feedback</th><th>Review</th></tr></thead><tbody>
+      ${rows.map((f) => `<tr data-fid="${f.id}">
+        <td class="small nowrap">${esc(new Date(f.created_at).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: TZ }))}</td>
+        <td class="small"><span class="tag ${f.kind === "problem" ? "bad" : f.kind === "praise" ? "good" : ""}">${esc(label[f.kind] || f.kind)}</span></td>
+        <td class="qa">${esc(f.message)}</td>
+        <td class="small"><select data-fstatus>${["new", "reviewed", "done", "ignored"].map((s) => `<option ${s === f.review_status ? "selected" : ""}>${s}</option>`).join("")}</select>
+          <input class="small" data-fnote placeholder="Note" value="${esc(f.review_note || "")}" style="margin-top:4px"></td></tr>`).join("")}
+      </tbody></table>` : `<p class="muted">${state.fbArchived ? "No archived feedback." : "No feedback yet. Students send it from Send feedback on the assistant page."}</p>`}`;
+}
+
+function wireFeedback() {
+  const { ctx } = state;
+  const panel = ctx.app.querySelector("#fb-panel");
+  if (!panel) return;
+  panel.querySelector("#fb-arch").onchange = (e) => { state.fbArchived = e.target.checked; panel.innerHTML = feedbackHtml(); wireFeedback(); };
+  panel.querySelectorAll("tr[data-fid]").forEach((tr) => {
+    const f = state.feedback.find((x) => x.id === tr.dataset.fid);
+    const update = async (patch) => {
+      const { error } = await ctx.sb.from("faq_feedback").update(patch).eq("id", f.id);
+      if (error) return alert(errorText(error));
+      Object.assign(f, patch);
+    };
+    tr.querySelector("[data-fstatus]").onchange = (e) => update({ review_status: e.target.value });
+    tr.querySelector("[data-fnote]").onchange = (e) => update({ review_note: e.target.value.trim() || null });
+  });
 }
 
 function wireLog() {
@@ -340,6 +420,7 @@ function wireLog() {
     tr.querySelector("[data-status]").onchange = (e) => update({ review_status: e.target.value });
     tr.querySelector("[data-note]").onchange = (e) => update({ review_note: e.target.value.trim() || null });
   });
+  panel.querySelector("#archive").onclick = () => downloadAndArchive().catch((e) => alert(errorText(e)));
   panel.querySelector("#csv").onclick = () => ctx.download(`faq-questions-${new Date().toISOString().slice(0, 10)}.csv`, toCsv(filtered()), "text/csv");
   panel.querySelector("#json").onclick = () => ctx.download(`faq-questions-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(filtered(), null, 2), "application/json");
 }
