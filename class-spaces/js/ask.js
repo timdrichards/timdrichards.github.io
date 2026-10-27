@@ -38,12 +38,63 @@ async function touch() {
   try { await sb.rpc("faq_touch", { p_code: code, p_session: visitId(), p_device: device, p_kind: kind() }); } catch { /* best effort */ }
 }
 
-// Small, safe formatting: escape everything, then **bold**, `code` and line breaks.
-export function format(text) {
-  return esc(text)
+// Safe formatting: everything is escaped first. Prose gets **bold**, `code`, "- " lists and
+// paragraphs; fenced blocks (```js ... ```) become code blocks, highlighted by highlight.js
+// (vendor/highlight-11.9.0.min.js) with a Copy button.
+const LANGS = { js: "javascript", javascript: "javascript", mjs: "javascript", node: "javascript", ts: "typescript",
+  ejs: "xml", html: "xml", xml: "xml", css: "css", json: "json", bash: "bash", sh: "bash", shell: "bash",
+  console: "bash", zsh: "bash", sql: "sql", text: "plaintext", txt: "plaintext" };
+const LABELS = { javascript: "JavaScript", typescript: "TypeScript", xml: "HTML", css: "CSS", json: "JSON", bash: "Terminal", sql: "SQL", plaintext: "Text" };
+
+function prose(text) {
+  const inline = (s) => esc(s)
     .replace(/`([^`\n]+)`/g, "<code>$1</code>")
-    .replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>")
-    .split(/\n{2,}/).map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+    .replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
+  return String(text).trim().split(/\n{2,}/).filter((p) => p.trim()).map((p) => {
+    const lines = p.split("\n");
+    if (lines.every((l) => /^\s*[-*] /.test(l))) return `<ul>${lines.map((l) => `<li>${inline(l.replace(/^\s*[-*] /, ""))}</li>`).join("")}</ul>`;
+    return `<p>${lines.map(inline).join("<br>")}</p>`;
+  }).join("");
+}
+
+export function format(text) {
+  let src = String(text ?? "");
+  if ((src.match(/```/g) || []).length % 2) src += "\n```";      // an answer cut off inside a block
+  const parts = src.split(/```([\w+-]*)[^\S\n]*\n?([\s\S]*?)```/);
+  let html = "";
+  for (let i = 0; i < parts.length; i += 3) {
+    html += prose(parts[i]);
+    if (i + 1 < parts.length) {
+      const tag = (parts[i + 1] || "").toLowerCase();
+      const lang = LANGS[tag] || "";
+      const code = parts[i + 2].replace(/\n+$/, "");
+      html += `<div class="ask-code"><div class="ask-code-bar"><span>${esc(tag === "ejs" ? "EJS" : LABELS[lang] || "Code")}</span>
+        <button type="button" class="link small" data-copy>Copy</button></div>
+        <pre><code${lang ? ` class="language-${lang}"` : ""}>${esc(code)}</code></pre></div>`;
+    }
+  }
+  return html;
+}
+
+// Highlight the code blocks in one answer and wire their Copy buttons.
+function dressCode(box) {
+  box.querySelectorAll(".ask-code").forEach((block) => {
+    const code = block.querySelector("code");
+    try {
+      if (window.hljs) {
+        window.hljs.configure({ ignoreUnescapedHTML: true });
+        if (code.className) window.hljs.highlightElement(code);
+        else code.innerHTML = window.hljs.highlightAuto(code.textContent, ["javascript", "xml", "css", "bash", "json"]).value;
+        code.classList.add("hljs");
+      }
+    } catch { /* plain text is fine */ }
+    const btn = block.querySelector("[data-copy]");
+    btn.onclick = async () => {
+      try { await navigator.clipboard.writeText(code.textContent); btn.textContent = "Copied"; }
+      catch { btn.textContent = "Select and copy"; }
+      setTimeout(() => { btn.textContent = "Copy"; }, 1500);
+    };
+  });
 }
 
 if (!configured) {
@@ -91,48 +142,67 @@ function showClosed() {
     <p>Every answer it gives comes from the <a href="${FAQ_PAGE}" target="_blank" rel="noopener">course FAQ on Canvas</a>, so start there.</p></div>`;
 }
 
+const EXAMPLES = ["My Mongo login keeps getting rejected", "Explain the code in Unit 8", "Who do I message for an extension?"];
+
+// The chat: a header, the conversation (the only part that scrolls), and the question box
+// pinned to the bottom, like a chat app.
 function showChat(info) {
   const updated = info.faq_updated_at
     ? new Date(info.faq_updated_at).toLocaleDateString([], { month: "short", day: "numeric" }) : null;
-  app.innerHTML = `<div class="ask-wrap">
-    <header class="ask-head">
+  app.innerHTML = `<div class="ask-app">
+    <header class="ask-head"><div class="ask-col">
       <h1>326 FAQ Assistant</h1>
-      <p class="muted small">Answers come only from the <a href="${FAQ_PAGE}" target="_blank" rel="noopener">course FAQ</a>, the syllabus and the unit pages${
-        updated ? ` (updated ${esc(updated)})` : ""}.
-        It explains ideas and points you to the right answer; it will not write your code or answer quiz questions.</p>
-    </header>
-    <ol class="ask-log" id="log" aria-live="polite"></ol>
-    <form id="ask" class="ask-form">
-      <label class="sr" for="q">Your question</label>
-      <textarea id="q" name="q" rows="2" maxlength="1000" placeholder="Ask about the course, a unit, its code, an error…" required></textarea>
-      <div class="btns">
-        <button class="primary" id="send">Ask</button>
-        <button type="button" class="link small" id="fresh">New conversation</button>
-        <span class="spacer"></span>
-        <span class="muted small" id="count"></span>
+      <p class="muted small">Answers from the <a href="${FAQ_PAGE}" target="_blank" rel="noopener">course FAQ</a>, the syllabus and the unit pages${
+        updated ? `<span class="wide-only"> (updated ${esc(updated)})</span>` : ""}.<span class="wide-only"> It explains ideas and the course's code; it won't write your code or answer quiz questions.</span></p>
+    </div></header>
+    <div class="ask-scroll" id="scroll"><div class="ask-col">
+      <div class="ask-empty" id="empty">
+        <p class="muted">Ask anything about the course, a unit, its code or an error. For example:</p>
+        <div class="btns">${EXAMPLES.map((x) => `<button type="button" class="small" data-example="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+      </div>
+      <ol class="ask-log" id="log" aria-live="polite"></ol>
+    </div></div>
+    <form id="ask" class="ask-composer"><div class="ask-col">
+      <div class="ask-box">
+        <label class="sr" for="q">Your question</label>
+        <textarea id="q" name="q" rows="1" maxlength="1000" placeholder="Ask a question about 326…" required></textarea>
+        <button class="primary ask-send" id="send" aria-label="Ask">Ask</button>
       </div>
       <p class="error" id="err"></p>
-    </form>
-    <p class="muted small ask-privacy">Your questions are saved <strong>without your name</strong> so the course staff can improve the FAQ.
-      Don't type anything personal. For your own grade, an extension or anything private, message the staff in the Canvas Inbox.</p>
+      <div class="ask-foot muted small">
+        <span>Saved <strong>without your name</strong>.<span class="wide-only"> Nothing personal; grades and extensions go to the Canvas Inbox.</span></span>
+        <span class="spacer"></span><span id="count"></span>
+        <button type="button" class="link small" id="fresh">New conversation</button>
+      </div>
+    </div></form>
   </div>`;
   const form = app.querySelector("#ask");
   const q = app.querySelector("#q");
+  const grow = () => { q.style.height = "auto"; q.style.height = `${Math.min(q.scrollHeight, innerHeight * 0.35)}px`; };
   q.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); form.requestSubmit(); }
   });
   q.addEventListener("input", () => {
+    grow();
     app.querySelector("#count").textContent = q.value.length > 800 ? `${q.value.length}/1000` : "";
   });
+  app.querySelectorAll("[data-example]").forEach((b) => { b.onclick = () => { q.value = b.dataset.example; grow(); ask(q.value); }; });
   app.querySelector("#fresh").onclick = () => {
     turns.length = 0;
     app.querySelector("#log").innerHTML = "";
+    app.querySelector("#empty").hidden = false;
     visitId(true);
     touch();
     q.focus();
   };
   form.onsubmit = (e) => { e.preventDefault(); ask(q.value.trim()); };
   q.focus();
+}
+
+// Keep the newest exchange in view, inside the conversation's own scroll area.
+function scrollToEnd() {
+  const s = app.querySelector("#scroll");
+  if (s) s.scrollTo({ top: s.scrollHeight, behavior: "smooth" });
 }
 
 async function ask(question) {
@@ -147,8 +217,10 @@ async function ask(question) {
   item.innerHTML = `<div class="ask-q">${esc(question)}</div>
     <div class="ask-a pending"><span class="muted">Looking in the FAQ… <span class="secs"></span></span></div>`;
   log.append(item);
-  item.scrollIntoView({ block: "end", behavior: "smooth" });
+  app.querySelector("#empty").hidden = true;
+  scrollToEnd();
   q.value = "";
+  q.style.height = "auto";
   send.disabled = true;
   const t0 = Date.now();
   const tick = setInterval(() => { item.querySelector(".secs").textContent = `${Math.round((Date.now() - t0) / 1000)}s`; }, 1000);
@@ -167,6 +239,7 @@ async function ask(question) {
       ${data.entries?.length ? `<div class="ask-links"><span class="muted small">Read more:</span>
         <ul>${data.entries.map((e) => `<li><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title)}</a>${e.kind === "page" ? ` <span class="muted small">(course page)</span>` : ""}</li>`).join("")}</ul></div>` : ""}
       ${data.id ? rateHtml() : ""}`;
+    dressCode(box);
     if (data.id) wireRating(box, data.id);
   } catch (e) {
     box.classList.remove("pending");
@@ -177,7 +250,7 @@ async function ask(question) {
     clearInterval(tick);
     send.disabled = false;
     q.focus();
-    item.scrollIntoView({ block: "end", behavior: "smooth" });
+    scrollToEnd();
   }
 }
 
