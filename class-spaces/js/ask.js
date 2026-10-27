@@ -159,6 +159,7 @@ function showChat(info) {
       <div class="ask-empty" id="empty">
         <p class="muted">Ask anything about the course, a unit, its code or an error. For example:</p>
         <div class="btns">${EXAMPLES.map((x) => `<button type="button" class="small" data-example="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+        ${limitsHtml(info)}
       </div>
       <ol class="ask-log" id="log" aria-live="polite"></ol>
     </div></div>
@@ -172,6 +173,7 @@ function showChat(info) {
       <div class="ask-foot muted small">
         <span>Saved <strong>without your name</strong>.<span class="wide-only"> Nothing personal; grades and extensions go to the Canvas Inbox.</span></span>
         <span class="spacer"></span><span id="count"></span>
+        <button type="button" class="link small ask-quota" id="quota" aria-live="polite" title="About the limits"></button>
         <button type="button" class="link small" id="fresh">New conversation</button>
       </div>
     </div></form>
@@ -187,6 +189,14 @@ function showChat(info) {
     app.querySelector("#count").textContent = q.value.length > 800 ? `${q.value.length}/1000` : "";
   });
   app.querySelectorAll("[data-example]").forEach((b) => { b.onclick = () => { q.value = b.dataset.example; grow(); ask(q.value); }; });
+  app.querySelector("#quota").onclick = () => {
+    const box = app.querySelector("#err");
+    box.classList.remove("error");
+    box.classList.add("muted", "small");
+    box.innerHTML = limitsHtml(lastQuota || info, true);
+  };
+  quotaInfo = info;
+  refreshQuota();
   app.querySelector("#fresh").onclick = () => {
     turns.length = 0;
     app.querySelector("#log").innerHTML = "";
@@ -197,6 +207,53 @@ function showChat(info) {
   };
   form.onsubmit = (e) => { e.preventDefault(); ask(q.value.trim()); };
   q.focus();
+}
+
+// ---------------------------------------------------------------- the limits
+
+let quotaInfo = null;
+let lastQuota = null;           // the latest limits and counts, newer than what the page loaded with
+let unlockTimer = null;
+const timeOf = (iso) => new Date(iso).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+
+function limitsHtml(info, inline = false) {
+  if (!info?.per_hour) return "";
+  const text = `You can ask up to <strong>${info.per_hour} questions an hour</strong> and <strong>${info.per_day} a day</strong> from one browser.
+    The limit keeps the assistant available, and free, for the whole class. The <a href="${FAQ_PAGE}" target="_blank" rel="noopener">FAQ page</a> has every answer any time.`;
+  return inline ? text : `<p class="muted small ask-limits">${text}</p>`;
+}
+
+// Show what is left, and at the limit, hold the Ask button until the next question frees up.
+function showQuota(q) {
+  const el = app.querySelector("#quota");
+  const send = app.querySelector("#send");
+  if (!el || !q) return;
+  lastQuota = q;
+  const hour = `${q.hour_left} of ${q.per_hour} left this hour`;
+  el.textContent = q.day_left < q.hour_left ? `${hour}, ${q.day_left} today` : hour;
+  el.classList.toggle("low", q.hour_left <= 2 || q.day_left <= 2);
+  clearTimeout(unlockTimer);
+  const out = q.day_left === 0 ? "day" : q.hour_left === 0 ? "hour" : null;
+  send.disabled = Boolean(out);
+  if (!out) return;
+  const err = app.querySelector("#err");
+  err.classList.add("error");
+  err.classList.remove("muted", "small");
+  if (out === "day") {
+    err.textContent = `You've used all ${q.per_day} questions for today. You can ask again tomorrow; the FAQ page has every answer.`;
+  } else if (q.next_at) {
+    err.textContent = `You've used all ${q.per_hour} questions for this hour. You can ask again at ${timeOf(q.next_at)}.`;
+    unlockTimer = setTimeout(() => { err.textContent = ""; refreshQuota(); }, Math.max(1000, new Date(q.next_at) - Date.now() + 1000));
+  } else {
+    refreshQuota();
+  }
+}
+
+async function refreshQuota() {
+  try {
+    const { data, error } = await sb.rpc("faq_quota", { p_code: code, p_device: device });
+    if (!error && data) showQuota(data);
+  } catch { /* the count is a convenience */ }
 }
 
 // Keep the newest exchange in view, inside the conversation's own scroll area.
@@ -232,6 +289,7 @@ async function ask(question) {
       body: JSON.stringify({ code, device, session: visitId(), question, history: turns.slice(-2) }),
     });
     const data = await r.json().catch(() => ({}));
+    if (data.quota) setTimeout(() => showQuota(data.quota), 0);
     if (!r.ok) throw new Error(data.error || `Something went wrong (${r.status}). Try again.`);
     turns.push({ q: question, a: data.answer });
     box.classList.remove("pending");
@@ -249,6 +307,7 @@ async function ask(question) {
   } finally {
     clearInterval(tick);
     send.disabled = false;
+    if (app.querySelector("#quota")?.textContent.startsWith("0 of")) refreshQuota();
     q.focus();
     scrollToEnd();
   }
