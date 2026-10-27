@@ -142,7 +142,7 @@ function showClosed() {
     <p>Every answer it gives comes from the <a href="${FAQ_PAGE}" target="_blank" rel="noopener">course FAQ on Canvas</a>, so start there.</p></div>`;
 }
 
-const EXAMPLES = ["My Mongo login keeps getting rejected", "Explain the code in Unit 8", "Who do I message for an extension?"];
+const EXAMPLES = ["What's due this week?", "Explain the code in Unit 8", "How should I plan my time for Sprint 3?", "My Mongo login keeps getting rejected"];
 
 // The chat: a header, the conversation (the only part that scrolls), and the question box
 // pinned to the bottom, like a chat app.
@@ -152,12 +152,12 @@ function showChat(info) {
   app.innerHTML = `<div class="ask-app">
     <header class="ask-head"><div class="ask-col">
       <h1>326 FAQ Assistant</h1>
-      <p class="muted small">Answers from the <a href="${FAQ_PAGE}" target="_blank" rel="noopener">course FAQ</a>, the syllabus and the unit pages${
+      <p class="muted small">Answers from the <a href="${FAQ_PAGE}" target="_blank" rel="noopener">course FAQ</a>, the syllabus, the unit pages and the assignments${
         updated ? `<span class="wide-only"> (updated ${esc(updated)})</span>` : ""}.<span class="wide-only"> It explains ideas and the course's code; it won't write your code or answer quiz questions.</span></p>
     </div></header>
     <div class="ask-scroll" id="scroll"><div class="ask-col">
       <div class="ask-empty" id="empty">
-        <p class="muted">Ask anything about the course, a unit, its code or an error. For example:</p>
+        <p class="muted">Ask anything about the course, a unit, its code, an assignment or an error. For example:</p>
         <div class="btns">${EXAMPLES.map((x) => `<button type="button" class="small" data-example="${esc(x)}">${esc(x)}</button>`).join("")}</div>
         ${limitsHtml(info)}
       </div>
@@ -295,7 +295,7 @@ async function ask(question) {
     box.classList.remove("pending");
     box.innerHTML = `${format(data.answer)}
       ${data.entries?.length ? `<div class="ask-links"><span class="muted small">Read more:</span>
-        <ul>${data.entries.map((e) => `<li><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(String(e.title).replace(/`/g, ""))}</a>${e.kind === "page" ? ` <span class="muted small">(course page)</span>` : ""}</li>`).join("")}</ul></div>` : ""}
+        <ul>${data.entries.map((e) => `<li><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(String(e.title).replace(/`/g, ""))}</a>${e.kind === "page" ? ` <span class="muted small">(course page)</span>` : e.kind === "assignment" ? ` <span class="muted small">(assignment)</span>` : ""}</li>`).join("")}</ul></div>` : ""}
       ${data.id ? rateHtml() : ""}`;
     dressCode(box);
     if (data.id) wireRating(box, data.id);
