@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing Exam Questions That Test What You Mean | Tim Richards</title>
+<meta name="description" content="Techniques for clear questions, the key and rubric, and beta-testing an exam.">
+<link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/style.css?v=10">
+<link rel="stylesheet" href="../../teaching-resources/resources.css?v=1">
+</head>
+<body data-site="ta" data-page="writing-exam-questions-that-test-what-you-mean">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Tim Richards</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#teaching">Teaching</a></li>
+        <li><a href="../../index.html#awards">Awards</a></li>
+        <li><a href="../../index.html#research">Research Projects</a></li>
+        <li><a href="../../writings.html">Writings</a></li>
+        <li><a href="../../tools.html">Tools</a></li>
+        <li><a href="../../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow"><a href="../index.html">Teaching Resources</a> &middot; <a href="index.html">For TAs and TOs</a> &middot; Exams and assignments</p>
+      <h1>Writing Exam Questions That Test What You Mean</h1>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <article class="prose resource">
+<p class="lede">If you are asked to draft an exam or quiz question for the course you TA, this page is for you. A good exam question tells the instructor exactly what each student understands. A weak one mostly measures who read the question the way you meant it. The techniques below come from well-written computer science exams, and most of them fit in a sentence or two of the question. Your instructor's expectations come first; where this page and your course differ, follow your course and ask.</p><div class="defaults"><p><strong>Defaults that work.</strong> If you only take four things from this page:</p><ul><li><strong>Start from what students should be able to do,</strong> and test one of those things per part.</li><li><strong>Show the expected behavior with examples</strong> that cover the edge cases.</li><li><strong>Write the answer key and the partial credit as you write the question,</strong> not after.</li><li><strong>Have another TA take it cold with a timer</strong> before it goes to the instructor.</li></ul></div>
+<h2>Before you write anything</h2>
+<h3>What should students be able to do?</h3>
+<p>Write one sentence per skill: "trace the flow of an update through an MVC app", "implement an iterator without storing the elements". Each part of your question should test one of these sentences. If a part tests none of them, cut it.</p>
+<h3>What does the instructor count as correct?</h3>
+<p>Read their lecture slides and their past exams on the same topic. When a course has more than one instructor, write to the ideas they share, and check any point where their slides disagree before you build a question on it.</p>
+<h3>How long should it take?</h3>
+<p>Size the question to the time. If the exam is 2 hours for 100 points, a 20-point question gets about 24 minutes. Students usually need two to three times as long as you do to solve it.</p>
+<h2>Techniques that make questions work</h2>
+<h3>Show the expected behavior with examples.</h3>
+<p>Give three or four input and output pairs, and choose them to cover the edge cases on purpose: an empty input, a single element, a typical case, and the case where everything is the same. Students know exactly what "correct" means, and you have your first grading test cases.</p>
+<pre>runs("")        produces nothing
+runs("b")       produces "b"
+runs("aabccc")  produces "aa", "b", "ccc"
+runs("dddd")    produces "dddd"</pre>
+<h3>Add constraints that force the idea you are testing.</h3>
+<p>Ask yourself what shortcut a student would take, then rule it out in one line. "Use constant space; do not copy the input into an array" means the only way through the question above is to actually walk the input once.</p>
+<h3>Give the scaffolding.</h3>
+<p>Provide the class header, the interface, or a short list of method signatures. Students should spend their time on the concept, not on remembering syntax.</p>
+<h3>Say what you will grade.</h3>
+<p>Sentences like "Your solution must reuse the base class's behavior" or "Make no other properties or methods public" tell students what counts. A student who misses it has misread the question, not guessed wrong about your intent.</p>
+<h3>Hide a design decision inside a coding task.</h3>
+<p>"You must decide whether to extend the class or wrap it" asks students to write code and show judgment in the same answer. This is a good way to test design thinking without an essay question.</p>
+<h3>Build wrong answers from real misconceptions.</h3>
+<p>In a multiple-choice part, every wrong option should be a mistake students actually make. Take them from what you hear in lab, office hours and on the forum. Then a wrong choice tells you what the student believes, not just that they missed.</p>
+<h3>Limit the length of explanations.</h3>
+<p>"In one sentence, say whether this follows the pattern and why" forces a precise answer and keeps grading fast. One sentence is enough to show understanding, and it is hard to hide a wrong idea in one.</p>
+<h3>Test one idea per part.</h3>
+<p>A question with five or six short parts, each checking one thing, means a student who misses one idea still earns the others, and the scores show the instructor exactly what the class did not get.</p>
+<h3>Check the size of your own solution.</h3>
+<p>Model answers for a 15 to 25 minute coding question usually run 5 to 15 lines. If your answer key is much longer, the question is too big. Split it or cut it.</p>
+<h3>Change the surface, keep the structure.</h3>
+<p>Students study old exams. Reuse a question's shape with a new scenario so you test the idea, not their memory of last year's answer.</p>
+<h3>Avoid tricks.</h3>
+<p>No double negatives, no "all of the above", no wording that only works if you read it twice. Make the hard part the concept, not the sentence.</p>
+<h2>Be careful with "circle all that apply"</h2>
+<p>These parts look quick to grade but often are not. If a reasonable student could argue for a different set of answers, you will be writing a paragraph in the key and handling regrade requests. Either choose a case with one defensible answer, or ask for a one-sentence reason and grade the reasoning.</p>
+<h2>The answer key and rubric</h2>
+<ul><li><strong>Write the key while you write each part, not after.</strong> Writing the answer is how you find out the question is unclear.</li><li><strong>Decide partial credit before the exam.</strong> For every part, write down what earns full, half and no credit. If you cannot, the question is not yet clear enough.</li><li><strong>Have someone take it cold.</strong> Ask another TA to solve your draft with a timer, without the key. Anything they argue with is something students will argue with.</li><li><strong>Send the instructor a short table with your draft:</strong> each part, the skill it tests, and where that skill appears in the lecture material. Ask: "Is there anything here you would not accept as an answer?" Settle disagreements before the exam, not while grading.</li></ul>
+<h2>When you are the one test-taking it</h2>
+<p>Instructors often ask a TA to take an exam before it is given. Do it properly; it is one of the most useful checks an exam gets.</p>
+<ul>
+<li><strong>Take it under real conditions:</strong> closed book if students will be, in one sitting, with a timer. Note your time for each question.</li>
+<li><strong>Report your total time and an estimate for students</strong> (two to three times yours). Flag it if that won't fit the exam slot.</li>
+<li><strong>Mark every place you hesitated</strong> over wording, guessed what was wanted, or saw two readings.</li>
+<li><strong>Compare the points with the time and difficulty</strong> of each question.</li>
+<li><strong>Check the answer key against your answers.</strong> Every disagreement is a key error or an ambiguity.</li>
+<li><strong>Suggest partial-credit steps,</strong> and the wrong answers you expect students to give.</li>
+<li><strong>Send one list</strong> of typos, numbering errors and broken code, by question number.</li>
+<li><strong>Keep it confidential,</strong> and delete your copies when the instructor says to.</li>
+</ul>
+
+<h2>Further reading</h2>
+<p><a href="https://www.cmu.edu/teaching/assessment/assesslearning/creatingexams.html" target="_blank">Creating Exams</a>, Eberly Center for Teaching Excellence, Carnegie Mellon University: matching questions to objectives, question types, timing and keys.</p>
+<div class="defaults"><p>Questions about a draft? Bring it to class or send it to me in the Canvas Inbox.</p></div>
+<p>Related pages: <a href="creating-rubrics-and-grading-to-them.html">Creating Rubrics and Grading to Them</a> and <a href="writing-homework-and-problem-sets-that-work.html">Writing Homework and Problem Sets That Work</a>.</p>
+    </article>
+    <nav class="page-nav" aria-label="More resources"><a href="exams-accommodations-makeups-and-proctoring.html">&larr; Exams: Accommodations, Makeups and Proctoring</a><a href="index.html">All TA resources</a><a href="writing-homework-and-problem-sets-that-work.html">Writing Homework and Problem Sets That Work &rarr;</a></nav>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year">2026</span> Tim Richards</p>
+    <p class="art-credit">This site counts page views anonymously (no names or cookies). <a href="../../teaching-resources/index.html#privacy">How</a>.</p>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="../../assets/js/main.js?v=4"></script>
+<script src="../../class-spaces/js/config.js"></script>
+<script src="../../teaching-resources/js/track.js?v=1"></script>
+</body>
+</html>

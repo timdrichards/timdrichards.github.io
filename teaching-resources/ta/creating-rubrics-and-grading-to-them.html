@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creating Rubrics and Grading to Them | Tim Richards</title>
+<meta name="description" content="Rubric types, criteria two graders apply the same way, calibration, bias, and grading time.">
+<link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/style.css?v=10">
+<link rel="stylesheet" href="../../teaching-resources/resources.css?v=1">
+</head>
+<body data-site="ta" data-page="creating-rubrics-and-grading-to-them">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Tim Richards</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#teaching">Teaching</a></li>
+        <li><a href="../../index.html#awards">Awards</a></li>
+        <li><a href="../../index.html#research">Research Projects</a></li>
+        <li><a href="../../writings.html">Writings</a></li>
+        <li><a href="../../tools.html">Tools</a></li>
+        <li><a href="../../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow"><a href="../index.html">Teaching Resources</a> &middot; <a href="index.html">For TAs and TOs</a> &middot; Feedback, rubrics and grading</p>
+      <h1>Creating Rubrics and Grading to Them</h1>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <article class="prose resource">
+<p class="lede">A rubric does two jobs. Before grading, it says what good work looks like, so students know what to aim for and graders know what to look for. During grading, it turns a series of judgment calls into the same decision made the same way for every student, whichever TA they get. A weak rubric does neither: "good code style, 5 points" leaves every grader to invent their own standard. This page covers choosing a rubric type, writing criteria two graders would apply the same way, testing the rubric before you grade, applying it fairly, and three example rubrics for code, proofs and written answers. Your instructor's grading scheme comes first; where this page and your course differ, follow your course and ask.</p>
+
+<div class="defaults">
+<p><strong>Defaults that work.</strong> If you only take four things from this page:</p>
+<ul>
+<li><strong>Write criteria you can see in the work,</strong> not value words. "Tests cover an empty input and a boundary," not "good testing."</li>
+<li><strong>Decide partial credit before you grade,</strong> for the mistakes you expect.</li>
+<li><strong>Try the rubric on a dozen real submissions</strong> and calibrate with the other graders before grading for real.</li>
+<li><strong>Grade to the rubric, not to your own solution.</strong> When a correct answer doesn't fit, add a rubric item and apply it to everyone.</li>
+</ul>
+</div>
+
+<h2>Choose the kind of rubric</h2>
+<table>
+<thead><tr><th>Type</th><th>How it works</th><th>Good for</th></tr></thead>
+<tbody>
+<tr><td>Analytic</td><td>Scores each criterion separately (correctness, design, explanation), then adds them</td><td>Most CS assignments; detailed feedback; several graders</td></tr>
+<tr><td>Holistic</td><td>One overall judgment against level descriptions</td><td>Short answers, quick formative checks</td></tr>
+<tr><td>Checklist</td><td>Yes or no on each item</td><td>Requirements that are present or absent (files submitted, tests included)</td></tr>
+<tr><td>Single-point</td><td>One column of target expectations, with room to note where work fell short or went beyond</td><td>Drafts and written work where you want comments more than points</td></tr>
+</tbody>
+</table>
+<p>Two more choices. <strong>Points or levels:</strong> a level-based rubric describes what each level of quality looks like and maps it to points; a pure count ("three or more tests") is easier to apply but says less about quality. <strong>Adding or deducting:</strong> in Gradescope you can start at zero and add points for what is there, or start at full marks and deduct for mistakes. Adding tends to keep partial credit consistent, because every point a student earns is tied to something specific in their work.</p>
+
+<h2>Build it step by step</h2>
+<ol>
+<li><strong>Start from the learning goals and the model solution.</strong> What should the work show that the student can do?</li>
+<li><strong>List what you can see in the work</strong> that shows each goal.</li>
+<li><strong>Pick the rubric type</strong> and, for levels, how many. Three or four levels per criterion is usually plenty.</li>
+<li><strong>Write a descriptor for each level,</strong> so the difference between levels is clear.</li>
+<li><strong>Decide partial credit now</strong> for the mistakes you expect, and how much each costs.</li>
+<li><strong>Try it on about a dozen real submissions.</strong> Add items for the common mistakes you find. Keep "attempted but incorrect" separate from "no attempt."</li>
+<li><strong>Get feedback</strong> from the instructor and the other graders.</li>
+<li><strong>Revise,</strong> and regrade anything already graded with the old version.</li>
+</ol>
+
+<h2>Write criteria two graders would apply the same way</h2>
+<table>
+<thead><tr><th>Rule</th><th>Weak</th><th>Better</th></tr></thead>
+<tbody>
+<tr><td>Say what you can see</td><td>Good code style</td><td>Names say what they hold; no function over about 40 lines; no copied blocks</td></tr>
+<tr><td>Describe quality, not only a count</td><td>Uses 3 or more test cases</td><td>Tests cover the normal case, an empty input and a boundary value</td></tr>
+<tr><td>One idea per criterion</td><td>Correct and well explained</td><td>Two criteria: Correctness, and Explanation</td></tr>
+<tr><td>Make the levels clearly different</td><td>Mostly correct / somewhat correct</td><td>Correct on all inputs / fails only edge cases / fails typical inputs</td></tr>
+<tr><td>Name the mistake and its cost</td><td>Minor error, −1</td><td>Off-by-one in a loop bound, −1, once per problem</td></tr>
+<tr><td>Avoid vague praise words</td><td>Insightful analysis</td><td>Explains why the result happens, citing a specific measurement</td></tr>
+<tr><td>Let correct alternatives earn credit</td><td>Uses a hash map</td><td>Lookup runs in expected O(1) or O(log n) time</td></tr>
+</tbody>
+</table>
+
+<h2>Test it before you grade</h2>
+<p>Even a good rubric reads differently to different people until they have used it together. In studies of rubric use, graders agree far more often on "within one level" than on the exact level, and several graders together are much more reliable than one. So calibrate:</p>
+<ol>
+<li><strong>Everyone grades the same five to ten submissions on their own.</strong> Pick a mix: strong, weak and odd.</li>
+<li><strong>Compare item by item,</strong> and talk through every disagreement of more than one level.</li>
+<li><strong>Rewrite the descriptors that caused disagreement,</strong> and attach an anchor example: "this is what a 3 looks like."</li>
+<li><strong>Grade a second shared set</strong> and check that you agree more.</li>
+<li><strong>Midway through grading,</strong> swap a few submissions and spot-check each other.</li>
+</ol>
+<p>Keep every rubric change in one place, with the date, and apply it to the work already graded.</p>
+
+<h2>Apply it fairly</h2>
+<h3>Grade to the rubric, not to your solution</h3>
+<p>Score what the work shows against the descriptors, not how close it is to the answer you would have written. When an answer is correct but unexpected, don't take points for being different. Tell the lead TA or the instructor, add a rubric item, and apply it to everyone.</p>
+
+<h3>Watch for the usual biases</h3>
+<table>
+<thead><tr><th>Bias</th><th>What happens</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td>Halo</td><td>A good earlier impression of a student lifts their next score</td><td>Grade anonymously when you can</td></tr>
+<tr><td>Name or identity</td><td>Information about the student, not the work, shifts the grade</td><td>Hide names; Gradescope supports anonymous grading</td></tr>
+<tr><td>Order and drift</td><td>Your standard moves as you grade</td><td>Grade one question at a time; regrade the first few at the end</td></tr>
+<tr><td>Contrast</td><td>A paper looks better or worse next to the one before it</td><td>Compare to the anchor examples, not to the last paper</td></tr>
+<tr><td>Leniency or severity</td><td>One grader is consistently higher or lower</td><td>Compare graders' averages per question during calibration</td></tr>
+<tr><td>Fatigue</td><td>Late papers are graded less carefully</td><td>Grade in short blocks</td></tr>
+</tbody>
+</table>
+<p>The bias is real: a review of experiments on grading found that information about a student unrelated to the work shifted subjective grades by a noticeable amount, at every level from primary school to university.</p>
+
+<h2 id="grading-time">Designing a rubric for grading time</h2>
+<p>Every decision in a rubric costs grading time, multiplied by every submission. So spend decisions only where judgment matters. Most of what makes a rubric faster also makes it more consistent, because graders disagree most on fine-grained calls.</p>
+<ol>
+<li><strong>Start from a time budget.</strong> Hours available divided by submissions gives minutes per submission. For example, 8 hours for 120 submissions is 4 minutes each. Time yourself grading 10 submissions with the draft rubric, and simplify until it fits.</li>
+<li><strong>Fewer, coarser criteria.</strong> Three or four criteria with three levels (full, partial, none) beat eight criteria with five levels. Fewer choices are faster and more consistent.</li>
+<li><strong>Make objective parts yes or no.</strong> "Handles the empty input" is a checkbox. Save judgment for the one or two criteria the assignment is really about.</li>
+<li><strong>Leave mechanical checks to the autograder.</strong> People grade what it can't check: design, explanation, proofs.</li>
+<li><strong>Set up the rubric for the tool.</strong> In Gradescope, order items by how often you'll use them (the first ones get the number keys), make the levels of each criterion a mutually exclusive group so each criterion is one keystroke, and write the feedback into the items so comments come free.</li>
+<li><strong>Cap each mistake.</strong> "Off-by-one, −1, once per problem" means you don't hunt for every repeat.</li>
+<li><strong>Design the assignment to be gradable,</strong> with your instructor: fixed answer areas or a template, one problem per page, the result first and then the justification, word limits, and fixed answer formats so identical answers can be grouped and graded once.</li>
+<li><strong>Policy choices, for your instructor to make:</strong> grade a few problems in detail and the rest for completion; specifications grading (pass or not yet); or check the final answer first and read the work only when it is wrong or partial.</li>
+<li><strong>Know the trade-off.</strong> Speed costs feedback. Keep one criterion with real written feedback where it matters most for learning, and say in the rubric that the rest is deliberately brief.</li>
+</ol>
+<p>Prompt 6 on <a href="using-generative-ai-to-draft-a-rubric.html">Using Generative AI to Draft a Rubric</a> can do a first pass at simplifying a rubric to fit a time budget.</p>
+
+<h2>Three example rubrics</h2>
+<p>These are made-up examples to adapt, not rubrics from a particular course.</p>
+
+<h3>A. A code assignment (20 points, adding points)</h3>
+<table>
+<thead><tr><th>Criterion</th><th>Levels</th></tr></thead>
+<tbody>
+<tr><td>Correctness (8)</td><td>Passes all hidden tests (8) · fails only edge cases such as empty input or a boundary (5) · fails typical cases (2) · does not run (0)</td></tr>
+<tr><td>Design (5)</td><td>Each function has one job, no repeated logic (5) · one oversized function or one repeated block (3) · logic repeated across the file (1)</td></tr>
+<tr><td>Readability (4)</td><td>Names say what they hold, and comments explain the non-obvious parts (4) · some unclear names (2) · hard to follow (0)</td></tr>
+<tr><td>Tests (3)</td><td>Normal case, empty input and a boundary (3) · normal case only (1) · none (0)</td></tr>
+</tbody>
+</table>
+
+<h3>B. A proof (10 points)</h3>
+<table>
+<thead><tr><th>Criterion</th><th>Levels</th></tr></thead>
+<tbody>
+<tr><td>Setup (2)</td><td>States what is assumed and what will be shown (2) · one of the two missing (1) · neither (0)</td></tr>
+<tr><td>Logic (5)</td><td>Every step follows from a definition or an earlier step (5) · one gap that can be fixed (3) · assumes the conclusion, or a key step is wrong (0 to 1)</td></tr>
+<tr><td>Variables (1)</td><td>Each variable is introduced before use, with its range</td></tr>
+<tr><td>Definitions (1)</td><td>Uses the definitions, not only restates them</td></tr>
+<tr><td>Writing (1)</td><td>Full sentences; no quantifier symbols standing in for prose</td></tr>
+</tbody>
+</table>
+
+<h3>C. A short written explanation (single-point)</h3>
+<table>
+<thead><tr><th>Needs work</th><th>Target</th><th>Beyond</th></tr></thead>
+<tbody>
+<tr><td></td><td>States the claim in the first sentence</td><td></td></tr>
+<tr><td></td><td>Gives the correct reason it happens</td><td></td></tr>
+<tr><td></td><td>Uses one concrete example</td><td></td></tr>
+<tr><td></td><td>Under 150 words</td><td></td></tr>
+</tbody>
+</table>
+<p>The grader writes a short note in "Needs work" or "Beyond" next to each target.</p>
+
+<h2>Share it with students</h2>
+<p>Give students the rubric, or a student version of it, with the assignment. It shows what to aim for, connects the grade to the quality of the work, and lets students check their own work before they submit. Reviews of rubric research find that this kind of use can improve both performance and how well students judge their own work, especially when students actually use the rubric rather than only receive it. If some details must stay hidden (for example the hidden test cases), say what kinds of cases they cover.</p>
+
+<h2>Further reading</h2>
+<p><strong>Guides</strong></p>
+<ul>
+<li><a href="https://www.cmu.edu/teaching/designteach/teach/rubrics.html">CMU Eberly Center, Grading and Performance Rubrics</a>: why explicit criteria keep standards steady across graders.</li>
+<li><a href="https://gsi.berkeley.edu/gsi-guide-contents/grading-intro/grading-rubrics/">UC Berkeley GSI Teaching &amp; Resource Center, Grading Rubrics</a>: types, sharing rubrics, consistency across sections.</li>
+<li><a href="https://teaching.cornell.edu/teaching-resources/assessing-student-learning/using-rubrics">Cornell Center for Teaching Innovation, Using Rubrics</a>: a step-by-step build process.</li>
+<li><a href="https://resources.depaul.edu/teaching-commons/teaching-guides/feedback-grading/rubrics/Pages/default.aspx">DePaul Teaching Commons, Rubrics</a>: types, and how to check a rubric before and after use.</li>
+<li><a href="https://groups.cs.umass.edu/uca/uca-training-grading-on-gradescope/">UMass CICS UCA Program, Grading on Gradescope</a>: adding vs deducting points and practical rubric habits.</li>
+<li><a href="https://web.stanford.edu/class/cs103/proofwriting_checklist">Stanford CS103, Proofwriting Checklist</a>: a model for grading proofs.</li>
+<li><a href="https://www.cultofpedagogy.com/single-point-rubric/">Jennifer Gonzalez, Meet the Single Point Rubric</a>.</li>
+</ul>
+<p><strong>Books</strong></p>
+<ul>
+<li><a href="https://www.ascd.org/books/how-to-create-and-use-rubrics-for-formative-assessment-and-grading">Susan Brookhart, How to Create and Use Rubrics for Formative Assessment and Grading (ASCD)</a>.</li>
+<li><a href="https://www.routledge.com/Introduction-to-Rubrics-An-Assessment-Tool-to-Save-Grading-Time-Convey-Effective-Feedback-and-Promote-Student-Learning/Stevens-Stevens/p/book/9781041069386">Stevens and Stevens, Introduction to Rubrics (Routledge)</a>.</li>
+</ul>
+<p><strong>Research</strong></p>
+<ul>
+<li><a href="https://doi.org/10.3389/feduc.2018.00022">Brookhart, "Appropriate Criteria: Key to Effective Rubrics" (Frontiers in Education, 2018)</a>: free; a review of rubric studies in higher education.</li>
+<li><a href="https://doi.org/10.1016/j.edurev.2007.05.002">Jonsson and Svingby, "The use of scoring rubrics: Reliability, validity and educational consequences" (2007)</a>.</li>
+<li><a href="https://doi.org/10.1016/j.edurev.2013.01.002">Panadero and Jonsson, "The use of scoring rubrics for formative assessment purposes revisited: A review" (2013)</a>.</li>
+<li><a href="https://doi.org/10.1080/02602930902862859">Reddy and Andrade, "A review of rubric use in higher education" (2010)</a>.</li>
+<li><a href="https://doi.org/10.1145/2999541.2999555">Stegeman, Barendsen and Smetsers, "Designing a rubric for feedback on code quality in programming courses" (Koli Calling 2016)</a>.</li>
+<li><a href="https://doi.org/10.1177/0098628313487425">Malouff, Emmerton and Schutte, "The Risk of a Halo Bias as a Reason to Keep Students Anonymous During Grading" (2013)</a>.</li>
+<li><a href="https://doi.org/10.1177/0004944116664618">Malouff and Thorsteinsson, "Bias in grading: A meta-analysis of experimental research findings" (2016)</a>.</li>
+</ul>
+<p>Related pages: <a href="writing-learning-outcomes.html">Writing Learning Outcomes</a>, <a href="giving-feedback-students-use.html">Giving Feedback Students Use</a>, <a href="using-generative-ai-to-draft-a-rubric.html">Using Generative AI to Draft a Rubric</a>, <a href="grading-faster-without-cutting-corners.html">Grading Faster Without Cutting Corners</a>, <a href="writing-exam-questions-that-test-what-you-mean.html">Writing Exam Questions That Test What You Mean</a> and <a href="writing-homework-and-problem-sets-that-work.html">Writing Homework and Problem Sets That Work</a>.</p>
+    </article>
+    <nav class="page-nav" aria-label="More resources"><a href="writing-learning-outcomes.html">&larr; Writing Learning Outcomes</a><a href="index.html">All TA resources</a><a href="using-generative-ai-to-draft-a-rubric.html">Using Generative AI to Draft a Rubric &rarr;</a></nav>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year">2026</span> Tim Richards</p>
+    <p class="art-credit">This site counts page views anonymously (no names or cookies). <a href="../../teaching-resources/index.html#privacy">How</a>.</p>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="../../assets/js/main.js?v=4"></script>
+<script src="../../class-spaces/js/config.js"></script>
+<script src="../../teaching-resources/js/track.js?v=1"></script>
+</body>
+</html>

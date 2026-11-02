@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing Homework and Problem Sets That Work | Tim Richards</title>
+<meta name="description" content="Programming and theory assignments, with nine examples at three levels.">
+<link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/style.css?v=10">
+<link rel="stylesheet" href="../../teaching-resources/resources.css?v=1">
+</head>
+<body data-site="ta" data-page="writing-homework-and-problem-sets-that-work">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Tim Richards</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#teaching">Teaching</a></li>
+        <li><a href="../../index.html#awards">Awards</a></li>
+        <li><a href="../../index.html#research">Research Projects</a></li>
+        <li><a href="../../writings.html">Writings</a></li>
+        <li><a href="../../tools.html">Tools</a></li>
+        <li><a href="../../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow"><a href="../index.html">Teaching Resources</a> &middot; <a href="index.html">For TAs and TOs</a> &middot; Exams and assignments</p>
+      <h1>Writing Homework and Problem Sets That Work</h1>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <article class="prose resource">
+<p class="lede">If you are asked to write or revise homework for the course you TA, this page is for you. That covers programming assignments and also problem sets in theory courses: discrete math, algorithms, theory of computation. A good assignment gives students practice on the skills the course is about and shows you, from what they hand in, who has them. A weak one mostly measures who decoded the instructions. The ideas below come from well-run computer science courses and from teaching centers' advice on assignment design, and nine example assignments show them at work. Your instructor's expectations come first; where this page and your course differ, follow your course and ask.</p>
+
+<div class="defaults">
+<p><strong>Defaults that work.</strong> If you only take four things from this page:</p>
+<ul>
+<li><strong>Start from one or two things students should be able to do</strong> when they finish, and make every part practice one of them.</li>
+<li><strong>Put the purpose, the task and how it is graded on the page,</strong> in that order.</li>
+<li><strong>Write the full solution and the rubric as you write the assignment,</strong> not after. For code, write the autograder tests too.</li>
+<li><strong>Do it yourself with a timer, then have another TA try it cold,</strong> before it goes to the instructor.</li>
+</ul>
+</div>
+
+<h2>Before you write anything</h2>
+
+<h3>What should students be able to do afterward?</h3>
+<p>Write one sentence per skill, with a verb you could watch someone do: "write a recursive function on a tree and explain its base case", "prove a claim by strong induction and state the inductive hypothesis", "design a greedy algorithm and argue why it is correct". Each part of the assignment should practice one of these sentences. If a part practices none of them, cut it.</p>
+
+<h3>What does the course already have?</h3>
+<p>Read last term's version and its solutions, the starter code or LaTeX template, the autograder setup, the course's AI policy, and the Piazza or Campuswire threads from the last time it ran. The questions students asked then are the places the old assignment was unclear. In a theory course, also check which definitions, notation and results from lecture students may use.</p>
+
+<h3>How long should it take?</h3>
+<p>Ask the instructor how many hours a week students should spend outside class, and size the assignment to that. Then do it yourself with a timer. As a rule of thumb, plan for students to take at least three times as long as you did. Proofs stretch further: you already know the key idea, and finding it is most of their time.</p>
+
+<h2>Writing the assignment</h2>
+
+<h3>1. Say why first</h3>
+<p>One or two sentences on what the assignment is for and how it connects to the course: "This is the same pattern you will use for the project's data layer", or "Next week's algorithms all rely on this kind of exchange argument." Students who know the purpose make better choices when the instructions run out.</p>
+
+<h3>2. Break it into steps</h3>
+<p>Split a large task into parts that each produce something you can check.</p>
+<ul>
+<li><strong>Code:</strong> a function that passes its tests, then the next one. Starter code, a worked first step or a checkpoint partway through all help students who stall at a blank file.</li>
+<li><strong>Theory:</strong> a warm-up that tries small cases (n = 1, 2, 3), a lemma before the main result, or "first show this one case, then generalize". Students who see the pattern in small cases can usually find the proof.</li>
+</ul>
+<p>Fade the support across the term as students get stronger.</p>
+
+<h3>3. Be exact about what is given and what is asked</h3>
+<ul>
+<li><strong>Code:</strong> give input and expected output for the normal case and the edge cases you care about (empty input, one element, duplicates, bad input). Say what students may change and what they must leave alone (file names, function signatures).</li>
+<li><strong>Theory:</strong> state the claim precisely, with every variable's domain. Use the definitions from lecture, word for word, or link to them. Say whether students must prove, disprove, or decide which. For an algorithm, say what counts as a full answer: the algorithm, why it is correct, and its running time.</li>
+</ul>
+
+<h3>4. Say exactly what to hand in</h3>
+<p>List the files, the format and where they go (Gradescope, GitHub, Canvas). For written work, say whether it must be typed, give a LaTeX template if the course uses one, and ask for one problem per page so Gradescope pages match. Say what happens if code does not compile or a page is not assigned. Most avoidable regrade requests start here.</p>
+
+<h3>5. Say how it is graded</h3>
+<p>Give the points for each part.</p>
+<ul>
+<li><strong>Code:</strong> say what the autograder checks and what a person reads. If some tests are hidden, say so and say what kind of cases they cover.</li>
+<li><strong>Theory:</strong> say what a complete proof needs (the setup, the key step, the conclusion) and how partial credit works: a correct structure with a gap earns more than a page of algebra that goes nowhere. Say which results students may cite without proof. A shared checklist, like Stanford's in the reading list, makes "rigorous enough" concrete.</li>
+</ul>
+<p>Students should be able to read the rubric and know what "done" looks like.</p>
+
+<h3>6. Ask for a decision or an explanation</h3>
+<p>One part where students choose and justify tells you more than another routine exercise.</p>
+<ul>
+<li><strong>Code:</strong> choose a data structure, a design or a test case, and explain the choice in two or three sentences.</li>
+<li><strong>Theory:</strong> find the flaw in a short wrong proof, give a counterexample to a false claim, or say which proof technique fits and why before writing it.</li>
+</ul>
+<p>These are also hard to hand off to an AI tool without understanding them.</p>
+
+<h3>7. One new idea at a time</h3>
+<p>Put the new skill in a setting students already know, or a new setting with a skill they already have, not both at once. A new proof technique on a familiar object (induction on sums before induction on trees) lets you see whether they have the technique. When everything is new, you cannot tell which part they missed.</p>
+
+<h3>8. Make it worth doing</h3>
+<p>Real data, a small working program, or a problem students recognize keeps them going through the hard parts. In a theory course, a problem tied to something they have built (why this hash table resizing is fast on average, why this scheduler is optimal) shows why the proof matters. Nifty Assignments (below) has many tested programming assignments with starter code.</p>
+
+<h2>Problem sets in theory courses</h2>
+<p>A few things that apply to proofs and algorithms in particular:</p>
+<ul>
+<li><strong>Mix the problem types.</strong> Prove, disprove with a counterexample, find the error in a given proof, put a scrambled proof in order, and design-and-analyze. The ordering kind (Proof Blocks, in the reading list) is autogradable and works well as a warm-up.</li>
+<li><strong>Avoid problems whose answers are one search away.</strong> Textbook exercises and famous puzzles have published solutions, and AI tools have seen them. Change the object, the numbers or the question so the idea is the same and the surface is new.</li>
+<li><strong>Avoid a single trick</strong> unless the trick is what you are teaching. If one insight unlocks the whole problem, students who miss it learn nothing from the rest. Add a hint or a first step.</li>
+<li><strong>Give a model.</strong> One fully written proof in the handout or in section shows the level of detail you expect better than any description of rigor.</li>
+<li><strong>Grade a few real attempts before release,</strong> if you have last term's work. That is where you find out whether your rubric's partial credit makes sense.</li>
+</ul>
+
+<h2>Example assignments by level</h2>
+<p>Nine short sketches, three each for programming, theory and informatics, at an introductory, middle and upper level. The course numbers show the level the sketch is pitched at, using CICS course descriptions as a guide; these are not real assignments from those courses. Each one uses the ideas above, named at the end. Borrow the shape, not the details.</p>
+
+<h3>Programming, introductory (a course like CICS 110)</h3>
+<p><strong>Outcome:</strong> write a function with a loop and a condition, and test it on the edge cases.</p>
+<p><strong>The assignment: Streaks in the weather.</strong> Students get a CSV of daily high temperatures in Amherst and starter code that reads it into a list.</p>
+<ul>
+<li>Write <code>longest_streak(temps, threshold)</code>: the length of the longest run of days above the threshold. The handout gives five examples, including an empty list, no day above, and every day above.</li>
+<li>Write two test cases of your own and say in one line what each one checks.</li>
+<li>In two or three sentences: you could have counted with one loop or with two. Which did you use, and why?</li>
+</ul>
+<p><strong>Graded on:</strong> autograder 70% (half the tests visible; the hidden half are edge cases of the kinds shown), the two tests 20%, the explanation 10%.</p>
+<p><strong>What it shows:</strong> steps, examples with edge cases, a decision to explain.</p>
+
+<h3>Programming, middle (a course like CICS 210)</h3>
+<p><strong>Outcome:</strong> implement a data structure to an interface, and check that the running time matches the Big-O analysis.</p>
+<p><strong>The assignment: Autocomplete, two ways.</strong></p>
+<ul>
+<li>Implement <code>insert</code> and <code>starts_with(prefix)</code> on a trie, to a given interface. A sorted-list version is provided.</li>
+<li>Time both versions on the provided word lists of 10,000 and 100,000 words, and fill in the table in the template.</li>
+<li>One paragraph: which version wins for which operation, and do your numbers match the Big-O you would predict? Refer to your own table.</li>
+</ul>
+<p><strong>Graded on:</strong> correctness tests 50%, the table 20%, the analysis paragraph 30% (rubric: a prediction, the evidence, an honest explanation of any mismatch).</p>
+<p><strong>What it shows:</strong> worth doing (a real feature), a decision tied to the student's own data, which an AI tool cannot supply.</p>
+
+<h3>Programming, upper (a course like COMPSCI 320 or 326)</h3>
+<p><strong>Outcome:</strong> add a feature to code someone else wrote, with tests, and explain a design trade-off.</p>
+<p><strong>The assignment: Your first pull request.</strong> Students get a small working web app with a test suite.</p>
+<ul>
+<li>Add search with pagination to one API route, and write tests for it, including an empty result and the last page.</li>
+<li>Open a pull request whose description explains one design choice (for example, offset or cursor pagination) and its trade-off.</li>
+<li>Review one classmate's pull request with at least two specific comments.</li>
+<li>Commit at least three times. AI tools are allowed: say where you used them and what you changed in what they gave you.</li>
+</ul>
+<p><strong>Graded on:</strong> all tests pass 30%, your tests 20%, the pull request description 25%, your review 15%, commit history 10%.</p>
+<p><strong>What it shows:</strong> grading the process, a decision to explain, an AI policy on the page.</p>
+
+<h3>Theory, introductory (a course like INFO 150)</h3>
+<p><strong>Outcome:</strong> count with the sum and product rules, and explain each step.</p>
+<p><strong>The assignment: Counting codes.</strong></p>
+<ul>
+<li>Warm-up: list every 2-character code made from the letters A, B and the digit 1, with no repeats. How many are there?</li>
+<li>Codes use the letters A to Z and the digits 0 to 9. Count the 6-character codes with exactly two digits and no repeated character. Write one sentence for each factor in your answer saying what it counts.</li>
+<li>A student counted the codes with at least one digit and got too many. Their work is shown. Find the double counting and fix it.</li>
+</ul>
+<p><strong>Graded on:</strong> correct answers 40%, the explanation of each step 40%, the error found and fixed 20%.</p>
+<p><strong>What it shows:</strong> small cases first, find the error, partial credit for reasoning.</p>
+
+<h3>Theory, middle (a course like COMPSCI 250)</h3>
+<p><strong>Outcome:</strong> write a complete proof by strong induction, with the inductive hypothesis stated.</p>
+<p><strong>The assignment: Strings without 11.</strong></p>
+<ul>
+<li>Put the given scrambled induction proof in order (autograded, Proof Blocks style).</li>
+<li>Count the binary strings of length n with no two 1s in a row, for n = 1 to 5. Conjecture a recurrence.</li>
+<li>Prove your recurrence by strong induction. State the base cases and the inductive hypothesis in full sentences.</li>
+<li>A short "proof" by induction that the count is odd for every n of 2 or more is shown. Check it against your table, then find the first false step.</li>
+</ul>
+<p><strong>Graded on:</strong> the ordering 10%, the table and conjecture 15%, the proof 55% (base cases 10, hypothesis stated 10, inductive step 25, conclusion 10, following the course's proofwriting checklist), the false step 20%.</p>
+<p><strong>What it shows:</strong> mixed problem types, small cases before the proof, a rubric that rewards structure.</p>
+
+<h3>Theory, upper (a course like COMPSCI 311)</h3>
+<p><strong>Outcome:</strong> design a greedy algorithm, prove it correct with an exchange argument, and analyze its running time.</p>
+<p><strong>The assignment: Covering office hours.</strong> Students have asked for help in given time windows; place the fewest TA check-ins so every window contains one.</p>
+<ul>
+<li>Try two natural greedy rules on the small instance provided. Show that one of them fails.</li>
+<li>Give your algorithm in clear pseudocode.</li>
+<li>Prove it uses the fewest check-ins, with an exchange argument.</li>
+<li>Give its running time and say which step dominates.</li>
+</ul>
+<p><strong>Graded on:</strong> the counterexample 15%, the algorithm 20%, the proof 45%, the running time 20%. A correct algorithm with a proof that has one gap earns most of the proof points if the structure is right.</p>
+<p><strong>What it shows:</strong> a familiar problem in a new setting (so the answer is not one search away), a counterexample before the proof, explicit partial credit.</p>
+
+<h3>Informatics, introductory (a course like INFO 248)</h3>
+<p><strong>Outcome:</strong> join and clean two datasets, make one clear chart, and say what the data can and cannot show.</p>
+<p><strong>The assignment: Is the dining hall busier on rainy days?</strong> Students get daily meal-swipe counts (aggregated, no individual data) and daily weather.</p>
+<ul>
+<li>Join the two files by date in the provided notebook, and decide what to do with missing days. Say what you did and why in one sentence.</li>
+<li>Make one chart that answers the question. Label the axes and give it a title that states the finding.</li>
+<li>Write 150 words: what the chart shows, and one reason it might mislead (for example, rain falls more in some months).</li>
+</ul>
+<p><strong>Graded on:</strong> the notebook runs top to bottom 30%, the chart 30%, the write-up 40% (rubric: a claim, the evidence, a limitation).</p>
+<p><strong>What it shows:</strong> a question students care about, a decision to explain, a written limitation.</p>
+
+<h3>Informatics, middle (a course like INFO 348)</h3>
+<p><strong>Outcome:</strong> build a predictive model, compare it with a simple baseline, and explain where it fails.</p>
+<p><strong>The assignment: Predicting bike-share demand.</strong> Students get a public city bike-share dataset with weather.</p>
+<ul>
+<li>Hold out the last month as the test set before doing anything else.</li>
+<li>Build a baseline (tomorrow equals today), a linear model and one model of your choice.</li>
+<li>Pick an error measure, say why it fits this problem, and report all three models in one table.</li>
+<li>One paragraph: which features mattered, and the days your best model got most wrong, with a guess at why.</li>
+</ul>
+<p><strong>Graded on:</strong> a clean train and test split with no leakage 20%, the models 30%, the table and the measure's justification 20%, the error analysis 30%.</p>
+<p><strong>What it shows:</strong> a decision to explain, a baseline that keeps results honest, analysis tied to the student's own results.</p>
+
+<h3>Informatics, upper (a course like INFO 494PI, Personal Health Informatics)</h3>
+<p><strong>Outcome:</strong> design a small health-tracking feature, test it with people, and reason about privacy.</p>
+<p><strong>The assignment: Design and test a tracker.</strong></p>
+<ul>
+<li>A one-page brief: who it is for, the need, and each piece of data it collects and why.</li>
+<li>A paper or clickable prototype.</li>
+<li>Try it with three people and take notes on what they did and said, not what you hoped.</li>
+<li>A privacy section: who sees the data, how long it is kept, and what you would never collect.</li>
+<li>Half a page: the one change you would make after testing, and the evidence for it.</li>
+</ul>
+<p><strong>Graded on:</strong> the brief 20%, the prototype 15%, the testing notes 25%, the privacy reasoning 25%, the change and its evidence 15%. A peer review round before the final version.</p>
+<p><strong>What it shows:</strong> grading the process, evidence from real users, an ethics question built into the task.</p>
+
+<h2>Generative AI</h2>
+<p>State the course's policy on the assignment itself: what is allowed, what is not, and how to say what they used. Then design so the learning shows in what students hand in, not only in the final answer:</p>
+<ul>
+<li>Ask for a short explanation of a decision, a trace of the code on one input, or the one step of a proof the student found hardest and why it holds.</li>
+<li>Grade some of the process: checkpoints, commit history, a scratch page of small cases, or a short reflection on what went wrong.</li>
+<li>If the course allows AI, say for which parts, and ask students to show what they changed in what the tool gave them.</li>
+<li>For proofs, remember that AI tools write confident proofs with wrong steps. "Find the error" problems teach students to check, whether the proof came from a classmate, a tool or themselves.</li>
+</ul>
+<p>Detecting AI use by feel is unreliable. Designing the assignment well is a better use of your time.</p>
+<p><strong>Using AI to build the assignment itself?</strong> Usually fine with your instructor's OK, if you check everything and say so on the assignment or in the syllabus. <a href="using-generative-ai-to-draft-an-assignment.html">Using Generative AI to Draft an Assignment</a> has a fill-in prompt and a checklist for judging the draft.</p>
+
+<h2>Before it goes out</h2>
+<ul>
+<li><strong>Check the solution.</strong> Run your code through the autograder from a clean copy of the starter code. Have another TA read every proof in the official solution line by line; errors in solution keys are common and costly.</li>
+<li><strong>Have another TA do it cold with a timer.</strong> Fix every place they had to ask you what something meant.</li>
+<li><strong>Write the three questions you expect on Piazza,</strong> and answer them in the assignment instead.</li>
+<li><strong>Give the instructor a short table:</strong> the outcome each part practices, its points, and your timed estimate.</li>
+</ul>
+
+<h2>After it runs</h2>
+<p>Keep a little evidence for next time: the questions students asked, the tests most students failed or the proof step most students skipped, and how long it took. One optional question at the end ("About how many hours did this take you?") is enough for the last one. It also makes a good small teaching-improvement project: change one thing about an assignment and measure what happens.</p>
+
+<h2>Further reading</h2>
+<p><strong>For any assignment</strong></p>
+<ul>
+<li><a href="https://www.cmu.edu/teaching/assessment/assesslearning/creatingassignments.html">CMU Eberly Center, Creating Assignments</a>: short, practical, with a checklist at the end.</li>
+<li><a href="https://www.tilthighered.com/tiltexamplesandresources">TILT Higher Ed, Examples and Resources</a>: the Transparent Assignment template (purpose, task, criteria) and many example assignments.</li>
+<li><a href="https://cs.longwood.edu/~dblaheta/research/dpb-sigcse2014.html">Don Blaheta, "Reinventing homework as cooperative, formative assessment" (SIGCSE 2014)</a>: group work and a revision cycle on CS homework, with less grading.</li>
+<li><a href="https://teaching.cornell.edu/generative-artificial-intelligence/ai-assignment-design">Cornell Center for Teaching Innovation, AI and assignment design</a>: deciding where AI fits an assignment, with sample policy wording.</li>
+<li><a href="https://teaching-resources.delta.ncsu.edu/designing-assignments-with-ai-in-mind">NC State DELTA, Designing Assignments with AI in Mind</a>: assignments that use AI, and assignments that limit it.</li>
+</ul>
+<p><strong>Programming assignments</strong></p>
+<ul>
+<li><a href="https://teachtogether.tech/en/index.html#s:exercises">Greg Wilson, Teaching Tech Together, "Exercise Types"</a>: free online; exercise formats beyond "write this function", such as Parsons problems and fill in the blanks.</li>
+<li><a href="https://carpentries.github.io/lesson-development-training/formative-assessment.html">The Carpentries, Designing Exercises</a>: how to write exercises that show you where a learner is stuck.</li>
+<li><a href="https://nifty.stanford.edu/">Nifty Assignments</a>: tested, engaging CS assignments shared each year at SIGCSE, with handouts and starter code.</li>
+</ul>
+<p><strong>Theory problem sets</strong></p>
+<ul>
+<li><a href="https://web.stanford.edu/class/cs103/proofwriting_checklist">Stanford CS103, Proofwriting Checklist</a>: eight things graders look for in a proof; a good model for your own rubric, or to link from the assignment.</li>
+<li><a href="https://web.stanford.edu/class/archive/cs/cs103/cs103.1204/handouts/Ten%20Techniques%20to%20Get%20Unstuck.pdf">Stanford CS103, Ten Techniques to Get Unstuck</a>: a student handout for when a proof will not start; worth linking from a problem set.</li>
+<li><a href="https://arxiv.org/abs/2106.11032">Poulsen et al., "Proof Blocks: Autogradable Scaffolding Activities for Learning to Write Proofs"</a>: Parsons problems for proofs, used in PrairieLearn and Runestone.</li>
+<li><a href="https://ocw.mit.edu/courses/6-1200j-mathematics-for-computer-science-spring-2024/">MIT OpenCourseWare, Mathematics for Computer Science</a>: a free text and course materials for discrete math in CS, useful for seeing how problems are pitched.</li>
+</ul>
+<p>Related pages: <a href="writing-learning-outcomes.html">Writing Learning Outcomes</a>, <a href="creating-rubrics-and-grading-to-them.html">Creating Rubrics and Grading to Them</a>, <a href="writing-exam-questions-that-test-what-you-mean.html">Writing Exam Questions That Test What You Mean</a>, <a href="using-generative-ai-to-draft-an-assignment.html">Using Generative AI to Draft an Assignment</a> and <a href="grading-faster-without-cutting-corners.html">Grading Faster Without Cutting Corners</a>.</p>
+    </article>
+    <nav class="page-nav" aria-label="More resources"><a href="writing-exam-questions-that-test-what-you-mean.html">&larr; Writing Exam Questions That Test What You Mean</a><a href="index.html">All TA resources</a><a href="using-generative-ai-to-draft-an-assignment.html">Using Generative AI to Draft an Assignment &rarr;</a></nav>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year">2026</span> Tim Richards</p>
+    <p class="art-credit">This site counts page views anonymously (no names or cookies). <a href="../../teaching-resources/index.html#privacy">How</a>.</p>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="../../assets/js/main.js?v=4"></script>
+<script src="../../class-spaces/js/config.js"></script>
+<script src="../../teaching-resources/js/track.js?v=1"></script>
+</body>
+</html>

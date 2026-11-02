@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giving Feedback Students Use | Tim Richards</title>
+<meta name="description" content="Comments students act on, with weak and better examples for code, proofs and reports.">
+<link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/style.css?v=10">
+<link rel="stylesheet" href="../../teaching-resources/resources.css?v=1">
+</head>
+<body data-site="ta" data-page="giving-feedback-students-use">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Tim Richards</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#teaching">Teaching</a></li>
+        <li><a href="../../index.html#awards">Awards</a></li>
+        <li><a href="../../index.html#research">Research Projects</a></li>
+        <li><a href="../../writings.html">Writings</a></li>
+        <li><a href="../../tools.html">Tools</a></li>
+        <li><a href="../../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow"><a href="../index.html">Teaching Resources</a> &middot; <a href="index.html">For TAs and TOs</a> &middot; Feedback, rubrics and grading</p>
+      <h1>Giving Feedback Students Use</h1>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <article class="prose resource">
+<p class="lede">Most feedback students receive is never used. They look at the score, skim a comment or two, and move on. That is not only the students' fault: comments that arrive late, list every flaw, or say "unclear" without saying what to do give them nothing to act on. Research on feedback is clear that it can help a lot, and also that it often doesn't: in one large review, more than a third of feedback interventions made performance worse. The difference is in what the feedback says and what students are asked to do with it. This page covers how to write comments students will use, on code, proofs and written work, and how to get them to use them.</p>
+
+<div class="defaults">
+<p><strong>Defaults that work.</strong> If you only take four things from this page:</p>
+<ul>
+<li><strong>One to three priorities per submission,</strong> not every flaw.</li>
+<li><strong>Every critical comment says what to do next,</strong> or what to check.</li>
+<li><strong>Comment on the work and the process, not the person.</strong></li>
+<li><strong>Give students a reason to use it:</strong> a revision, a next assignment that builds on it, or a short "what I'll change" note.</li>
+</ul>
+</div>
+
+<h2>What good feedback answers</h2>
+<p>Hattie and Timperley's review frames useful feedback as answers to three questions:</p>
+<ul>
+<li><strong>Where am I going?</strong> The goal, usually the rubric criterion or learning outcome.</li>
+<li><strong>How am I doing?</strong> Where this piece of work stands against that goal.</li>
+<li><strong>Where to next?</strong> The next step. This is the one most often left out, and the one students can act on.</li>
+</ul>
+<p>They also found that feedback works best when it is about the task ("this invariant fails after the swap"), the process ("tracing a small example would have caught this"), or the student's own checking ("how could you test this before submitting?"). Feedback about the person, including praise like "you're so smart," helps least, and can hurt.</p>
+
+<h2>Writing comments students can use</h2>
+<ul>
+<li><strong>Pick one to three priorities.</strong> Marking every error buries the important one. If a mistake repeats, mark it once and say it repeats.</li>
+<li><strong>Make it actionable.</strong> "Rename the three variables in lines 14 to 18 to say what they hold," not "bad naming."</li>
+<li><strong>Tie it to the goal.</strong> Quote the rubric criterion, so the comment explains the score.</li>
+<li><strong>Leave the student some work to do.</strong> Point to the region ("there's an off-by-one somewhere in lines 40 to 55") rather than fixing it for them. Good feedback is more work for the student than for you.</li>
+<li><strong>Name what worked,</strong> specifically, so they can do it again: "Your empty-input test caught a real bug."</li>
+<li><strong>Look forward.</strong> "On the next project, ..." turns a comment on a closed assignment into one they can use.</li>
+<li><strong>Don't compare students.</strong> "Below the class average" tells a student nothing about what to do and turns attention to the self.</li>
+<li><strong>When the critique is heavy, say why.</strong> "I'm pointing these out because the standard here is high and I think you can meet it." Studies of this "wise feedback" found students were much more likely to revise.</li>
+<li><strong>Be on time.</strong> Feedback that arrives after the next related assignment is due gets ignored. A short comment returned quickly beats a long one returned late.</li>
+</ul>
+
+<h2>Weak and better: six examples</h2>
+<table>
+<thead><tr><th>Work</th><th>Weak</th><th>Better</th></tr></thead>
+<tbody>
+<tr><td>Code</td><td>Inefficient. −3</td><td>findDuplicates is O(n²) because of the nested loop in lines 22 to 31. With 100,000 inputs that is around 10¹⁰ steps, which is why test 7 times out. What data structure gives you constant-time "have I seen this?" lookups?</td></tr>
+<tr><td>Code</td><td>Bad naming. Comment your code.</td><td>Your test cases are well chosen: the empty and single-element cases caught real bugs. One change for next time: names like x2 and tmp3 make merge() hard to follow. Rename the three in lines 14 to 18 to say what they hold.</td></tr>
+<tr><td>Proof</td><td>Not rigorous.</td><td>The inductive step assumes P(k) but then uses P(k−1) on line 3. Either switch to strong induction or show why P(k) alone is enough. The base case and overall structure are right.</td></tr>
+<tr><td>Proof</td><td>Wrong. See solutions.</td><td>Looking for a counterexample is the right move. The graph you chose has a cycle, which the claim rules out. Can you find a tree with the same property? Try one with four vertices.</td></tr>
+<tr><td>Report</td><td>Unclear writing. Needs work.</td><td>Your results are solid, but a reader has to reach page 4 to learn what you found. Top priority for the revision: put the main finding (the 2.3× speedup) in the first paragraph.</td></tr>
+<tr><td>Report</td><td>Great job!</td><td>Your threats-to-validity section is the strongest part: you named the dataset bias and measured its effect. Keep doing that. Next: Figure 2 has no axis units. Add them before you resubmit.</td></tr>
+</tbody>
+</table>
+
+<h2>Feedback on code</h2>
+<p>Write comments the way a good code reviewer does: point to the line, give the reason, suggest a direction, and say how serious it is. A simple scale helps students decide what to fix first:</p>
+<ul>
+<li><strong>Must fix:</strong> wrong results, crashes, a requirement missed.</li>
+<li><strong>Should fix:</strong> design or readability problems that will cause trouble later.</li>
+<li><strong>Small:</strong> style points worth knowing, not worth points.</li>
+</ul>
+<p>Automated feedback tools tend to say what is wrong and rarely what to do about it. That gap is where a person's comment adds the most.</p>
+
+<h2>Getting students to use it</h2>
+<p>The most reliable way to get feedback used is to build its use into the course. These are your instructor's decisions, but worth suggesting:</p>
+<ul>
+<li><strong>A revision or resubmission</strong> for some or all of the points.</li>
+<li><strong>A short reflection</strong> before the grade is released: the top comment in their own words, and what they'll do differently next time.</li>
+<li><strong>Comments before grades,</strong> or comments released separately, so the score doesn't end the reading.</li>
+<li><strong>Self-assessment against the rubric</strong> before submission, so students learn to judge their own work.</li>
+<li><strong>Next assignments that build on the last,</strong> with a line in the handout: "Last time many of you ... ; check for it here."</li>
+</ul>
+
+<h2>Speaking, not writing</h2>
+<p>In office hours or section, ask before you tell. "Walk me through what happens when the list is empty" keeps the student doing the thinking, and you learn what they actually understand. Then give one next step, and let them try it while you help someone else.</p>
+
+<h2>Doing this at scale</h2>
+<p>With a hundred submissions you cannot write a paragraph for each. Write the common comments once, as rubric items or a shared comment bank across the grading team, and add one sentence specific to the student where it matters most. That keeps comments consistent between graders and leaves your time for the part that is personal. <a href="grading-faster-without-cutting-corners.html">Grading Faster Without Cutting Corners</a> covers the mechanics.</p>
+
+<h2>Further reading</h2>
+<p><strong>Guides</strong></p>
+<ul>
+<li><a href="https://gsi.berkeley.edu/gsi-guide-contents/grading-intro/communicating-about-grades/comments/">UC Berkeley GSI Teaching &amp; Resource Center, Writing Comments on Student Work</a>.</li>
+<li><a href="https://gsi.berkeley.edu/gsi-guide-contents/student-writing-intro/grading/">UC Berkeley GSI Teaching &amp; Resource Center, Grading Essays</a>: why not to mark every error.</li>
+<li><a href="https://www.cmu.edu/teaching/principles/learning.html">CMU Eberly Center, Learning Principles</a>: goal-directed practice with targeted feedback.</li>
+<li><a href="https://www.ascd.org/el/articles/seven-keys-to-effective-feedback">Grant Wiggins, Seven Keys to Effective Feedback</a>.</li>
+<li><a href="https://www.ascd.org/el/articles/feedback-part-of-a-system">Dylan Wiliam, Feedback: Part of a System</a>.</li>
+<li><a href="https://sparq.stanford.edu/solutions/wise-critiques-help-students-succeed">Stanford SPARQ, Wise Critiques Help Students Succeed</a>.</li>
+</ul>
+<p><strong>Research</strong></p>
+<ul>
+<li><a href="https://doi.org/10.3102/003465430298487">Hattie and Timperley, "The Power of Feedback" (2007)</a>.</li>
+<li><a href="https://doi.org/10.3389/fpsyg.2019.03087">Wisniewski, Zierer and Hattie, "The Power of Feedback Revisited" (2020)</a>: free; feedback that carries more information works better.</li>
+<li><a href="https://doi.org/10.1037/0033-2909.119.2.254">Kluger and DeNisi, "The effects of feedback interventions on performance" (1996)</a>: why feedback sometimes hurts.</li>
+<li><a href="https://doi.org/10.3102/0034654307313795">Shute, "Focus on Formative Feedback" (2008)</a>.</li>
+<li><a href="https://doi.org/10.1080/03075070600572090">Nicol and Macfarlane-Dick, "Formative assessment and self-regulated learning: a model and seven principles of good feedback practice" (2006)</a>.</li>
+<li><a href="https://doi.org/10.1177/1469787412467125">Jonsson, "Facilitating productive use of feedback in higher education" (2013)</a>.</li>
+<li><a href="https://doi.org/10.1080/00461520.2016.1207538">Winstone et al., "Supporting Learners' Agentic Engagement With Feedback" (2017)</a>.</li>
+<li><a href="https://doi.org/10.1145/3231711">Keuning, Jeuring and Heeren, "A Systematic Literature Review of Automated Feedback Generation for Programming Exercises" (2018)</a>.</li>
+<li><a href="https://doi.org/10.1145/3403935">Indriasari, Luxton-Reilly and Denny, "A Review of Peer Code Review in Higher Education" (2020)</a>.</li>
+</ul>
+<p>Related pages: <a href="creating-rubrics-and-grading-to-them.html">Creating Rubrics and Grading to Them</a> and <a href="what-to-say-when-a-student-doubts-themselves.html">What to Say When a Student Doubts Themselves</a>.</p>
+    </article>
+    <nav class="page-nav" aria-label="More resources"><a href="accessible-teaching-materials.html">&larr; Accessible Teaching Materials</a><a href="index.html">All TA resources</a><a href="writing-learning-outcomes.html">Writing Learning Outcomes &rarr;</a></nav>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year">2026</span> Tim Richards</p>
+    <p class="art-credit">This site counts page views anonymously (no names or cookies). <a href="../../teaching-resources/index.html#privacy">How</a>.</p>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="../../assets/js/main.js?v=4"></script>
+<script src="../../class-spaces/js/config.js"></script>
+<script src="../../teaching-resources/js/track.js?v=1"></script>
+</body>
+</html>

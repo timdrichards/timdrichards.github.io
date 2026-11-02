@@ -1,0 +1,46 @@
+/* Teaching Resources pages: extras on top of assets/css/style.css */
+.resource { max-width: 46rem; }
+.resource .lede { font-size: 1.12rem; color: var(--ink-soft); line-height: 1.6; }
+.resource .defaults {
+  background: var(--bg-alt);
+  border-left: 4px solid var(--sage);
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-3);
+}
+.resource .defaults p:first-child { margin-bottom: 0.5rem; }
+.resource .defaults ul { margin-bottom: 0; }
+.resource table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-3);
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+}
+.resource th, .resource td {
+  border: 1px solid var(--line);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.resource th { background: var(--bg-alt); }
+.resource pre { white-space: pre-wrap; word-wrap: break-word; font-size: 0.85rem; line-height: 1.5; }
+.resource h3 { color: var(--ink); }
+.page-head .eyebrow a { color: inherit; }
+.page-nav {
+  display: flex; justify-content: space-between; gap: var(--space-2);
+  max-width: 46rem; margin: 0 0 var(--space-4); padding-top: var(--space-2);
+  border-top: 1px solid var(--line); font-size: 0.95rem; flex-wrap: wrap;
+}
+.resource-index { max-width: 52rem; }
+.resource-list { list-style: none; padding: 0 !important; margin: 0 0 var(--space-3); }
+.resource-list li {
+  display: flex; flex-direction: column; gap: 0.15rem;
+  padding: 0.7rem 0; border-bottom: 1px solid var(--line); margin: 0;
+}
+.resource-list a { font-weight: 600; font-size: 1.05rem; }
+.resource-list span { color: var(--ink-soft); font-size: 0.95rem; }
+.stats-form { display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: end; margin-bottom: var(--space-3); }
+.stats-form label { display: flex; flex-direction: column; font-size: 0.9rem; gap: 0.2rem; }
+@media (max-width: 40rem) { .page-nav { flex-direction: column; } }
