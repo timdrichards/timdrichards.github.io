@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Viva</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<main id="join" class="narrow">
+  <div class="card">
+    <h1>Viva</h1>
+    <p class="muted">An in-class conversation about what you know. Enter the code on the screen and your UMass email.</p>
+    <form id="join-form">
+      <label for="code">Session code</label>
+      <input id="code" autocomplete="off" autocapitalize="characters" maxlength="8" required>
+      <label for="email">UMass email</label>
+      <input id="email" type="email" autocomplete="email" placeholder="netid@umass.edu" required>
+      <p class="error" id="join-error"></p>
+      <p><button class="primary" id="join-btn">Join</button></p>
+    </form>
+  </div>
+</main>
+
+<main id="gate" class="narrow hidden">
+  <div class="card">
+    <h1 id="gate-title"></h1>
+    <p>Before you start, please read this.</p>
+    <ul>
+      <li>This conversation <strong>records when you leave this window</strong> (another app, another tab, another window) and for how long. Each time, the chat will tell you it noticed.</li>
+      <li id="gate-screen">It also <strong>takes screenshots of your entire screen</strong> while you talk. When your browser asks, choose <strong>Entire Screen</strong>, not a window or a tab.</li>
+      <li id="gate-paste">Pasting into the chat is turned off.</li>
+      <li>Answer in your own words. There is a time limit: <strong id="gate-time"></strong>.</li>
+      <li id="gate-draw">Some answers may be drawings: a drawing area opens below the chat. It works with a mouse, a pen or your finger.</li>
+      <li id="gate-hint">If you get stuck, press "I'm stuck" for a small hint. Each hint costs some points on that part of the question, and you will see how many before you decide. You have <strong id="gate-hints"></strong>.</li>
+      <li id="gate-conf">With each answer, you say how sure you are, from 1 (guessing) to 5 (certain). It does not change your grade.</li>
+    </ul>
+    <p class="error" id="gate-error"></p>
+    <p class="row"><button class="primary" id="share-btn">Share my screen and start</button></p>
+    <p class="muted small" id="gate-browser"></p>
+  </div>
+</main>
+
+<div id="chat" class="chat-app hidden">
+  <div class="banner hidden" id="fs-banner">You left full screen. <button id="fs-btn">Return to full screen</button></div>
+  <header class="chat-head">
+    <h1 id="chat-title"></h1>
+    <span class="spacer"></span>
+    <span class="rec hidden" id="rec">Screen recorded</span>
+    <span class="timer" id="timer" title="Time left"></span>
+    <button id="done-btn">I'm finished</button>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <section class="draw-panel hidden" id="draw-panel" aria-label="Drawing area">
+    <div class="draw-head"><h2 id="draw-title"></h2><span class="muted" id="draw-prompt"></span><span class="spacer"></span>
+      <button type="button" id="draw-close">Close drawing</button></div>
+    <div id="pad"></div>
+  </section>
+  <div class="confidence hidden" id="confidence" role="radiogroup" aria-label="How sure are you of this answer?">
+    <span>How sure are you of this answer?</span>
+    <button type="button" data-conf="1">1 Guessing</button><button type="button" data-conf="2">2</button><button type="button" data-conf="3">3</button><button type="button" data-conf="4">4</button><button type="button" data-conf="5">5 Certain</button>
+  </div>
+  <div class="hint-ask hidden" id="hint-ask" role="dialog" aria-live="polite">
+    <p id="hint-ask-text"></p>
+    <p class="row"><button type="button" class="primary" id="hint-yes">Show the hint</button><button type="button" id="hint-no">Never mind</button></p>
+  </div>
+  <form class="compose" id="compose">
+    <textarea id="answer" rows="2" placeholder="Type your answer. Enter sends, Shift+Enter for a new line." maxlength="2500" autocomplete="off" spellcheck="true"></textarea>
+    <button type="button" id="draw-btn" class="hidden" title="Answer with a drawing">Draw</button>
+    <button type="button" id="hint-btn" class="hidden" title="Ask for a small hint (it costs points)">I'm stuck</button>
+    <button class="primary" id="send-btn">Send</button>
+  </form>
+  <p class="error" id="chat-error" style="padding: 0 1rem .5rem"></p>
+</div>
+
+<div class="lock hidden" id="lock">
+  <div class="card">
+    <h2 style="margin-top:0">Screen sharing stopped</h2>
+    <p>That has been recorded. Share your <strong>entire screen</strong> again to keep going.</p>
+    <p class="error" id="lock-error"></p>
+    <button class="primary" id="reshare-btn">Share my screen</button>
+  </div>
+</div>
+
+<main id="finished" class="narrow hidden">
+  <div class="card">
+    <h1>All done</h1>
+    <p id="finished-text">Your answers have been recorded. You can close this page.</p>
+  </div>
+</main>
+
+<script src="js/config.js"></script>
+<script type="module" src="js/student.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Viva admin</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<main id="login" class="narrow hidden">
+  <div class="card">
+    <h1>Viva admin</h1>
+    <form id="login-form">
+      <label for="login-email">Email</label>
+      <input id="login-email" type="email" autocomplete="username" required>
+      <label for="login-password">Password</label>
+      <input id="login-password" type="password" autocomplete="current-password" required>
+      <p class="error" id="login-error"></p>
+      <p><button class="primary">Sign in</button></p>
+    </form>
+  </div>
+</main>
+
+<div id="app" class="hidden">
+  <nav class="top" id="nav">
+    <strong>Viva</strong>
+    <a href="#/" data-nav="home">Assessments</a>
+    <a href="#/roster" data-nav="roster">Roster</a>
+    <a href="#/shapes" data-nav="shapes">Shapes</a>
+    <span class="spacer"></span>
+    <span class="muted small" id="who"></span>
+    <button id="logout">Sign out</button>
+  </nav>
+  <div id="view" class="wide"></div>
+</div>
+
+<div class="viewer hidden" id="viewer">
+  <img id="viewer-img" alt="">
+  <p id="viewer-cap"></p>
+  <p class="row"><button id="viewer-prev">Previous</button><button id="viewer-close">Close</button><button id="viewer-next">Next</button></p>
+</div>
+
+<script src="vendor/supabase-2.45.4.js"></script>
+<script src="vendor/qrcode-1.4.4.js"></script>
+<script src="js/config.js"></script>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

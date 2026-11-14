@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRTI Analyzer | Tim Richards</title>
+<meta name="description" content="Pull a defensible signal out of your UMass SRTI course evaluations: reliability-weighted comparisons, a grade baseline, and comment themes. Runs entirely in your browser.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css?v=10">
+<link rel="stylesheet" href="css/srti.css?v=20261114a">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Tim Richards</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#teaching">Teaching</a></li>
+        <li><a href="../writings.html">Writings</a></li>
+        <li><a href="../tools.html">Tools</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap wide">
+      <p class="eyebrow">For UMass instructors</p>
+      <h1>SRTI Analyzer</h1>
+      <p class="tagline">Student evaluations are biased in known ways. This tool takes your SRTI reports and separates what the numbers can support from what they can't: how far you really are from the department mean, whether the negative comments are more than your grade mix predicts, and which complaints are about you, your course design, or the room.</p>
+      <p class="privacy"><strong>Runs entirely in your browser.</strong> Your PDFs are read on your own computer and never uploaded anywhere. Close the tab and they are gone.</p>
+    </div>
+  </section>
+
+  <section class="srti-load">
+    <div class="wrap wide">
+      <div id="drop" class="drop" tabindex="0" role="button" aria-describedby="drop-help">
+        <p class="drop-title">Drop SRTI PDFs here, or <label for="files" class="pick">choose files</label></p>
+        <p id="drop-help" class="drop-help">For each course, add both the <em>Section Report</em> and the <em>Open-Ended Responses</em> PDF from OAPA. Add several courses or semesters to see which themes recur.</p>
+        <input id="files" type="file" accept="application/pdf,.pdf" multiple hidden>
+      </div>
+      <div class="load-actions">
+        <button type="button" id="sample" class="btn ghost">Try it with sample data</button>
+        <button type="button" id="clear" class="btn ghost" hidden>Clear</button>
+        <button type="button" id="print" class="btn ghost" hidden>Print or save as PDF</button>
+        <button type="button" id="json" class="btn ghost" hidden>Download results (JSON)</button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+
+      <details class="settings">
+        <summary>Assumptions</summary>
+        <p class="page-note">These stand in for department-wide data the tool does not have yet. Change them and the results update.</p>
+        <div class="settings-grid" id="settings"></div>
+      </details>
+    </div>
+  </section>
+
+  <section id="results" class="results" aria-live="polite"></section>
+
+  <section class="method">
+    <div class="wrap wide">
+      <h2>How the numbers are made</h2>
+      <div class="grid two-col">
+        <div class="card">
+          <h3>Gaps from the department</h3>
+          <p>Each item's gap is your mean minus the department mean. Small classes and low response rates make a mean noisy, so the gap is multiplied by a reliability <var>&lambda;</var> = &tau;&sup2; / (&tau;&sup2; + SE&sup2;), where SE is the standard error of your mean (with a correction for how much of the class responded) and &tau; is how much true section means vary. A noisy gap shrinks toward zero.</p>
+        </div>
+        <div class="card">
+          <h3>The grade baseline</h3>
+          <p>Students who expect low grades rate courses lower whatever the teaching. From the expected-grade question, the tool predicts how many students should rate the course 1 or 2, and compares that with how many did. A z near 0 means the low ratings are about what the grades predict. A large positive z means students who were doing fine still rated the course low. Pass/fail courses have no grade spread, so there is no baseline.</p>
+        </div>
+        <div class="card">
+          <h3>Comment themes</h3>
+          <p>Each written response is checked for themes (workload, feedback, difficulty, clarity, and so on). Every theme has a <strong>target</strong>: you, your course design, the format, the course staff, or things outside your control such as the room or the time slot, which are shown but never scored. Click any theme to see the comments behind it.</p>
+        </div>
+        <div class="card">
+          <h3>Signal</h3>
+          <p><strong>Signal = (shrunk share &minus; baseline) &times; D &times; C &times; R.</strong> The share of respondents raising a theme is shrunk toward a baseline so a few comments in a small class don't dominate. <strong>D</strong> is direction: if as many students say "too easy" as "too hard", the difficulty is probably right (D near 0). <strong>C</strong> is 1 when a numeric item backs the theme up, 0.5 when not. <strong>R</strong> is how many of your loaded courses show the theme.</p>
+        </div>
+      </div>
+      <p class="page-note limits"><strong>What this can't tell you.</strong> SRTIs measure student satisfaction, not learning; large studies find the two barely correlate. If weak teaching causes low grades, the grade baseline excuses it. Comment coding here is a keyword pass and makes mistakes, which is why every theme shows its comments. Use the results to decide what to look at, not as a verdict.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year">2026</span> Tim Richards. Questions or ideas: <a href="mailto:richards@cs.umass.edu">richards@cs.umass.edu</a>.</p>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script type="module" src="js/app.js?v=20261114a"></script>
+</body>
+</html>
