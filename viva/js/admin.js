@@ -4,6 +4,7 @@
 
 import { Sketch } from "./draw.js";
 import { STARTER, normalize } from "./stencils.js";
+import { readAssessment } from "./import.js";
 
 const cfg = window.VIVA || {};
 const sb = cfg.supabaseUrl ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey, {
@@ -159,6 +160,13 @@ async function editAssessment(id) {
       ${sessions.map((s) => `<tr><td><a href="#/s/${s.id}"><code>${esc(s.code)}</code></a></td><td>${esc(s.label)}${s.roster_only ? "" : ' <span class="pill">practice</span>'}</td>
         <td>${s.status}</td><td>${fmtDate(s.opened_at)}</td></tr>`).join("") || '<tr><td colspan="4" class="muted">No sessions yet.</td></tr>'}
       </tbody></table></div>`}
+    <details class="card" id="imp" style="margin:1rem 0"${isNew ? " open" : ""}>
+      <summary><strong>Fill from JSON</strong> <span class="muted">(an assessment file, such as a "Download for check" file or an example)</span></summary>
+      <p class="muted small">Paste the JSON or choose a file. It fills the form below${isNew ? "" : " and replaces what is there"}; nothing is saved until you press Save.</p>
+      <textarea id="imp-text" class="json" rows="6" style="min-height:6rem" placeholder='{ "title": "...", "opening_question": "...", "rubric": [ ... ] }'></textarea>
+      <p class="row"><button type="button" id="imp-fill">Fill the form</button><input type="file" id="imp-file" accept=".json,application/json" style="width:auto"></p>
+      <p class="error" id="imp-error"></p><p class="muted small" id="imp-msg"></p>
+    </details>
     <form id="a-form" class="grid2">
       <div>
         <label for="f-title">Title</label><input id="f-title" required value="${esc(a.title)}">
@@ -243,6 +251,41 @@ async function editAssessment(id) {
   };
   for (const d of a.diagrams || []) addDiagram(d);
   $("add-diagram").addEventListener("click", () => addDiagram(null));
+
+  // Fill from JSON: puts a file's values into the form; Save works as usual.
+  const FIELDS = {
+    title: "f-title", course: "f-course", student_intro: "f-intro", opening_question: "f-opening", interviewer_brief: "f-brief",
+    answer_key: "f-key", transfer_settings: "f-transfer", time_limit_min: "f-time", min_turns: "f-min", max_turns: "f-max",
+    capture_every_sec: "f-every", revisit_max: "f-revisit", hint_limit: "f-hints",
+  };
+  const CHECKS = { require_screen: "f-screen", allow_paste: "f-paste", allow_drawing: "f-draw", ask_confidence: "f-conf" };
+  const fillFrom = (text) => {
+    $("imp-error").textContent = ""; $("imp-msg").textContent = "";
+    let got;
+    try { got = readAssessment(text); } catch (e) { $("imp-error").textContent = e.message; return; }
+    const { values, ignored, notes } = got;
+    for (const [k, el] of Object.entries(FIELDS)) if (k in values) $(el).value = values[k];
+    for (const [k, el] of Object.entries(CHECKS)) if (k in values) $(el).checked = values[k];
+    if (values.rubric) { $("f-rubric").value = JSON.stringify(values.rubric, null, 2); total(); }
+    if (values.diagrams) {
+      for (const p of pads) p.card.remove();
+      pads.length = 0;
+      for (const d of values.diagrams) addDiagram(d);
+    }
+    if (got.resetShapes) v.querySelectorAll("#f-shapes [data-stencil]").forEach((b) => { b.checked = true; });
+    const rubricErr = values.rubric ? checkRubric(values.rubric) : null;
+    if (rubricErr) notes.unshift("Rubric: " + rubricErr);
+    if (ignored.length) notes.push("Not used: " + ignored.join(", ") + ".");
+    $("imp-msg").textContent = `Filled ${Object.keys(values).length} fields. Check them, then press Save.` + (notes.length ? " " + notes.join(" ") : "");
+  };
+  $("imp-fill").addEventListener("click", () => fillFrom($("imp-text").value));
+  $("imp-file").addEventListener("change", async (ev) => {
+    const f = ev.target.files[0];
+    if (!f) return;
+    const text = await f.text();
+    $("imp-text").value = text;
+    fillFrom(text);
+  });
   const diagramsNow = () => pads.map((p) => {
     const f = (k) => p.card.querySelector(`[data-f="${k}"]`).value.trim();
     const scene = p.pad.scene();
@@ -291,7 +334,7 @@ async function editAssessment(id) {
     $("check-dl").addEventListener("click", () => {
       const keep = ["title", "course", "student_intro", "interviewer_brief", "opening_question", "rubric", "answer_key",
                     "time_limit_min", "min_turns", "max_turns", "require_screen", "allow_paste", "capture_every_sec",
-                    "diagrams", "allow_drawing", "ask_confidence", "transfer_settings", "hint_limit"];
+                    "diagrams", "allow_drawing", "ask_confidence", "transfer_settings", "revisit_max", "hint_limit"];
       download(`viva-${a.title.replace(/\W+/g, "-").toLowerCase()}.json`, JSON.stringify(Object.fromEntries(keep.map((k) => [k, a[k]])), null, 2) + "\n", "application/json");
     });
     $("archive").addEventListener("click", async () => {
