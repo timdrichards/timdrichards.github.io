@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CICS Degree Map | Tim Richards</title>
+<meta name="description" content="An interactive map of the UMass Amherst BS in Computer Science: click a course to see what leads to it and what it opens up next. Prototype.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf8f5; --ink:#1f1b18; --muted:#6b635c; --line:#e4ded6; --card:#fff;
+  --maroon:#881c1c; --maroon-soft:#f6e8e6; --teal:#1f6f78; --teal-soft:#e3f1f2;
+  --req:#881c1c; --gold:#b7791f;
+  --ai:#7c3aed; --sys:#0f766e; --sw:#c2410c; --th:#1d4ed8; --soc:#be185d;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.45}
+header.dm-head{padding:28px 28px 8px;max-width:1500px;margin:0 auto}
+h1{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:clamp(24px,3.2vw,36px);margin:0 0 6px;letter-spacing:-.01em}
+.lede{color:var(--muted);max-width:780px;margin:0 0 16px;font-size:16px}
+.proto{display:inline-block;font-size:12px;font-weight:600;color:var(--gold);border:1px solid #ecd9b5;background:#fdf6e9;border-radius:99px;padding:2px 10px;margin-bottom:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;max-width:1500px;margin:0 auto;padding:0 28px 14px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 13px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink);display:inline-flex;align-items:center;gap:7px}
+.chip .dot{width:9px;height:9px;border-radius:50%}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.search{margin-left:auto;display:flex;gap:8px;align-items:center}
+.search input{font:inherit;font-size:14px;padding:7px 12px;border:1px solid var(--line);border-radius:99px;width:230px;background:#fff}
+.toggle{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+.layout{display:grid;grid-template-columns:1fr 330px;gap:18px;max-width:1500px;margin:0 auto;padding:0 28px 28px}
+.mapwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:#fff;-webkit-overflow-scrolling:touch}
+.map{position:relative;display:grid;grid-template-columns:repeat(6,minmax(148px,1fr));gap:26px;padding:18px 18px 22px;min-width:1020px}
+.col h2{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 2px;font-weight:600}
+.col .when{font-size:12px;color:#9a918a;margin-bottom:10px}
+.col .cards{display:flex;flex-direction:column;gap:7px}
+.card{position:relative;z-index:2;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:8px;padding:7px 9px 7px 9px;cursor:pointer;transition:opacity .15s,box-shadow .15s,transform .15s;text-align:left;font:inherit;color:inherit;width:100%}
+.card:hover{box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.card:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.card .code{font-size:12px;font-weight:600;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:6px;white-space:nowrap}
+.card .title{font-size:13.5px;font-weight:600;line-height:1.25;margin-top:1px}
+.card .tags{display:flex;gap:4px;margin-top:5px}
+.card .tags i{width:7px;height:7px;border-radius:50%;display:block}
+.badge{font-size:9.5px;line-height:1.5;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;padding:1px 5px;white-space:nowrap}
+.badge.req{background:var(--maroon-soft);color:var(--maroon)}
+.badge.ie{background:#fdf6e9;color:var(--gold)}
+.card.required{border-left-color:var(--maroon)}
+.card.math{background:#fcfbf9}
+.map.has-sel .card{opacity:.28}
+.map.has-sel .card.anc,.map.has-sel .card.desc,.map.has-sel .card.sel{opacity:1}
+.card.sel{box-shadow:0 0 0 2px var(--ink);transform:scale(1.02)}
+.card.anc{background:var(--maroon-soft);border-color:#e9c9c4}
+.card.desc{background:var(--teal-soft);border-color:#bfdfe2}
+.card.dim{opacity:.22}
+.card.hide{display:none}
+svg.edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;align-self:start;position:sticky;top:72px;max-height:calc(100vh - 84px);overflow:auto}
+.panel h3{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:22px;margin:2px 0 4px;line-height:1.2}
+.panel .pcode{font-size:13px;color:var(--muted);font-weight:600}
+.panel p{margin:8px 0}
+.panel .sec{margin-top:14px}
+.panel .sec h4{font-size:12px;text-transform:uppercase;letter-spacing:.07em;margin:0 0 6px;color:var(--muted)}
+.links{display:flex;flex-wrap:wrap;gap:6px}
+.panel .links button,.panel .group button{font:inherit;font-size:13px;border-radius:6px;padding:4px 8px;cursor:pointer;border:1px solid}
+.panel .a{background:var(--maroon-soft);border-color:#e9c9c4;color:var(--maroon)}
+.panel .d{background:var(--teal-soft);border-color:#bfdfe2;color:var(--teal)}
+.or{font-size:12px;color:var(--muted);align-self:center}
+.group{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+.note{font-size:13px;color:var(--muted)}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin-top:4px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid var(--line)}
+.empty h3{font-size:20px}
+.empty ol{padding-left:18px;margin:8px 0}
+.empty li{margin:4px 0}
+.reqs{max-width:1500px;margin:0 auto;padding:0 28px 18px}
+.reqs h2{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:22px;margin:8px 0 10px}
+.reqgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.req{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px}
+.req b{display:block;font-size:22px;font-family:Fraunces,Georgia,serif;color:var(--maroon)}
+.req span{font-size:13.5px}
+.req small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
+footer.dm-foot{max-width:1500px;margin:0 auto;padding:6px 28px 40px;font-size:13px;color:var(--muted)}
+footer.dm-foot a{color:var(--teal)}
+.close{display:none}
+@media (max-width:980px){
+  header.dm-head,.controls,.layout,.reqs,footer.dm-foot{padding-left:14px;padding-right:14px}
+  .layout{grid-template-columns:1fr}
+  .search{margin-left:0;width:100%}
+  .search input{flex:1;width:auto}
+  .panel{position:fixed;left:0;right:0;bottom:0;top:auto;max-height:62vh;border-radius:16px 16px 0 0;z-index:20;box-shadow:0 -8px 30px rgba(0,0,0,.15);transform:translateY(105%);transition:transform .2s}
+  .panel.open{transform:none}
+  .close{display:block;position:absolute;right:10px;top:8px;border:0;background:none;font-size:26px;line-height:1;cursor:pointer;color:var(--muted)}
+  .map{min-width:1000px}
+}
+
+/* Site header and footer, copied from assets/css/style.css so the map's own styles do not collide with the site's */
+.skip-link{position:absolute;left:-999px;background:#2f4538;color:#faf8f3;padding:.6em 1em;border-radius:.3em;z-index:100}
+.skip-link:focus{left:1rem;top:1rem}
+header.site-header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,#faf8f3 88%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid #ddd6c4;padding:0}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.75rem;max-width:54rem;margin:0 auto}
+.brand{font-family:Fraunces,serif;font-size:1.05rem;color:#2f4538;text-decoration:none;letter-spacing:.01em}
+nav.site-nav ul{display:flex;gap:1.75rem;list-style:none;margin:0;padding:0}
+nav.site-nav a{font-size:.9rem;color:#565a4f;text-decoration:none}
+nav.site-nav a:hover,nav.site-nav a:focus-visible{color:#2f4538}
+footer.site-footer{padding:2rem 0 3rem;text-align:center;color:#565a4f;font-size:.85rem}
+footer.site-footer a{color:#2f4538}
+@media (max-width:480px){nav.site-nav ul{gap:.35rem 1rem;flex-wrap:wrap}.site-header .wrap{flex-wrap:wrap;row-gap:.5rem}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Tim Richards</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#teaching">Teaching</a></li>
+        <li><a href="../writings.html">Writings</a></li>
+        <li><a href="../tools.html">Tools</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<header class="dm-head">
+  <div class="proto">Prototype for discussion · data from CICS course pages, 2026</div>
+  <h1>How the Computer Science courses connect</h1>
+  <p class="lede">Every course in the BS in Computer Science builds on earlier ones and opens the door to later ones. Tap any course to see the path that leads to it (red) and where it can take you next (teal).</p>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--maroon-soft);border-color:#e9c9c4"></i>Comes before</span>
+    <span><i class="sw" style="background:var(--teal-soft);border-color:#bfdfe2"></i>Opens up</span>
+    <span><i class="sw" style="border-left:4px solid var(--maroon)"></i>Required for everyone</span>
+  </div>
+</header>
+
+<div class="controls" role="toolbar" aria-label="Filter courses">
+  <span id="chips"></span>
+  <label class="toggle"><input type="checkbox" id="reqOnly"> Required courses only</label>
+  <div class="search"><input id="q" type="search" placeholder="Search: “security”, “web”, “326”" aria-label="Search courses"></div>
+</div>
+
+<div class="layout">
+  <div class="mapwrap" id="mapwrap">
+    <div class="map" id="map">
+      <svg class="edges" id="edges" aria-hidden="true"></svg>
+    </div>
+  </div>
+  <aside class="panel" id="panel" aria-live="polite"></aside>
+</div>
+
+<section class="reqs">
+  <h2>The degree at a glance</h2>
+  <div class="reqgrid">
+    <div class="req"><b>3</b><span>Introductory programming courses</span><small>CICS 110, 160, 210, usually in year one</small></div>
+    <div class="req"><b>4</b><span>Core CS courses</span><small>COMPSCI 220, 230, 240, 250, usually in year two</small></div>
+    <div class="req"><b>4</b><span>Math courses</span><small>Calculus I and II, Linear Algebra, and Multivariate Calculus or Statistics I</small></div>
+    <div class="req"><b>2</b><span>Lab science courses</span><small>Physics, chemistry, biology, geology, or CICS 256 (physical computing)</small></div>
+    <div class="req"><b>8</b><span>Upper-level electives</span><small>COMPSCI 311 Algorithms, three at 300+, three at 400+, and one more at 300+ (or an approved outside course)</small></div>
+    <div class="req"><b>1</b><span>Writing course</span><small>CICS 305 Social Issues in Computing, junior or senior year</small></div>
+    <div class="req"><b>1</b><span>Integrative Experience</span><small>COMPSCI 320 or 326, which also count as electives</small></div>
+    <div class="req"><b>120</b><span>Credits to graduate</span><small>Plus UMass general education; 5 of the 8 upper-level courses taken at UMass</small></div>
+  </div>
+</section>
+
+<footer class="dm-foot">
+  <p><b>About this prototype.</b> Built for the CICS advising conversation, November 2026. Course list, prerequisites and offering patterns come from the CICS <a href="https://www.cics.umass.edu/academics/academic-policies/undergraduate-programs-policies/bs-computer-science-degree-requirem-2">BS in Computer Science requirements (2023 revision)</a>, the Spring and Fall 2026 course descriptions, and the <a href="https://content.cs.umass.edu/content/course-offering-plan">course offering plan</a>. Prerequisites are simplified: grade minimums, Informatics-major alternatives and outside courses are noted in each course's panel but not drawn. The math sequence is shown as students usually take it. It shows a selection of upper-level electives, not every course. Always confirm on SPIRE and with an advisor.</p>
+</footer>
+</main>
+<footer class="site-footer">
+  <p>&copy; 2026 Tim Richards. Questions or ideas: <a href="mailto:richards@cs.umass.edu">richards@cs.umass.edu</a>.</p>
+</footer>
+
+<script>
+const AREAS = {
+  ai:  {name:"AI & Data", color:"var(--ai)"},
+  sys: {name:"Systems & Security", color:"var(--sys)"},
+  sw:  {name:"Software & Web", color:"var(--sw)"},
+  th:  {name:"Theory", color:"var(--th)"},
+  soc: {name:"People & Society", color:"var(--soc)"}
+};
+const COLS = [
+  {id:0, name:"Start here", when:"Year 1"},
+  {id:1, name:"Foundations", when:"Year 1 to 2"},
+  {id:2, name:"Core", when:"Year 2"},
+  {id:3, name:"300-level", when:"Year 2 to 4"},
+  {id:4, name:"400-level", when:"Year 3 to 4"},
+  {id:5, name:"500-level", when:"Year 3 to 4"}
+];
+// pre: list of groups; each group is a list of alternatives (any one). All groups needed.
+const C = [
+ // Start here
+ {c:"CICS 110", t:"Foundations of Programming", col:0, req:1, a:["sw"], pre:[], off:"Fall and Spring",
+  d:"A first programming course in Python. No experience needed: you learn to break problems into steps and write, test and debug programs.",
+  n:"Needs basic math skills (R1) or a math placement score of 15+."},
+ {c:"CICS 160", t:"Object-Oriented Programming", col:0, req:1, a:["sw"], pre:[["CICS 110"]], off:"Fall and Spring",
+  d:"Programming beyond the basics: designing programs with classes and objects, recursion, and a first look at data structures and how fast code runs.",
+  n:"C or better in CICS 110 (or COMPSCI 121)."},
+ {c:"MATH 131", t:"Calculus I", col:0, req:1, math:1, a:[], pre:[], off:"Every term",
+  d:"Limits, derivatives and their uses. The start of the math sequence for the major.", n:"Math department course; see the Math department for placement."},
+ {c:"MATH 132", t:"Calculus II", col:0, req:1, math:1, a:[], pre:[["MATH 131"]], off:"Every term",
+  d:"Integrals, sequences and series. Needed before the two math-heavy core courses, COMPSCI 240 and 250.", n:"Usually taken after Calculus I."},
+ // Foundations
+ {c:"CICS 210", t:"Data Structures", col:1, req:1, a:["sw","th"], pre:[["CICS 160"]], off:"Fall and Spring",
+  d:"How to organize data so programs are fast: lists, trees, hash tables, heaps and graphs, and how to compare their speed. The gateway to most of the major.",
+  n:"C or better in CICS 160."},
+ {c:"COMPSCI 198C", t:"Intro to C (1 credit)", col:1, req:1, a:["sys"], pre:[["CICS 160","CICS 210"]], off:"Fall and Spring",
+  d:"A short practicum in the C language: pointers, memory and the tools programmers use. Required before Computer Systems Principles.",
+  n:"C or better in CICS 160 or 210 (or B in COMPSCI 121)."},
+ {c:"MATH 235", t:"Linear Algebra", col:1, req:1, math:1, a:["ai","th"], pre:[["MATH 132"]], off:"Every term",
+  d:"Vectors, matrices and linear systems. The math behind graphics, machine learning and quantum computing.", n:"Shown after Calculus II, as students usually take it."},
+ {c:"MATH 233", t:"Multivariate Calculus", col:1, math:1, a:[], pre:[["MATH 132"]], off:"Every term",
+  d:"Calculus in several variables. One of two choices for the fourth math course (the other is Statistics I).", n:"Choose MATH 233 or STATISTC 315."},
+ {c:"STATISTC 315", t:"Statistics I", col:1, math:1, a:["ai"], pre:[], off:"Every term",
+  d:"Probability and statistics. Can be the fourth math course, and opens several data and machine learning electives.", n:"Choose MATH 233 or STATISTC 315. See the Statistics program for prerequisites."},
+ // Core
+ {c:"COMPSCI 220", t:"Programming Methodology", col:2, req:1, a:["sw"], pre:[["CICS 210"]], off:"Fall and Spring",
+  d:"Writing larger programs well: design, testing, debugging and refactoring, in both functional and object-oriented styles. Leads into software engineering and web programming.",
+  n:"C or better in CICS 210."},
+ {c:"COMPSCI 230", t:"Computer Systems Principles", col:2, req:1, a:["sys"], pre:[["CICS 210"],["COMPSCI 198C"]], off:"Fall and Spring",
+  d:"What happens inside the machine: how data is stored, how programs become instructions, and what the operating system does. Leads into operating systems, networks and security.",
+  n:"C or better in CICS 210, and COMPSCI 198C."},
+ {c:"COMPSCI 240", t:"Reasoning Under Uncertainty", col:2, req:1, a:["ai","th"], pre:[["CICS 160","CICS 210"],["MATH 132"]], off:"Fall and Spring",
+  d:"Probability for computing: counting, chance, Bayes' rule and Markov chains. The doorway to AI, machine learning and data science.",
+  n:"C or better in CICS 160 (or 210) and MATH 132."},
+ {c:"COMPSCI 250", t:"Introduction to Computation", col:2, req:1, a:["th"], pre:[["CICS 160","CICS 210"],["MATH 132"]], off:"Fall and Spring",
+  d:"The math of computer science: logic, proof, induction, graphs and simple machines that recognize patterns. Leads into algorithms and theory.",
+  n:"C or better in CICS 160 (or 210) and MATH 132."},
+ // 300
+ {c:"COMPSCI 311", t:"Introduction to Algorithms", col:3, req:1, a:["th"], pre:[["CICS 210"],["COMPSCI 250"]], off:"Fall and Spring",
+  d:"How to design efficient algorithms and prove they work: greedy methods, dynamic programming, network flow, and which problems are believed to be hard.",
+  n:"C or better in CICS 210 and COMPSCI 250 (or MATH 455)."},
+ {c:"CICS 305", t:"Social Issues in Computing", col:3, req:1, a:["soc"], pre:[["COMPSCI 220"],["COMPSCI 230"],["COMPSCI 240","COMPSCI 250"]], off:"Fall and Spring",
+  d:"The junior-year writing course: technical and public writing about how computing affects people and society.",
+  n:"Also needs ENGLWRIT 112 (or a waiver). Check SPIRE for the full list."},
+ {c:"COMPSCI 320", t:"Software Engineering", col:3, ie:1, a:["sw"], pre:[["COMPSCI 220"]], off:"Fall and Spring",
+  d:"A semester-long team project that walks the whole life of real software: requirements, design, testing and teamwork. Meets the Integrative Experience requirement.",
+  n:"C or better in COMPSCI 220."},
+ {c:"COMPSCI 325", t:"Human-Computer Interaction", col:3, a:["sw","soc"], pre:[["CICS 210"]], off:"Fall and Spring",
+  d:"Designing technology around people: hands-on projects in design thinking, prototyping and testing with users.",
+  n:"C or better in CICS 210 (Informatics majors have another route)."},
+ {c:"COMPSCI 326", t:"Web Programming", col:3, ie:1, a:["sw"], pre:[["COMPSCI 220"]], off:"Fall and Spring",
+  d:"Build a full web application as a team, from the page in the browser to the server and database behind it. Meets the Integrative Experience requirement.",
+  n:"CS majors: C or better in COMPSCI 220. Informatics majors: INFO 248 and CICS 210."},
+ {c:"COMPSCI 328", t:"Mobile Health Sensing", col:3, a:["ai","sys"], pre:[["CICS 210"]], off:"Fall",
+  d:"Teams build smartphone apps that sense health signals, using signal processing and machine learning.", n:"C or better in CICS 210."},
+ {c:"COMPSCI 335", t:"Inside the Box: How Computers Work", col:3, a:["sys"], pre:[["COMPSCI 220","COMPSCI 230"]], off:"Fall",
+  d:"From logic circuits to assembly language: how hardware actually runs your code.", n:"C or better in COMPSCI 220 or 230."},
+ {c:"COMPSCI 345", t:"Databases in Practice", col:3, a:["sw","ai"], pre:[["CICS 210"]], off:"Fall and Spring",
+  d:"Relational databases and SQL: designing schemas, querying data, transactions and security.", n:"C or better in CICS 210 (Informatics: INFO 248)."},
+ {c:"COMPSCI 348", t:"Principles of Data Science", col:3, a:["ai"], pre:[["CICS 210"],["COMPSCI 240"],["COMPSCI 250"]], off:"Spring",
+  d:"The ideas behind data science, drawing on machine learning, statistics and databases, with uses like fraud detection.", n:"CICS 210, COMPSCI 240, and COMPSCI 250 (or MATH 455)."},
+ {c:"COMPSCI 360", t:"Computer and Network Security", col:3, a:["sys"], pre:[["COMPSCI 230"]], off:"Fall",
+  d:"How systems are attacked and defended: encryption, web and mobile security, and new threats to AI systems.", n:"C or better in COMPSCI 230."},
+ {c:"COMPSCI 363", t:"Computer Crime Law", col:3, a:["sys","soc"], pre:[["COMPSCI 230"]], off:"Fall",
+  d:"The law of computer crime, privacy and surveillance, alongside the technology used to investigate it.", n:"C or better in COMPSCI 230, and ENGLWRIT 112 (or a waiver)."},
+ {c:"COMPSCI 367", t:"Reverse Engineering", col:3, a:["sys"], pre:[["COMPSCI 230"]], off:"Fall",
+  d:"Reading programs at the machine level, how exploits work, and the defenses against them.", n:"C or better in COMPSCI 230, or instructor permission."},
+ {c:"COMPSCI 377", t:"Operating Systems", col:3, a:["sys"], pre:[["COMPSCI 230"]], off:"Fall and Spring",
+  d:"How an operating system shares one machine among many programs: processes, scheduling, memory and files, with projects in C.", n:"C or better in COMPSCI 230."},
+ {c:"COMPSCI 383", t:"Artificial Intelligence", col:3, a:["ai"], pre:[["CICS 210"],["COMPSCI 240","STATISTC 315"]], off:"Fall and Spring",
+  d:"A survey of AI as used in industry, with hands-on machine learning in Python.", n:"C or better in CICS 210 and COMPSCI 240 (or STATISTC 315)."},
+ {c:"COMPSCI 389", t:"Intro to Machine Learning", col:3, a:["ai"], pre:[["CICS 210"],["COMPSCI 240","STATISTC 315"],["MATH 132"]], off:"Spring (also Fall 2026)",
+  d:"How machines learn from data: supervised learning, neural networks, reinforcement learning, and the ethics of using them.", n:"C or better in CICS 210, COMPSCI 240 (or a statistics course), and MATH 132."},
+ // 400
+ {c:"COMPSCI 420", t:"Software Entrepreneurship", col:4, a:["sw","soc"], pre:[["COMPSCI 320","COMPSCI 326"]], off:"Fall and Spring",
+  d:"Teams turn a software idea into a product with social benefit, learning how startups test and grow an idea.", n:"C or better in COMPSCI 320 or 326."},
+ {c:"COMPSCI 426", t:"Scalable Web Systems", col:4, a:["sw","sys"], pre:[["COMPSCI 320","COMPSCI 326"]], off:"Fall (also Spring 2027)",
+  d:"How large web applications serve many users at once: the architecture and tools behind sites that scale.", n:"C or better in COMPSCI 320 or 326."},
+ {c:"COMPSCI 429", t:"Software Project Management", col:4, a:["sw"], pre:[["COMPSCI 320"]], off:"Fall and Spring",
+  d:"Lead a COMPSCI 320 student team as its technical manager: set goals, track progress and give feedback.", n:"By instructor permission, after a B or better in COMPSCI 320."},
+ {c:"COMPSCI 445", t:"Information Systems", col:4, a:["ai","sys"], pre:[["COMPSCI 220","COMPSCI 230"],["COMPSCI 311"],["COMPSCI 345"]], off:"Fall and Spring",
+  d:"Managing data at scale: how databases run queries fast, handle many users, and process big data with tools like Spark.", n:"C or better in COMPSCI 220 (or 230), 311 and 345."},
+ {c:"COMPSCI 446", t:"Search Engines", col:4, a:["ai"], pre:[["COMPSCI 240","COMPSCI 383"]], off:"Fall and Spring (Spring only in 2026-27)",
+  d:"How web search works: finding, ranking and evaluating results.", n:"C or better in COMPSCI 240 or 383."},
+ {c:"COMPSCI 453", t:"Computer Networks", col:4, a:["sys"], pre:[["COMPSCI 230","COMPSCI 377"]], off:"Fall and Spring",
+  d:"How the Internet works: the protocols that move data, routing, and network security, with hands-on labs.", n:"C or better in COMPSCI 230 (or 377)."},
+ {c:"COMPSCI 461", t:"Secure Distributed Systems", col:4, a:["sys"], pre:[["COMPSCI 326","COMPSCI 345","COMPSCI 377","COMPSCI 453"]], off:"Fall",
+  d:"Systems that keep working when some parts fail or lie, including how Bitcoin and Ethereum work and how to program for them.", n:"C or better in any one of COMPSCI 326, 345, 377 or 453."},
+ {c:"COMPSCI 466", t:"Applied Cryptography", col:4, a:["sys","th"], pre:[["COMPSCI 311"]], off:"Spring",
+  d:"The tools that keep data secret and trustworthy, such as ciphers, hashes and digital signatures, and how to reason about their security.", n:"C or better in COMPSCI 311."},
+ {c:"COMPSCI 485", t:"Natural Language Processing", col:4, a:["ai"], pre:[["COMPSCI 220"],["COMPSCI 240"]], off:"Fall",
+  d:"Teaching computers to work with human language: classifying text, sentiment and translation, through projects.", n:"C or better in COMPSCI 220 and 240 (or a linguistics route)."},
+ {c:"COMPSCI 491G", t:"Networking Lab", col:4, a:["sys"], pre:[["COMPSCI 453"]], off:"Spring",
+  d:"Hands-on work with real routers and switches to see networking ideas in action.", n:"C or better in COMPSCI 453."},
+ // 500
+ {c:"COMPSCI 501", t:"Formal Language Theory", col:5, a:["th"], pre:[["COMPSCI 311"]], off:"Spring",
+  d:"What computers can and cannot do in principle: automata, Turing machines and computability.", n:"C or better in COMPSCI 311."},
+ {c:"COMPSCI 508", t:"Ethics in Data Science and AI", col:5, a:["soc","ai"], pre:[], off:"Spring",
+  d:"Ethical questions raised by AI, privacy, surveillance and algorithms, explored through current events and readings.", n:"No prerequisite listed."},
+ {c:"COMPSCI 513", t:"Logic in Computer Science", col:5, a:["th"], pre:[["COMPSCI 250"],["COMPSCI 311"]], off:"Odd-year Fall",
+  d:"Logic as a computing tool: SAT solvers and proving programs correct with a proof assistant.", n:"COMPSCI 250 and 311."},
+ {c:"COMPSCI 514", t:"Algorithms for Data Science", col:5, a:["ai","th"], pre:[["COMPSCI 240","STATISTC 315"],["COMPSCI 311"]], off:"Fall and Spring",
+  d:"Clever ways to handle data too big to fit: sampling, sketching and streaming algorithms.", n:"B+ or better in COMPSCI 240 (or STATISTC 315) and 311."},
+ {c:"COMPSCI 515", t:"Computational Social Choice", col:5, a:["th","soc"], pre:[["COMPSCI 240"],["COMPSCI 250"]], off:"Fall",
+  d:"Where economics meets computing: voting, matching, fair division and game theory.", n:"C or better in COMPSCI 240 and 250."},
+ {c:"COMPSCI 520", t:"Software Engineering: Theory and Practice", col:5, a:["sw","ai"], pre:[["COMPSCI 320","COMPSCI 326"]], off:"Fall and Spring",
+  d:"AI tools for building software, building software that uses AI, and how the software industry works.", n:"C or better in COMPSCI 320 (or 220 and 326)."},
+ {c:"COMPSCI 528", t:"Mobile and Ubiquitous Computing", col:5, a:["sys","ai"], pre:[["COMPSCI 230"],["COMPSCI 240"]], off:"Spring (not 2026-27)",
+  d:"Building mobile sensing systems and making sense of the data they collect.", n:"C or better in COMPSCI 230 and 240."},
+ {c:"COMPSCI 532", t:"Systems for Data Science", col:5, a:["sys","ai"], pre:[["COMPSCI 377"],["COMPSCI 445"]], off:"Fall and Spring",
+  d:"Spreading data analysis across many machines with platforms like Hadoop and Spark.", n:"C or better in COMPSCI 377 and 445."},
+ {c:"COMPSCI 535", t:"Computer Architecture", col:5, a:["sys"], pre:[["COMPSCI 335"]], off:"Spring",
+  d:"How processors are built, from gates to pipelines, memory systems and parallelism.", n:"C or better in COMPSCI 335."},
+ {c:"COMPSCI 546", t:"Applied Information Retrieval", col:5, a:["ai","sw"], pre:[["COMPSCI 320","COMPSCI 326"],["COMPSCI 383","COMPSCI 389","COMPSCI 446"]], off:"Spring (not 2026-27)",
+  d:"Build search systems that learn to rank results, through programming projects.", n:"COMPSCI 320 (or 326) and one of COMPSCI 383, 389 or 446."},
+ {c:"COMPSCI 550", t:"Introduction to Simulation", col:5, a:["ai","th"], pre:[["CICS 210"],["STATISTC 315"]], off:"Spring (Fall in 2026-27)",
+  d:"Simulating systems driven by chance, when the math alone cannot give the answer.", n:"CICS 210 and STATISTC 315."},
+ {c:"COMPSCI 561", t:"System Defense and Test", col:5, a:["sys"], pre:[["COMPSCI 360"],["COMPSCI 453"]], off:"Spring",
+  d:"Ethical hacking: testing systems for weaknesses and defending them.", n:"COMPSCI 360 (or an equivalent) and 453."},
+ {c:"COMPSCI 564", t:"Cyber Effects", col:5, a:["sys"], pre:[["COMPSCI 230"],["COMPSCI 360"]], off:"Spring",
+  d:"Advanced reverse engineering and exploit analysis with professional tools.", n:"COMPSCI 230 and 360 (or equivalents)."},
+ {c:"COMPSCI 565", t:"Advanced Digital Forensics", col:5, a:["sys"], pre:[["COMPSCI 377"]], off:"Spring (Fall in 2026-27)",
+  d:"Recovering evidence from disks and memory, and how criminals try to hide it.", n:"C or better in COMPSCI 365 (Digital Forensics) or 377."},
+ {c:"COMPSCI 571", t:"Data Visualization", col:5, a:["ai","sw"], pre:[["COMPSCI 220","COMPSCI 230","COMPSCI 326"]], off:"Spring (Fall in 2026-27)",
+  d:"Turning data into clear pictures: design and algorithms for charts, maps and networks, with Python or D3 projects.", n:"C or better in COMPSCI 220, 230 or 326."},
+ {c:"COMPSCI 575", t:"Combinatorics and Graph Theory", col:5, a:["th"], pre:[["COMPSCI 250"]], off:"Even-year Fall",
+  d:"Counting and graphs: coloring, matching and generating functions.", n:"B or better in COMPSCI 250 (or MATH 455)."},
+ {c:"COMPSCI 589", t:"Machine Learning", col:5, a:["ai"], pre:[["COMPSCI 240"],["STATISTC 315"]], off:"Fall and Spring",
+  d:"The core models of machine learning, and how to choose and evaluate them properly.", n:"C or better in COMPSCI 240, STATISTC 315, and MATH 545 (Linear Algebra for Applied Math)."}
+];
+
+const byCode = Object.fromEntries(C.map(x=>[x.c,x]));
+C.forEach(x=>{ x.parents=[...new Set(x.pre.flat())].filter(p=>byCode[p]); x.kids=[]; });
+C.forEach(x=>x.parents.forEach(p=>byCode[p].kids.push(x.c)));
+const slug = c => c.toLowerCase().replace(/\s+/g,'-');
+const fromSlug = Object.fromEntries(C.map(x=>[slug(x.c),x.c]));
+
+function closure(code, key){
+  const seen=new Set(), stack=[...byCode[code][key]];
+  while(stack.length){ const k=stack.pop(); if(seen.has(k)) continue; seen.add(k); stack.push(...byCode[k][key]); }
+  return seen;
+}
+
+// Build columns
+const map=document.getElementById('map');
+COLS.forEach(col=>{
+  const el=document.createElement('div'); el.className='col';
+  el.innerHTML=`<h2>${col.name}</h2><div class="when">${col.when}</div><div class="cards"></div>`;
+  const cards=el.querySelector('.cards');
+  C.filter(x=>x.col===col.id).forEach(x=>{
+    const b=document.createElement('button'); b.className='card'+(x.req?' required':'')+(x.math?' math':'');
+    b.dataset.code=x.c;
+    const badge = x.ie?'<span class="badge ie">IE</span>':(x.math&&!x.req?'<span class="badge" style="background:#f3efe9;color:var(--muted)">Option</span>':'');
+    b.innerHTML=`<div class="code"><span>${x.c}</span>${badge}</div><div class="title">${x.t}</div><div class="tags">${x.a.map(a=>`<i style="background:${AREAS[a].color}" title="${AREAS[a].name}"></i>`).join('')}</div>`;
+    b.setAttribute('aria-label',`${x.c} ${x.t}`);
+    b.addEventListener('click',()=>select(x.c===selected?null:x.c));
+    cards.appendChild(b); x.el=b;
+  });
+  map.appendChild(el);
+});
+
+// Chips
+let area=null;
+const chips=document.getElementById('chips');
+const mk=(id,label,color)=>{ const b=document.createElement('button'); b.className='chip'; b.dataset.id=id||''; b.setAttribute('aria-pressed', id===null?'true':'false');
+  b.innerHTML=(color?`<span class="dot" style="background:${color}"></span>`:'')+label;
+  b.onclick=()=>{ area=id; chips.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c===b?'true':'false')); applyFilters(); };
+  chips.appendChild(b); chips.append(' '); };
+mk(null,'All interests');
+Object.entries(AREAS).forEach(([k,v])=>mk(k,v.name,v.color));
+
+const q=document.getElementById('q'), reqOnly=document.getElementById('reqOnly');
+q.addEventListener('input',applyFilters); reqOnly.addEventListener('change',applyFilters);
+function applyFilters(){
+  const s=q.value.trim().toLowerCase();
+  C.forEach(x=>{
+    const hay=(x.c+' '+x.t+' '+x.d).toLowerCase();
+    const okS=!s||hay.includes(s)||hay.replace(/compsci |cics |math /g,'').includes(s);
+    const okA=!area||x.a.includes(area)||x.req;
+    const okR=!reqOnly.checked||x.req;
+    x.el.classList.toggle('hide',!okR);
+    x.el.classList.toggle('dim',!(okS&&okA)&&!selected);
+  });
+  draw();
+}
+
+// Selection
+let selected=null;
+const panel=document.getElementById('panel');
+function select(code, fromHash){
+  selected=code;
+  map.classList.toggle('has-sel',!!code);
+  C.forEach(x=>x.el.classList.remove('sel','anc','desc'));
+  if(code){
+    const anc=closure(code,'parents'), desc=closure(code,'kids');
+    anc.forEach(k=>byCode[k].el.classList.add('anc'));
+    desc.forEach(k=>byCode[k].el.classList.add('desc'));
+    byCode[code].el.classList.add('sel');
+    C.forEach(x=>x.el.classList.remove('dim'));
+    renderPanel(code,anc,desc);
+    panel.classList.add('open');
+    if(!fromHash){ try{ history.replaceState(null,'','#'+slug(code)); }catch(e){ location.hash=slug(code);} }
+    const r=byCode[code].el.getBoundingClientRect(), w=document.getElementById('mapwrap');
+    if(r.left<0||r.right>window.innerWidth) byCode[code].el.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+  } else {
+    renderEmpty(); panel.classList.remove('open'); applyFilters();
+    if(!fromHash){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} }
+  }
+  draw();
+}
+function linkBtn(k,cls){ return `<button class="${cls}" data-go="${k}">${k}<span style="opacity:.7"> · ${byCode[k].t}</span></button>`; }
+function renderPanel(code,anc,desc){
+  const x=byCode[code];
+  const groups=x.pre.map(g=>g.filter(k=>byCode[k]));
+  const preHtml = groups.length ? groups.map(g=>`<div class="group">${g.map(k=>linkBtn(k,'a')).join('<span class="or">or</span>')}</div>`).join('') : '<p class="note">None. You can start here.</p>';
+  const kidsHtml = x.kids.length ? `<div class="links">${x.kids.sort().map(k=>linkBtn(k,'d')).join('')}</div>` : '<p class="note">Nothing on this map requires it. It is a destination.</p>';
+  const counts = [];
+  if(x.req) counts.push('Required for every BS-CS student');
+  if(x.ie) counts.push('Integrative Experience (also an elective)');
+  if(x.col>=3 && !x.req) counts.push(x.col>=4?'Upper-level elective (counts toward the 400+ group)':'Upper-level elective (300+)');
+  if(x.math && !x.req) counts.push('Fourth math course option');
+  panel.innerHTML=`<button class="close" aria-label="Close" onclick="select(null)">×</button>
+    <div class="pcode">${x.c}</div><h3>${x.t}</h3>
+    <div class="tags" style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0">${x.a.map(a=>`<span class="badge" style="background:#f4f1ec;color:${AREAS[a].color}">${AREAS[a].name}</span>`).join('')}</div>
+    <p>${x.d}</p>
+    <dl class="meta"><dt>Offered</dt><dd>${x.off}</dd>${counts.length?`<dt>Counts as</dt><dd>${counts.join('; ')}</dd>`:''}</dl>
+    <div class="sec"><h4>Take first</h4>${preHtml}<p class="note">${x.n}</p></div>
+    <div class="sec"><h4>Opens the door to</h4>${kidsHtml}</div>
+    <div class="sec"><h4>The whole path</h4><p class="note">${anc.size?`${anc.size} course${anc.size>1?'s':''} on this map lead${anc.size>1?'':'s'} here, shown in red.`:'This is a starting point.'} ${desc.size?`It leads, directly or later, to ${desc.size} more, shown in teal.`:''}</p></div>`;
+  panel.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>select(b.dataset.go));
+}
+function renderEmpty(){
+  panel.innerHTML=`<div class="empty"><h3>Pick a course to explore</h3>
+  <ol><li>Start with <a href="#" data-go="CICS 110">CICS 110</a> to see everything a first course opens up.</li>
+  <li>Or pick a destination, like <a href="#" data-go="COMPSCI 589">Machine Learning</a> or <a href="#" data-go="COMPSCI 561">System Defense</a>, to see the path that gets you there.</li>
+  <li>Use the interest buttons to light up one area of computing.</li></ol>
+  <p class="note">Required courses have a red edge. Colored dots show each course's areas.</p></div>`;
+  panel.querySelectorAll('[data-go]').forEach(a=>a.onclick=e=>{e.preventDefault();select(a.dataset.go);});
+}
+
+// Edges
+const svg=document.getElementById('edges');
+function draw(){
+  const box=map.getBoundingClientRect();
+  svg.setAttribute('viewBox',`0 0 ${map.scrollWidth} ${map.scrollHeight}`);
+  svg.style.width=map.scrollWidth+'px'; svg.style.height=map.scrollHeight+'px';
+  let out='';
+  const pt=(el,side)=>{ const r=el.getBoundingClientRect(); return {x:(side==='r'?r.right:r.left)-box.left, y:r.top+r.height/2-box.top}; };
+  const edge=(p,k,color,w,op)=>{
+    const a=byCode[p].el, b=byCode[k].el; if(a.classList.contains('hide')||b.classList.contains('hide')) return '';
+    let s,e;
+    if(byCode[p].col===byCode[k].col){ s=pt(a,'l'); e=pt(b,'l'); const dx=-22; return `<path d="M${s.x},${s.y} C${s.x+dx},${s.y} ${e.x+dx},${e.y} ${e.x},${e.y}" stroke="${color}" stroke-width="${w}" fill="none" opacity="${op}"/>`; }
+    s=pt(a,'r'); e=pt(b,'l'); const mx=(s.x+e.x)/2;
+    return `<path d="M${s.x},${s.y} C${mx},${s.y} ${mx},${e.y} ${e.x},${e.y}" stroke="${color}" stroke-width="${w}" fill="none" opacity="${op}"/>`;
+  };
+  if(selected){
+    const anc=closure(selected,'parents'), desc=closure(selected,'kids');
+    const ancSet=new Set([...anc,selected]), descSet=new Set([...desc,selected]);
+    C.forEach(x=>x.parents.forEach(p=>{
+      if(ancSet.has(p)&&ancSet.has(x.c)) out+=edge(p,x.c,'#881c1c',2,.75);
+      else if(descSet.has(p)&&descSet.has(x.c)) out+=edge(p,x.c,'#1f6f78',2,.75);
+    }));
+  } else {
+    C.forEach(x=>x.parents.forEach(p=>{
+      const spine=byCode[p].req&&x.req;
+      const hl = area && byCode[p].a.includes(area) && x.a.includes(area);
+      if(spine||hl) out+=edge(p,x.c, hl?'#555':'#b9aea3', hl?1.6:1.2, hl?.55:.6);
+    }));
+  }
+  svg.innerHTML=out;
+}
+let raf; const redraw=()=>{cancelAnimationFrame(raf); raf=requestAnimationFrame(draw);};
+window.addEventListener('resize',redraw);
+document.fonts && document.fonts.ready.then(redraw);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&selected) select(null); });
+function fromHashNow(){ const h=location.hash.slice(1); select(fromSlug[h]||null,true); }
+window.addEventListener('hashchange',fromHashNow);
+renderEmpty(); fromHashNow(); setTimeout(redraw,60);
+</script>
+</body>
+</html>
