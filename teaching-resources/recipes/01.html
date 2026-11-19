@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recipe 1: Rubrics that grade quickly and fairly | Tim Richards</title>
+<meta name="description" content="Clear criteria make grading reliable and show students what good work looks like">
+<link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/style.css?v=10">
+<link rel="stylesheet" href="../../teaching-resources/resources.css?v=1">
+<link rel="stylesheet" href="recipes.css?v=1">
+</head>
+<body data-site="recipes" data-page="01">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Tim Richards</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#teaching">Teaching</a></li>
+        <li><a href="../../index.html#awards">Awards</a></li>
+        <li><a href="../../index.html#research">Research Projects</a></li>
+        <li><a href="../../writings.html">Writings</a></li>
+        <li><a href="../../tools.html">Tools</a></li>
+        <li><a href="../../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow"><a href="../index.html">Teaching Resources</a> &middot; <a href="index.html">Teaching Recipes</a> &middot; Spring 2027, week 1</p>
+      <h1>Recipe 1: Rubrics that grade quickly and fairly</h1>
+    </div>
+  </section>
+
+  <div class="wrap recipe-wrap">
+    <aside class="glance" aria-label="At a glance"><dl><dt>Where AI helps</dt><dd>Drafts a rubric from the spec and outcomes; you edit it</dd><dt>The idea behind it</dt><dd>Clear criteria make grading reliable and show students what good work looks like (<a class="cite" href="references.html#jonsson2007">Jonsson and Svingby 2007</a>)</dd><dt>Leads to</dt><dd><ul><li><a href="02.html">2. Faster feedback with AI drafts and a person in the loop</a></li><li><a href="09.html">9. Consistent grading across TAs</a> <span class="soon">Spring 2027</span></li><li><a href="13.html">13. Grading final projects at scale</a> <span class="soon">Spring 2027</span></li></ul></dd></dl><p class="tags"><span class="tag tag-saves-time">Saves time</span><span class="tag tag-feedback">Feedback</span></p></aside>
+    <article class="prose resource recipe">
+<p class="lede">One page, for the first Teaching Recipes session. <a
+href="02.html">Recipe 2</a>, faster feedback with AI drafts, builds on
+it.</p>
+<h2 id="the-problem">The problem</h2>
+<p>Grading a big assignment takes hours, and two graders often give the
+same work different scores. Students then argue points instead of
+reading comments. A vague rubric is usually the cause: criteria like
+"good code quality" leave each grader to decide what good means, and
+leave students to guess.</p>
+<h2 id="what-it-looks-like">What it looks like</h2>
+<p>A short rubric with <strong>3 to 5 criteria</strong> and <strong>3 or
+4 levels</strong> each. Every level says what a grader can see in the
+work ("every function has a test, and the tests pass") rather than a
+judgment ("well tested"). Students get the rubric with the assignment,
+not after it. Graders score the same few submissions first and fix any
+criterion they disagree on before grading the rest.</p>
+<h2 id="why-it-works">Why it works</h2>
+<p>Rubrics make grading more consistent when they are
+<strong>analytic</strong> (one row per criterion), <strong>specific to
+the task</strong>, and used with <strong>examples and a short
+calibration</strong> between graders (<a
+href="references.html#jonsson2007" class="cite">Jonsson and Svingby
+2007</a>). They also help students learn when students see them before
+the work, because the rubric tells them what the goal is (<a
+href="references.html#panadero2013" class="cite">Panadero and Jonsson
+2013</a>; <a href="references.html#reddy2010" class="cite">Reddy and
+Andrade 2010</a>).</p>
+<p>This is <strong>feedback</strong> before the work is even done.
+Hattie and Timperley's first question for good feedback is "Where am I
+going?" (<a href="references.html#hattie2007" class="cite">2007</a>),
+and a clear rubric answers it. It is also the idea behind transparent
+assignment design (<a href="references.html#winkelmes2016" class="cite">TILT Higher
+Ed</a>): students do better when the purpose, the task and the criteria
+are spelled out. A rubric written this way also makes <a
+href="02.html">Recipe 2</a> possible, since each level's wording becomes
+the comment a student reads.</p>
+<h2 id="the-steps">The steps</h2>
+<ol type="1">
+<li><strong>Start from the outcomes.</strong> List the 3 to 5 things the
+assignment is meant to show. Each becomes one criterion. If a criterion
+does not match an outcome, cut it.</li>
+<li><strong>Ask AI for a first draft.</strong> Give it the assignment
+spec and the outcomes, using the prompt below. Ask for observable
+levels, not adjectives.</li>
+<li><strong>Edit it as the expert.</strong> Cut criteria that overlap,
+fix point values, and rewrite any level you could not score in under a
+minute.</li>
+<li><strong>Test it on old work.</strong> Score 3 to 5 past submissions,
+with names removed. Where you hesitate, the wording needs work.</li>
+<li><strong>Calibrate with your graders.</strong> Each grader scores the
+same 3 submissions alone. Compare. Rewrite any criterion where scores
+differ by more than one level.</li>
+<li><strong>Give it to students with the assignment.</strong> Point to
+it in class, and use its wording in your comments when you grade.</li>
+</ol>
+<h2 id="the-prompt">The prompt</h2>
+<pre><code>You are helping a computer science instructor write a grading rubric.
+
+Assignment spec:
+[paste the spec]
+
+Learning outcomes this assignment should show:
+[list 3 to 5 outcomes]
+
+Write an analytic rubric with one row per outcome and 4 levels
+(Exceeds, Meets, Approaching, Missing). For each level, describe what a
+grader can see in the submission, in one sentence. Avoid words like
+&quot;good&quot;, &quot;clear&quot; or &quot;strong&quot; unless you say what they look like.
+Suggest a point value per row so the total is [N].
+Then list two places where graders are most likely to disagree.</code></pre>
+<h2 id="time-and-cost">Time and cost</h2>
+<p>Time is hard to give as a number, so think of it as a fraction.</p>
+<ul>
+<li><strong>T</strong> is the time to write the rubric by hand. T grows
+with the assignment: more parts, more outcomes, more ways to be partly
+right.</li>
+<li>With an AI first draft, the work takes about <strong>T / P</strong>.
+<strong>P</strong> is how much the prompt tells the AI: the spec, the
+outcomes, the point total, and an example of what "Meets" looks
+like.</li>
+<li>P is hard to measure, but the direction is clear: the more detail in
+the prompt, the less there is to fix. A thin prompt (P close to 1) saves
+little, because you rewrite most of what comes back.</li>
+<li>Calibration with graders takes about 30 minutes, once per
+assignment, whatever P is.</li>
+<li>Cost: none beyond a tool the university already supports.</li>
+</ul>
+<h2 id="what-students-see">What students see</h2>
+<p>The rubric, with the assignment, before they start. When grading
+comes back, each score points to a row and a level they have already
+read, so the comment explains the score and says what the next level up
+looks like. That is feedback they can use on the next assignment.</p>
+<h2 id="what-can-go-wrong">What can go wrong</h2>
+<ul>
+<li><strong>AI writes generic rubrics.</strong> Without your outcomes it
+falls back on "clarity" and "organization". Always give it the outcomes,
+and always edit.</li>
+<li><strong>Too many criteria.</strong> Ten rows take longer to grade
+and blur what matters. Keep it to five or fewer.</li>
+<li><strong>Grading to the rubric only.</strong> A rubric can miss good
+work it did not expect. Keep a short "other" note for graders to flag
+it.</li>
+<li><strong>Student work in AI tools.</strong> Remove names before
+pasting any past work, and use a tool the university supports.</li>
+</ul>
+<h2 id="try-it-this-week">Try it this week</h2>
+<p>Pick one assignment that is due in the next month. Run the prompt on
+its spec, edit the result for 20 minutes, and score two old submissions
+with it. If you have TAs, have one score the same two and compare.</p>
+<h2 id="evidence">Evidence</h2>
+<ul>
+<li>Jonsson, A. and Svingby, G. 2007. The use of scoring rubrics:
+Reliability, validity and educational consequences. <em>Educational
+Research Review</em>. <a
+href="references.html#jonsson2007" class="cite">doi:10.1016/j.edurev.2007.05.002</a></li>
+<li>Panadero, E. and Jonsson, A. 2013. The use of scoring rubrics for
+formative assessment purposes revisited: A review. <em>Educational
+Research Review</em>. <a
+href="references.html#panadero2013" class="cite">doi:10.1016/j.edurev.2013.01.002</a></li>
+<li>Reddy, Y. M. and Andrade, H. 2010. A review of rubric use in higher
+education. <em>Assessment &amp; Evaluation in Higher Education</em>. <a
+href="references.html#reddy2010" class="cite">doi:10.1080/02602930902862859</a></li>
+<li>Hattie, J. and Timperley, H. 2007. The power of feedback. <em>Review
+of Educational Research</em>. <a
+href="references.html#hattie2007" class="cite">doi:10.3102/003465430298487</a></li>
+<li>Winkelmes, M.-A. et al. 2016. A teaching intervention that increases
+underserved college students' success. <em>Peer Review</em>. <a
+href="references.html#winkelmes2016" class="cite">TILT Higher Ed</a></li>
+</ul>
+
+      <p class="print-note"><button type="button" class="linkish" onclick="window.print()">Print this recipe</button> (it fits on two pages).</p>
+    </article>
+    <nav class="page-nav" aria-label="More recipes"><span></span><a href="index.html">All recipes</a><a href="02.html">2. Faster feedback with AI drafts and a person in the loop &rarr;</a></nav>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year">2026</span> Tim Richards</p>
+    <p class="art-credit">This site counts page views anonymously (no names or cookies). <a href="../../teaching-resources/index.html#privacy">How</a>.</p>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="../../assets/js/main.js?v=4"></script>
+<script src="../../class-spaces/js/config.js"></script>
+<script src="../../teaching-resources/js/track.js?v=1"></script>
+</body>
+</html>
