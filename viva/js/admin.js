@@ -146,6 +146,7 @@ async function editAssessment(id) {
     title: "", course: "326", student_intro: "", interviewer_brief: "", opening_question: "", rubric: RUBRIC_TEMPLATE,
     answer_key: "", time_limit_min: 20, min_turns: 3, max_turns: 14, require_screen: true, allow_paste: false, capture_every_sec: 5,
     diagrams: [], allow_drawing: true, ask_confidence: true, transfer_settings: "", revisit_max: 0, hint_limit: 2,
+    allow_code: false, code_language: "", allow_math: false,
   } : must(await sb.from("assessments").select("*").eq("id", id).single());
   const sessions = isNew ? [] : must(await sb.from("sessions").select("*").eq("assessment_id", id).order("opened_at", { ascending: false }));
   const library = must(await sb.from("stencils").select("id,name,scene").eq("course", a.course || "326").eq("archived", false).order("sort").order("created_at"));
@@ -188,6 +189,10 @@ async function editAssessment(id) {
         <label class="row" style="font-weight:400"><input type="checkbox" id="f-screen" style="width:auto" ${a.require_screen ? "checked" : ""}> Require sharing the entire screen (screenshots)</label>
         <label class="row" style="font-weight:400"><input type="checkbox" id="f-paste" style="width:auto" ${a.allow_paste ? "checked" : ""}> Allow pasting into the chat</label>
         <label class="row" style="font-weight:400"><input type="checkbox" id="f-draw" style="width:auto" ${a.allow_drawing ? "checked" : ""}> Students may answer with a drawing (a Draw button), and the evaluator may ask for one on a blank page</label>
+        <label class="row" style="font-weight:400"><input type="checkbox" id="f-code" style="width:auto" ${a.allow_code ? "checked" : ""}> Students may answer with code (a Code button), and the evaluator may ask for code in a blank code area</label>
+        <label for="f-code-lang" style="margin-left:1.6rem">Language for blank code areas <span class="muted">(any language CodeMirror knows, e.g. JavaScript, Python, SQL, HTML; empty for plain text)</span></label>
+        <input id="f-code-lang" list="languages" value="${esc(a.code_language || "")}" style="max-width:16rem;margin-left:1.6rem">
+        <label class="row" style="font-weight:400"><input type="checkbox" id="f-math" style="width:auto" ${a.allow_math ? "checked" : ""}> Students may answer with math (a Math button), and the evaluator may ask for math in a blank math area</label>
         <label class="row" style="font-weight:400"><input type="checkbox" id="f-conf" style="width:auto" ${a.ask_confidence ? "checked" : ""}> Ask how sure students are (1 to 5) with each answer <span class="muted">(never shown to the AIs; not graded)</span></label>
         <label for="f-transfer">New settings to test transfer <span class="muted">(one per line, e.g. "a Node server reading a file"; the interviewer sees these; empty to skip)</span></label>
         <textarea id="f-transfer" rows="3">${esc(a.transfer_settings || "")}</textarea>
@@ -206,10 +211,14 @@ async function editAssessment(id) {
         <p class="muted small">From this course's <a href="#/shapes?course=${esc(a.course || "326")}">shape library</a>. Students find them under Shapes in the drawing pad. ${library.length ? "" : "The library is empty; add the starter set on the Shapes page."}</p>
         <div class="shape-grid" id="f-shapes">${library.map((st) => `<label class="shape-pick">${Sketch.thumb(st)}<span class="small">${esc(st.name)}</span>
           <input type="checkbox" data-stencil="${st.id}" ${offered(st) ? "checked" : ""}></label>`).join("")}</div>
-        <h2>Starting diagrams</h2>
-        <p class="muted small">Diagrams students complete or draw on. The evaluator opens one when a drawing would show understanding better than words. Students cannot move or erase what you draw here; they draw on it and connect arrows to it.</p>
+        <h2>Answer areas</h2>
+        <p class="muted small">Places students answer in something other than words. The evaluator opens one when it would show understanding better than words, at most once each.
+          <strong>Drawings:</strong> students cannot move or erase what you draw; they draw on it and connect arrows to it.
+          <strong>Code:</strong> any language; students can change the starter code, and "Start over" puts it back.
+          <strong>Math:</strong> students type math (x^2, /, sqrt) and it is typeset; they can change any starter.</p>
         <div id="diagrams"></div>
-        <p><button type="button" id="add-diagram">Add a diagram</button></p>
+        <p class="row"><button type="button" id="add-diagram">Add a drawing</button><button type="button" id="add-code">Add a code area</button><button type="button" id="add-math">Add a math area</button></p>
+        <datalist id="languages"></datalist>
       </div>
       <div><p class="error" id="a-error"></p><p class="row"><button class="primary">Save</button>
         ${isNew ? "" : '<button type="button" id="check-dl">Download for check</button><button type="button" id="archive" class="danger">Archive</button>'}<span class="muted" id="a-saved"></span></p>
@@ -226,31 +235,74 @@ async function editAssessment(id) {
   $("f-rubric").addEventListener("input", total);
   total();
 
-  // Starting diagrams, each with its own drawing pad.
+  // Answer areas: drawings (each with its own drawing pad), code (a CodeMirror editor for the
+  // starter) and math (a MathLive field for the starter). Saved together in assessments.diagrams.
   const pads = [];
-  const addDiagram = (d) => {
-    const n = pads.length ? Math.max(...pads.map((p) => +(p.id.match(/\d+$/)?.[0] || 0))) + 1 : 1;
-    const dd = { id: d?.id || `d${n}`, title: d?.title || "", prompt: d?.prompt || "", when: d?.when || "", scene: d?.scene || null };
+  const nextId = (prefix) => `${prefix}${Math.max(0, ...pads.filter((p) => p.id.startsWith(prefix) && /^\d+$/.test(p.id.slice(prefix.length))).map((p) => +p.id.slice(prefix.length))) + 1}`;
+  const fillLanguages = async () => {
+    if ($("languages").childElementCount) return;
+    const { LANGUAGES } = await import("./code.js");
+    $("languages").innerHTML = LANGUAGES.map((n) => `<option value="${esc(n)}">`).join("");
+  };
+  if (a.allow_code) fillLanguages();
+  $("f-code").addEventListener("change", fillLanguages);
+  const areaHead = (kind, dd) => `<div class="row"><strong>${{ code: "Code area", math: "Math area" }[kind] || "Drawing"} <code>${esc(dd.id)}</code></strong><span class="spacer"></span><button type="button" class="danger" data-remove>Remove</button></div>
+      <div class="grid2" style="grid-template-columns:1fr 1fr">
+        <div><label>Title <span class="muted">(students see it)</span></label><input data-f="title" value="${esc(dd.title)}"></div>
+        <div><label>What students are told <span class="muted">(students and the interviewer see it)</span></label><input data-f="prompt" value="${esc(dd.prompt)}"></div>
+      </div>
+      <label>When to ask for it <span class="muted">(only the evaluator sees this)</span></label><input data-f="when" value="${esc(dd.when)}">`;
+  const addWork = async (kind, d) => {
+    const dd = { id: d?.id || nextId(kind), title: d?.title || "", prompt: d?.prompt || "", when: d?.when || "", language: d?.language || "", starter: d?.starter || "" };
     const card = document.createElement("div");
     card.className = "diagram-card";
-    card.innerHTML = `<div class="row"><strong>Diagram <code>${esc(dd.id)}</code></strong><span class="spacer"></span><button type="button" class="danger" data-remove>Remove diagram</button></div>
-      <div class="grid2" style="grid-template-columns:1fr 1fr">
-        <div><label>Title <span class="muted">(students see it)</span></label><input data-f="title" value="${esc(dd.title)}" placeholder="Where do the callbacks wait?"></div>
-        <div><label>What students are told <span class="muted">(students and the interviewer see it)</span></label><input data-f="prompt" value="${esc(dd.prompt)}" placeholder="Draw each callback where it waits, and arrows for what runs next."></div>
-      </div>
-      <label>When to ask for it <span class="muted">(only the evaluator sees this)</span></label><input data-f="when" value="${esc(dd.when)}" placeholder="After the student has predicted the output, to see where they think each callback goes.">
-      <label>Starting diagram</label><div data-pad></div>`;
+    card.innerHTML = areaHead(kind, dd) + (kind === "code"
+      ? `<label>Language</label><input data-f="language" list="languages" value="${esc(dd.language)}" placeholder="JavaScript" style="max-width:16rem">
+         <label>Starter code <span class="muted">(optional; students can change it)</span></label><div data-editor></div>`
+      : `<label>Starter math <span class="muted">(optional; students can change it)</span></label><div data-editor></div>`);
     $("diagrams").appendChild(card);
-    const pad = new Sketch(card.querySelector("[data-pad]"), { scene: dd.scene, authoring: true, stencils: library });
-    const entry = { id: dd.id, card, pad };
+    const entry = { id: dd.id, kind, card, value: () => dd.starter };
     pads.push(entry);
     card.querySelector("[data-remove]").addEventListener("click", () => {
-      if (!confirm("Remove this diagram?")) return;
+      if (!confirm("Remove this area?")) return;
+      card.remove(); pads.splice(pads.indexOf(entry), 1);
+    });
+    const box = card.querySelector("[data-editor]");
+    if (kind === "code") {
+      fillLanguages();
+      const { CodeBox } = await import("./code.js");
+      let editor = new CodeBox(box, { language: dd.language, text: dd.starter, label: "Starter code" });
+      entry.value = () => editor.text();
+      card.querySelector('[data-f="language"]').addEventListener("change", (ev) => {
+        const text = editor.text();
+        editor.destroy();
+        editor = new CodeBox(box, { language: ev.target.value, text, label: "Starter code" });
+      });
+    } else {
+      const { mathField } = await import("./math.js");
+      const mf = mathField(box, { latex: dd.starter, label: "Starter math" });
+      entry.value = () => mf.value;
+    }
+  };
+  const addDiagram = (d) => {
+    if (d?.kind === "code" || d?.kind === "math") return addWork(d.kind, d);
+    const dd = { id: d?.id || nextId("d"), title: d?.title || "", prompt: d?.prompt || "", when: d?.when || "", scene: d?.scene || null };
+    const card = document.createElement("div");
+    card.className = "diagram-card";
+    card.innerHTML = areaHead("drawing", dd) + `<label>Starting diagram</label><div data-pad></div>`;
+    $("diagrams").appendChild(card);
+    const pad = new Sketch(card.querySelector("[data-pad]"), { scene: dd.scene, authoring: true, stencils: library });
+    const entry = { id: dd.id, kind: "drawing", card, pad };
+    pads.push(entry);
+    card.querySelector("[data-remove]").addEventListener("click", () => {
+      if (!confirm("Remove this drawing?")) return;
       card.remove(); pads.splice(pads.indexOf(entry), 1);
     });
   };
   for (const d of a.diagrams || []) addDiagram(d);
   $("add-diagram").addEventListener("click", () => addDiagram(null));
+  $("add-code").addEventListener("click", () => addWork("code", null));
+  $("add-math").addEventListener("click", () => addWork("math", null));
 
   // Fill from JSON: puts a file's values into the form; Save works as usual.
   const FIELDS = {
@@ -258,7 +310,8 @@ async function editAssessment(id) {
     answer_key: "f-key", transfer_settings: "f-transfer", time_limit_min: "f-time", min_turns: "f-min", max_turns: "f-max",
     capture_every_sec: "f-every", revisit_max: "f-revisit", hint_limit: "f-hints",
   };
-  const CHECKS = { require_screen: "f-screen", allow_paste: "f-paste", allow_drawing: "f-draw", ask_confidence: "f-conf" };
+  FIELDS.code_language = "f-code-lang";
+  const CHECKS = { require_screen: "f-screen", allow_paste: "f-paste", allow_drawing: "f-draw", ask_confidence: "f-conf", allow_code: "f-code", allow_math: "f-math" };
   const fillFrom = (text) => {
     $("imp-error").textContent = ""; $("imp-msg").textContent = "";
     let got;
@@ -288,6 +341,8 @@ async function editAssessment(id) {
   });
   const diagramsNow = () => pads.map((p) => {
     const f = (k) => p.card.querySelector(`[data-f="${k}"]`).value.trim();
+    if (p.kind === "code") return { id: p.id, kind: "code", title: f("title") || "Code", prompt: f("prompt"), when: f("when"), language: f("language"), starter: p.value() };
+    if (p.kind === "math") return { id: p.id, kind: "math", title: f("title") || "Math", prompt: f("prompt"), when: f("when"), starter: p.value() };
     const scene = p.pad.scene();
     scene.items.forEach((i) => { i.locked = true; });
     return { id: p.id, title: f("title") || "Drawing", prompt: f("prompt"), when: f("when"), scene };
@@ -308,6 +363,7 @@ async function editAssessment(id) {
       capture_every_sec: +$("f-every").value, require_screen: $("f-screen").checked, allow_paste: $("f-paste").checked,
       allow_drawing: $("f-draw").checked, ask_confidence: $("f-conf").checked, transfer_settings: $("f-transfer").value.trim(),
       revisit_max: Math.max(0, Math.min(4, +$("f-revisit").value || 0)), diagrams: diagramsNow(),
+      allow_code: $("f-code").checked, code_language: $("f-code-lang").value.trim(), allow_math: $("f-math").checked,
       hint_limit: Math.max(0, Math.min(5, Math.round(+$("f-hints").value || 0))),
       stencil_ids: (() => {   // null means every shape in the library, including ones added later
         const boxes = [...v.querySelectorAll("#f-shapes [data-stencil]")];
@@ -334,7 +390,8 @@ async function editAssessment(id) {
     $("check-dl").addEventListener("click", () => {
       const keep = ["title", "course", "student_intro", "interviewer_brief", "opening_question", "rubric", "answer_key",
                     "time_limit_min", "min_turns", "max_turns", "require_screen", "allow_paste", "capture_every_sec",
-                    "diagrams", "allow_drawing", "ask_confidence", "transfer_settings", "revisit_max", "hint_limit"];
+                    "diagrams", "allow_drawing", "ask_confidence", "transfer_settings", "revisit_max", "hint_limit",
+                    "allow_code", "code_language", "allow_math"];
       download(`viva-${a.title.replace(/\W+/g, "-").toLowerCase()}.json`, JSON.stringify(Object.fromEntries(keep.map((k) => [k, a[k]])), null, 2) + "\n", "application/json");
     });
     $("archive").addEventListener("click", async () => {
@@ -577,6 +634,7 @@ async function review(id) {
   // Each student answer's confidence next to how the evaluator judged that answer on its own.
   const judged = new Map(evals.filter((e) => !e.final).map((e) => [e.after_turn, e.result.last_answer]));
   const answers = [];
+  const works = [];   // code and math answers, drawn after the page is built
   let turn = 0;
   const transcript = msgs.map((m) => {
     let extra = "";
@@ -589,10 +647,17 @@ async function review(id) {
       extra = (m.meta?.drawing ? `<span class="sketch-view">${Sketch.svg(m.meta.drawing.scene || { items: [] })}</span>
           <div class="small" style="opacity:.85">drawing${m.meta.drawing.diagram ? ` (${esc(m.meta.drawing.diagram)})` : ""} · <a style="color:inherit" href="${esc(urls[m.meta.drawing.path] || "#")}" target="_blank" rel="noopener">image sent to the AI</a></div>` : "") +
         `<div class="small" style="opacity:.85">${bits}${conf ? `${bits ? " · " : ""}<span class="pill ${over ? "over" : under ? "under" : ""}" title="How sure the student said they were">sure ${conf}/5</span>` : ""}${j ? ` <span class="pill" title="The evaluator's judgment of this answer alone">answer: ${esc(j.replace("_", " "))}</span>` : ""}</div>`;
+      if (m.meta?.code || m.meta?.math) {
+        const w = m.meta.code || m.meta.math;
+        const notes = [m.meta.code ? `code${w.language ? ` (${esc(w.language)})` : ""}` : "math", w.area && !String(w.area).startsWith("free") ? `area ${esc(w.area)}` : "",
+          w.starter ? (w.changed ? "changed the starter" : "<strong>starter unchanged</strong>") : "", w.resets ? `started over ${w.resets}×` : ""].filter(Boolean).join(" · ");
+        extra += `<div class="work ${m.meta.code ? "code" : "math"}" data-work="${works.length}"></div><span class="work-tag">${notes}${w.starter ? ` · <a href="#" data-starter="${works.length}" style="color:inherit">show the starter</a>` : ""}</span>`;
+        works.push(m.meta.code ? { kind: "code", language: w.language, text: w.text, starter: w.starter } : { kind: "math", text: w.latex, starter: w.starter });
+      }
     } else if (m.role === "helper") {
       extra = `<div class="small" style="opacity:.85">hint ${m.meta?.nth > 1 ? `${m.meta.nth} ` : ""}on ${esc(m.meta?.criterion_name || m.meta?.criterion || "")} · caps it at ${esc(m.meta?.cap_level || "")} (up to ${m.meta?.cost ?? "?"} point${m.meta?.cost === 1 ? "" : "s"})</div>`;
     } else if (m.meta?.diagram) {
-      extra = `<span class="asked">Opened drawing area: ${esc(m.meta.diagram.title)}</span>`;
+      extra = `<span class="asked">Opened ${({ code: "code", math: "math" })[m.meta.diagram.kind] || "drawing"} area: ${esc(m.meta.diagram.title)}</span>`;
     }
     return `<div class="msg ${m.role}"><div class="small" style="opacity:.7">${fmtTime(m.created_at)}</div>${m.role === "helper" ? "Hint: " : ""}${esc(m.content)}${extra}</div>`;
   }).join("");
@@ -639,6 +704,7 @@ async function review(id) {
         <h2>Grade</h2>
         <div class="card">
           <p style="margin-top:0"><strong>Suggested: ${final ? `${final.result.points} / ${final.result.max_points}` : "none"}</strong>${final && !final.final ? ' <span class="muted small">(from the latest turn; no final evaluation)</span>' : ""}</p>
+          ${final?.usage?.regrade ? `<p class="muted small">Graded again ${fmtDate(final.created_at)} by ${esc(final.usage.by || "")}${final.result.instructor_note ? `, with this note: “${esc(final.result.instructor_note)}”` : ""}</p>` : ""}
           ${final?.result.summary ? `<p>${esc(final.result.summary)}</p>` : ""}
           ${crit}
           <label for="g-final">Final points</label>
@@ -649,6 +715,13 @@ async function review(id) {
             <span class="muted small" id="g-msg">${grade?.approved_at ? `Approved ${fmtDate(grade.approved_at)} by ${esc(grade.approved_by)}` : ""}</span></p>
           <p class="error" id="g-error"></p>
         </div>
+        ${t.status === "finished" && t.turns > 0 ? `<details class="card" id="rg"${final ? "" : " open"}>
+          <summary><strong>Grade again</strong> <span class="muted small">${final ? "the AI grader reads the whole conversation again" : "this conversation has no grade yet"}</span></summary>
+          <label for="rg-note">Note for the grader <span class="muted">(optional; for example “count the answer about hx-target as Met”)</span></label>
+          <textarea id="rg-note" rows="3"></textarea>
+          <p class="row"><button id="rg-go">Grade again</button><span class="muted small" id="rg-msg">Takes up to a minute. Your approved final points stay as they are.</span></p>
+          <p class="error" id="rg-error"></p>
+        </details>` : ""}
         ${transfer}${revisit}${calib}
         <h2>Leaving the conversation</h2>
         <table><thead><tr><th>What</th><th>When</th><th class="num">How long</th><th>Detail</th></tr></thead><tbody>
@@ -663,6 +736,22 @@ async function review(id) {
       </section>
     </div>`;
 
+  if (works.length) {
+    const needCode = works.some((w) => w.kind === "code"), needMath = works.some((w) => w.kind === "math");
+    const [{ CodeBox }, { mathHTML }] = await Promise.all([needCode ? import("./code.js") : {}, needMath ? import("./math.js") : {}]);
+    const draw = (el, w, text) => { if (w.kind === "code") new CodeBox(el, { language: w.language, text, readOnly: true }); else el.innerHTML = mathHTML(text); };
+    v.querySelectorAll("[data-work]").forEach((el) => draw(el, works[+el.dataset.work], works[+el.dataset.work].text));
+    v.querySelectorAll("[data-starter]").forEach((a) => a.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      const w = works[+a.dataset.starter];
+      const el = document.createElement("div");
+      el.className = `work ${w.kind}`;
+      a.parentElement.after(el);
+      draw(el, w, w.starter);
+      a.replaceWith(document.createTextNode("starter shown below"));
+    }));
+  }
+
   $("g-save").addEventListener("click", async () => {
     $("g-error").textContent = "";
     const v = $("g-final").value === "" ? null : Number($("g-final").value);
@@ -672,6 +761,28 @@ async function review(id) {
         suggested_points: grade?.suggested_points ?? final?.result.points ?? null, max_points: grade?.max_points ?? final?.result.max_points ?? null }));
       $("g-msg").textContent = `Approved just now by ${me}`;
     } catch (e) { $("g-error").textContent = e.message; }
+  });
+
+  $("rg-go")?.addEventListener("click", async () => {
+    const btn = $("rg-go");
+    $("rg-error").textContent = "";
+    btn.disabled = true;
+    $("rg-msg").textContent = "Grading… this takes up to a minute.";
+    try {
+      const { data } = await sb.auth.getSession();
+      const r = await fetch(`${cfg.supabaseUrl.replace(/\/$/, "")}/functions/v1/viva`, {
+        method: "POST",
+        headers: { "content-type": "application/json", Authorization: `Bearer ${data.session?.access_token || ""}` },
+        body: JSON.stringify({ action: "regrade", attempt: id, note: $("rg-note").value }),
+      });
+      const out = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(out.error || `The grader failed (${r.status}).`);
+      if (location.hash === `#/t/${id}`) review(id);
+    } catch (e) {
+      $("rg-error").textContent = e.message;
+      $("rg-msg").textContent = "";
+      btn.disabled = false;
+    }
   });
 
   let at = 0;

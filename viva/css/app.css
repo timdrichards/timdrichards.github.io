@@ -196,3 +196,14 @@ tr.flag td { background: var(--warn-bg); }
 .hint-ask { background: #fff6dd; border-top: 1px solid #f0d58a; padding: .6rem 1rem; color: #5b4300; }
 .hint-ask p { margin: .2rem 0; }
 #hint-btn { white-space: nowrap; }
+
+/* Code and math answers */
+.codebox { text-align: left; }
+.mathbox { display: block; width: 100%; font-size: 1.4rem; padding: .4rem .6rem; border: 1px solid var(--border); border-radius: 6px; background: #fff; color: #111; }
+.mathbox::part(menu-toggle) { display: none; }
+.msg .work { display: block; margin-top: .4rem; background: #fff; color: #111; border-radius: 6px; border: 1px solid rgba(0,0,0,.15); overflow: auto; max-height: 22rem; text-align: left; }
+.msg .work .cm-editor { border: 0; }
+.msg .work.math { padding: .4rem .7rem; font-size: 1.2rem; }
+.msg .work-tag { display: block; margin-top: .3rem; font-size: .8rem; opacity: .85; }
+.work .cm-content { min-height: 0; }
+.work .cm-scroller { max-height: 20rem; }

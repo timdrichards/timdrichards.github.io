@@ -2,8 +2,8 @@
 // or one written by hand) into the values the assessment form holds. Plain module, no DOM, so it
 // is tested in Node (private/test/import.test.mjs).
 
-const TEXT = ["title", "course", "student_intro", "opening_question", "interviewer_brief", "answer_key", "transfer_settings"];
-const BOOL = ["require_screen", "allow_paste", "allow_drawing", "ask_confidence"];
+const TEXT = ["title", "course", "student_intro", "opening_question", "interviewer_brief", "answer_key", "transfer_settings", "code_language"];
+const BOOL = ["require_screen", "allow_paste", "allow_drawing", "ask_confidence", "allow_code", "allow_math"];
 const NUM = {   // field: [min, max], as on the form
   time_limit_min: [1, 180], min_turns: [1, 50], max_turns: [1, 60], capture_every_sec: [2, 120],
   revisit_max: [0, 4], hint_limit: [0, 5],
@@ -38,7 +38,10 @@ export function readAssessment(text) {
     } else if (k === "diagrams") {
       if (!Array.isArray(v)) throw new Error('"diagrams" should be a list.');
       values.diagrams = v.map((d, i) => {
-        if (!d || typeof d !== "object") throw new Error(`Diagram ${i + 1} is not an object.`);
+        if (!d || typeof d !== "object") throw new Error(`Answer area ${i + 1} is not an object.`);
+        const base = { title: String(d.title || ""), prompt: String(d.prompt || ""), when: String(d.when || "") };
+        if (d.kind === "code") return { id: typeof d.id === "string" && d.id ? d.id : `code${i + 1}`, kind: "code", ...base, language: String(d.language || ""), starter: String(d.starter || "") };
+        if (d.kind === "math") return { id: typeof d.id === "string" && d.id ? d.id : `math${i + 1}`, kind: "math", ...base, starter: String(d.starter || "") };
         return { id: typeof d.id === "string" && d.id ? d.id : `d${i + 1}`, title: String(d.title || ""), prompt: String(d.prompt || ""),
                  when: String(d.when || ""), scene: d.scene && typeof d.scene === "object" ? d.scene : null };
       });

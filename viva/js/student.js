@@ -9,9 +9,13 @@
 //   - blocked pastes, the screen share stopping, leaving full screen.
 // Answers can be drawings (js/draw.js): the server may open a drawing area for an answer, with a
 // starting diagram from the instructor, and the student can open a blank one with Draw. Each
-// answer can carry how sure the student is (1-5), which the AIs never see.
+// answer can carry how sure the student is (1-5), which the AIs never see. Answers can also be
+// code (js/code.js, CodeMirror) or math (js/math.js, MathLive), in areas the server opens or the
+// student opens with Code or Math; both load only when first needed. Copying out of the page is
+// turned off, with a Viva-only clipboard inside it (js/guard.js).
 
 import { Sketch } from "./draw.js";
+import { guard, registerEditor } from "./guard.js";
 
 const cfg = window.VIVA || {};
 const FN_URL = cfg.functionUrl || `${String(cfg.supabaseUrl || "").replace(/\/$/, "")}/functions/v1/viva`;
@@ -31,7 +35,21 @@ const state = {
   away: false, awayAt: 0, captureTimer: null, lastShot: 0, lastThumb: null, queue: [], uploading: false,
   firstKeyAt: 0, pasted: 0,
   pad: null, diagram: null, confidence: 0,
+  work: null,   // the open code or math area: {area, kind, editor, starter, resets, requested, unregister}
 };
+
+const loadCode = () => import("./code.js");
+const loadMath = () => import("./math.js");
+
+// Before the chat starts (the join form) pasting is fine; during it, only what the assessment allows.
+guard({
+  allowPaste: () => !state.active || !!state.info?.allow_paste,
+  onPaste: (length) => { state.pasted += length; },
+  onBlocked: (length) => {
+    if (!state.active) return;
+    call("focus", { event: "paste_blocked", detail: { length } }).then((o) => o.notice && addMsg("notice", o.notice)).catch(() => {});
+  },
+});
 
 // ---------------------------------------------------------------- server
 
@@ -100,6 +118,8 @@ function openGate() {
   show("gate-screen", i.require_screen);
   show("gate-paste", !i.allow_paste);
   show("gate-draw", !!i.allow_drawing);
+  show("gate-code", !!i.allow_code);
+  show("gate-math", !!i.allow_math);
   show("gate-conf", !!i.ask_confidence);
   show("gate-hint", i.hint_limit > 0);
   $("gate-hints").textContent = `${i.hint_limit} hint${i.hint_limit === 1 ? "" : "s"}`;
@@ -183,10 +203,23 @@ function addMsg(role, text, meta = {}) {
     v.innerHTML = Sketch.svg(meta.scene);
     d.appendChild(v);
   }
+  if (meta.code?.text) {
+    const box = document.createElement("div");
+    box.className = "work code";
+    d.appendChild(box);
+    loadCode().then(({ CodeBox }) => new CodeBox(box, { language: meta.code.language, text: meta.code.text, readOnly: true, label: "Your code" })).catch(() => { box.textContent = meta.code.text; });
+  }
+  if (meta.math?.latex) {
+    const box = document.createElement("div");
+    box.className = "work math";
+    d.appendChild(box);
+    loadMath().then(({ mathHTML }) => { box.innerHTML = mathHTML(meta.math.latex); }).catch(() => { box.textContent = meta.math.latex; });
+  }
   if (meta.diagram) {
     const a = document.createElement("span");
     a.className = "asked";
-    a.textContent = `Drawing area opened below: ${meta.diagram.title}`;
+    const what = { code: "Code area", math: "Math area" }[meta.diagram.kind] || "Drawing area";
+    a.textContent = `${what} opened below: ${meta.diagram.title}`;
     d.appendChild(a);
   }
   $("log").appendChild(d);
@@ -206,12 +239,14 @@ function startChat() {
   }
   for (const m of state.info.messages) addMsg(m.role, m.content, m.meta || {});
   show("draw-btn", !!state.info.allow_drawing);
+  show("code-btn", !!state.info.allow_code);
+  show("math-btn", !!state.info.allow_math);
   show("confidence", !!state.info.ask_confidence);
   state.hintsLeft = Math.max(0, (state.info.hint_limit || 0) - (state.info.hints_used || 0));
   showHints();
   const said = state.info.messages.filter((m) => m.role !== "notice" && m.role !== "helper");
   const last = said.at(-1);
-  if (last?.role === "interviewer" && last.meta?.diagram) openDrawing(last.meta.diagram, true);
+  if (last?.role === "interviewer" && last.meta?.diagram) openArea(last.meta.diagram, true);
   state.active = true;
   tick();
   state.clock = setInterval(tick, 1000);
@@ -238,13 +273,6 @@ $("answer").addEventListener("keydown", (ev) => {
   }
 });
 
-function blockPaste(ev, length) {
-  if (state.info?.allow_paste) { state.pasted += length; return; }
-  ev.preventDefault();
-  call("focus", { event: "paste_blocked", detail: { length } }).then((o) => o.notice && addMsg("notice", o.notice)).catch(() => {});
-}
-$("answer").addEventListener("paste", (ev) => blockPaste(ev, (ev.clipboardData?.getData("text") || "").length));
-$("answer").addEventListener("drop", (ev) => blockPaste(ev, (ev.dataTransfer?.getData("text") || "").length));
 
 // ---------------------------------------------------------------- drawing
 
@@ -256,8 +284,7 @@ function openDrawing(diagram, requested) {
   show("draw-panel");
   $("chat").classList.add("drawing");
   state.pad = new Sketch($("pad"), { scene: diagram.scene || { items: [] }, stencils: state.info.stencils || [] });
-  state.pad.input.addEventListener("paste", (ev) => blockPaste(ev, (ev.clipboardData?.getData("text") || "").length));
-  $("draw-btn").disabled = true;
+  setAreaButtons();
   $("log").scrollTop = $("log").scrollHeight;
 }
 
@@ -266,7 +293,7 @@ function closeDrawing() {
   $("pad").innerHTML = "";
   show("draw-panel", false);
   $("chat").classList.remove("drawing");
-  $("draw-btn").disabled = false;
+  setAreaButtons();
 }
 
 $("draw-btn").addEventListener("click", () => {
@@ -275,6 +302,109 @@ $("draw-btn").addEventListener("click", () => {
 $("draw-close").addEventListener("click", () => {
   if (state.pad?.hasWork() && !confirm("Close the drawing? What you drew will be lost.")) return;
   closeDrawing();
+});
+
+// ---------------------------------------------------------------- code and math
+
+// One answer area at a time: a drawing, code or math.
+function setAreaButtons() {
+  const busy = !!state.pad || !!state.work;
+  for (const b of ["draw-btn", "code-btn", "math-btn"]) $(b).disabled = busy;
+}
+
+function openArea(area, requested) {
+  if (state.pad) closeDrawing();
+  if (state.work) closeWork();
+  if (area.kind === "code" || area.kind === "math") return openWork(area, requested);
+  openDrawing(area, requested);
+}
+
+// What the student has written in an area survives a reload of this tab.
+const draftKey = (area) => `viva.draft.${state.info?.attempt_id}.${area.id}`;
+function readDraft(area) {
+  try { return JSON.parse(sessionStorage.getItem(draftKey(area)) || "null"); } catch { return null; }
+}
+function saveDraft() {
+  const w = state.work;
+  if (!w) return;
+  try { sessionStorage.setItem(draftKey(w.area), JSON.stringify({ text: workValue(), resets: w.resets })); } catch { /* fine */ }
+}
+function clearDraft(area) {
+  try { sessionStorage.removeItem(draftKey(area)); } catch { /* fine */ }
+}
+
+function workValue() {
+  const w = state.work;
+  if (!w?.editor) return "";
+  return w.kind === "code" ? w.editor.text() : w.editor.value;
+}
+
+async function openWork(area, requested) {
+  const draft = readDraft(area);
+  const starter = String(area.starter || "");
+  const w = { area, kind: area.kind, editor: null, starter, resets: draft?.resets || 0, requested };
+  state.work = w;
+  $("work-title").textContent = area.title || (area.kind === "code" ? "Code" : "Math");
+  $("work-prompt").textContent = area.prompt || "";
+  $("work-lang").textContent = area.kind === "code" ? (area.language || "") : "";
+  show("work-reset", !!starter);
+  show("work-close", !requested);
+  $("work-box").innerHTML = "";
+  show("work-panel");
+  $("chat").classList.add("drawing");
+  setAreaButtons();
+  const typed = () => { if (!state.firstKeyAt) state.firstKeyAt = performance.now(); saveDraft(); };
+  try {
+    if (area.kind === "code") {
+      const { CodeBox } = await loadCode();
+      if (state.work !== w) return;
+      w.editor = new CodeBox($("work-box"), { language: area.language, text: draft ? draft.text : starter, onChange: typed, label: area.title || "Code" });
+      w.unregister = registerEditor(w.editor.view.dom, { selectedText: () => w.editor.selectedText(), replaceSelection: (t) => w.editor.replaceSelection(t) });
+    } else {
+      const { mathField, mathEditor } = await loadMath();
+      if (state.work !== w) return;
+      w.editor = mathField($("work-box"), { latex: draft ? draft.text : starter, onChange: typed, label: area.title || "Math" });
+      w.unregister = registerEditor(w.editor, mathEditor(w.editor));
+    }
+    w.editor.focus?.();
+  } catch (e) {
+    $("chat-error").textContent = "The answer area could not load. Reload the page; your place is kept.";
+  }
+  $("log").scrollTop = $("log").scrollHeight;
+}
+
+function closeWork() {
+  const w = state.work;
+  if (!w) return;
+  w.unregister?.();
+  if (w.kind === "code") w.editor?.destroy();
+  state.work = null;
+  $("work-box").innerHTML = "";
+  show("work-panel", false);
+  $("chat").classList.remove("drawing");
+  setAreaButtons();
+}
+
+$("work-reset").addEventListener("click", () => {
+  const w = state.work;
+  if (!w?.editor) return;
+  if (!confirm(`Start over with the starting ${w.kind}? Your changes will be lost.`)) return;
+  if (w.kind === "code") w.editor.setText(w.starter); else w.editor.value = w.starter;
+  w.resets++;
+  saveDraft();
+  w.editor.focus?.();
+});
+$("work-close").addEventListener("click", () => {
+  const w = state.work;
+  if (w && workValue().trim() && workValue() !== w.starter && !confirm("Close this area? What you wrote will be lost.")) return;
+  if (w) clearDraft(w.area);
+  closeWork();
+});
+$("code-btn").addEventListener("click", () => {
+  if (!state.pad && !state.work) openWork({ id: "free_code", kind: "code", title: "Your code", prompt: "Write your code, then press Send. You can add words in the box too.", language: state.info.code_language || "", starter: "" }, false);
+});
+$("math-btn").addEventListener("click", () => {
+  if (!state.pad && !state.work) openWork({ id: "free_math", kind: "math", title: "Your math", prompt: "Write your math, then press Send. You can add words in the box too.", starter: "" }, false);
 });
 
 // ---------------------------------------------------------------- confidence
@@ -299,8 +429,11 @@ $("compose").addEventListener("submit", async (ev) => {
   const text = $("answer").value.trim();
   if (state.waiting || !state.active) return;
   const drew = !!state.pad?.hasWork();
-  if (!text && !drew) {
+  const w = state.work;
+  const wrote = w?.editor ? workValue() : "";
+  if (!text && !drew && !wrote.trim()) {
     if (state.pad) $("chat-error").textContent = "Draw your answer (or type it) before sending.";
+    if (w) $("chat-error").textContent = `Write your answer in the ${w.kind} area (or type it) before sending.`;
     return;
   }
   if (state.info.ask_confidence && !state.confidence) { $("chat-error").textContent = "Choose how sure you are (1 to 5) before sending."; return; }
@@ -315,19 +448,22 @@ $("compose").addEventListener("submit", async (ev) => {
     state.waiting = false; $("send-btn").disabled = false;
     return;
   }
-  const mine = addMsg("student", text, drawing ? { scene: drawing.scene } : {});
+  const code = w?.kind === "code" && wrote.trim() ? { area: w.area.id, text: wrote, resets: w.resets } : null;
+  const math = w?.kind === "math" && wrote.trim() ? { area: w.area.id, latex: wrote, resets: w.resets } : null;
+  const mine = addMsg("student", text, { ...(drawing ? { scene: drawing.scene } : {}), ...(code ? { code: { language: w.area.language, text: wrote } } : {}), ...(math ? { math: { latex: wrote } } : {}) });
   $("answer").value = "";
   const typing = addMsg("interviewer typing", "Thinking…");
   const typed_ms = state.firstKeyAt ? Math.round(performance.now() - state.firstKeyAt) : null;
   try {
-    const out = await call("say", { text, typed_ms, pasted: state.pasted, confidence: state.confidence || null, drawing });
+    const out = await call("say", { text, typed_ms, pasted: state.pasted, confidence: state.confidence || null, drawing, code, math });
     typing.remove();
     if (state.pad) closeDrawing();
+    if (w) { clearDraft(w.area); closeWork(); }
     addMsg("interviewer", out.reply, out.diagram ? { diagram: out.diagram } : {});
     state.firstKeyAt = 0; state.pasted = 0;
     resetConfidence();
     if (out.done) finished(out.reply);
-    else if (out.diagram) openDrawing(out.diagram, true);
+    else if (out.diagram) openArea(out.diagram, true);
   } catch (e) {
     typing.remove();
     mine.remove();

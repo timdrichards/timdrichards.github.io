@@ -31,9 +31,12 @@
     <ul>
       <li>This conversation <strong>records when you leave this window</strong> (another app, another tab, another window) and for how long. Each time, the chat will tell you it noticed.</li>
       <li id="gate-screen">It also <strong>takes screenshots of your entire screen</strong> while you talk. When your browser asks, choose <strong>Entire Screen</strong>, not a window or a tab.</li>
-      <li id="gate-paste">Pasting into the chat is turned off.</li>
+      <li id="gate-paste">Pasting from outside this page is turned off.</li>
+      <li>Copying out of this page is turned off. Copy and paste still work inside it, for example from one line of your code to another.</li>
       <li>Answer in your own words. There is a time limit: <strong id="gate-time"></strong>.</li>
       <li id="gate-draw">Some answers may be drawings: a drawing area opens below the chat. It works with a mouse, a pen or your finger.</li>
+      <li id="gate-code" class="hidden">Some answers may be code: a code area opens below the chat. If it starts with code, you can change it, and "Start over" puts the starting code back.</li>
+      <li id="gate-math" class="hidden">Some answers may be math: a math area opens below the chat. Type math the way you would say it, such as <code>x^2</code>, <code>/</code> for a fraction or <code>sqrt</code>; on a tablet a math keyboard opens.</li>
       <li id="gate-hint">If you get stuck, press "I'm stuck" for a small hint. Each hint costs some points on that part of the question, and you will see how many before you decide. You have <strong id="gate-hints"></strong>.</li>
       <li id="gate-conf">With each answer, you say how sure you are, from 1 (guessing) to 5 (certain). It does not change your grade.</li>
     </ul>
@@ -58,6 +61,13 @@
       <button type="button" id="draw-close">Close drawing</button></div>
     <div id="pad"></div>
   </section>
+  <section class="draw-panel hidden" id="work-panel" aria-label="Answer area">
+    <div class="draw-head"><h2 id="work-title"></h2><span class="muted" id="work-prompt"></span><span class="spacer"></span>
+      <span class="muted small" id="work-lang"></span>
+      <button type="button" id="work-reset">Start over</button>
+      <button type="button" id="work-close">Close</button></div>
+    <div id="work-box"></div>
+  </section>
   <div class="confidence hidden" id="confidence" role="radiogroup" aria-label="How sure are you of this answer?">
     <span>How sure are you of this answer?</span>
     <button type="button" data-conf="1">1 Guessing</button><button type="button" data-conf="2">2</button><button type="button" data-conf="3">3</button><button type="button" data-conf="4">4</button><button type="button" data-conf="5">5 Certain</button>
@@ -69,6 +79,8 @@
   <form class="compose" id="compose">
     <textarea id="answer" rows="2" placeholder="Type your answer. Enter sends, Shift+Enter for a new line." maxlength="2500" autocomplete="off" spellcheck="true"></textarea>
     <button type="button" id="draw-btn" class="hidden" title="Answer with a drawing">Draw</button>
+    <button type="button" id="code-btn" class="hidden" title="Answer with code">Code</button>
+    <button type="button" id="math-btn" class="hidden" title="Answer with math">Math</button>
     <button type="button" id="hint-btn" class="hidden" title="Ask for a small hint (it costs points)">I'm stuck</button>
     <button class="primary" id="send-btn">Send</button>
   </form>
