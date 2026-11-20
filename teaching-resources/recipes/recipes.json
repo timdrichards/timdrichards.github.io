@@ -108,7 +108,9 @@
    "ai": "Makes variants of a worked example with steps faded out",
    "idea": "Studying worked examples beats solving cold for novices",
    "ideaHtml": "Studying worked examples beats solving cold for novices (<a class=\"cite\" href=\"references.html#atkinson2000\">Atkinson et al. 2000</a>)",
-   "tags": [],
+   "tags": [
+    "formative"
+   ],
    "fits": [
     "falling-behind",
     "passive"
@@ -145,7 +147,9 @@
    "ai": "Maps each question and assignment to an outcome, and flags outcomes with fewer than two kinds of evidence",
    "idea": "Outcomes, teaching and assessment should line up, which is constructive alignment",
    "ideaHtml": "Outcomes, teaching and assessment should line up, which is constructive alignment (<a class=\"cite\" href=\"references.html#biggs1996\">Biggs 1996</a>)",
-   "tags": [],
+   "tags": [
+    "formative"
+   ],
    "fits": [
     "exams",
     "design",
@@ -162,7 +166,10 @@
    "ai": "Flags grades that do not match the rubric for a second look",
    "idea": "A grade is fair only if it measures the work, not who graded it",
    "ideaHtml": "A grade is fair only if it measures the work, not who graded it (<a class=\"cite\" href=\"references.html#messick1995\">Messick 1995</a>)",
-   "tags": [],
+   "tags": [
+    "saves-time",
+    "feedback"
+   ],
    "fits": [
     "grading-consistency",
     "fairness"
@@ -276,7 +283,9 @@
    "ai": "Drafts outcomes with verbs you can assess, and suggests two kinds of evidence for each",
    "idea": "Bloom's revised taxonomy: name what students will be able to do",
    "ideaHtml": "Bloom&#x27;s revised taxonomy: name what students will be able to do (<a class=\"cite\" href=\"references.html#krathwohl2002\">Krathwohl 2002</a>)",
-   "tags": [],
+   "tags": [
+    "formative"
+   ],
    "fits": [
     "design",
     "exams",
@@ -405,7 +414,9 @@
    "ai": "Summarizes each student's commits, issues and pull requests for a quick check",
    "idea": "With AI everywhere, a grade has to be valid evidence of the student's own learning. Repository history shows how a student worked, such as testing as they go or working in small steps and starting early",
    "ideaHtml": "With AI everywhere, a grade has to be valid evidence of the student&#x27;s own learning (<a class=\"cite\" href=\"references.html#dawson2024\">Dawson et al. 2024</a>). Repository history shows how a student worked, such as testing as they go (<a class=\"cite\" href=\"references.html#kazerouni2019\">Kazerouni et al. 2019</a>) or working in small steps and starting early (<a class=\"cite\" href=\"references.html#kazerouni2017\">Kazerouni et al. 2017</a>)",
-   "tags": [],
+   "tags": [
+    "saves-time"
+   ],
    "fits": [
     "ai-worry",
     "teams"
@@ -442,7 +453,9 @@
    "ai": "Summarizes contribution from GitHub and drafts team agreements",
    "idea": "Groups work when members depend on each other and each is accountable. Includes a protection clause, so a student who did their own part, with evidence, and reported the problem before the deadline is not marked down for a teammate's missing work",
    "ideaHtml": "Groups work when members depend on each other and each is accountable (<a class=\"cite\" href=\"references.html#johnson2009\">Johnson and Johnson 2009</a>). Includes a protection clause, so a student who did their own part, with evidence, and reported the problem before the deadline is not marked down for a teammate&#x27;s missing work",
-   "tags": [],
+   "tags": [
+    "saves-time"
+   ],
    "fits": [
     "teams",
     "fairness"
@@ -517,7 +530,9 @@
    "ai": "Pulls grades, comments and feedback into one page, outcome by outcome",
    "idea": "Close the loop by lining outcomes, teaching and assessment up again",
    "ideaHtml": "Close the loop by lining outcomes, teaching and assessment up again (<a class=\"cite\" href=\"references.html#biggs1996\">Biggs 1996</a>)",
-   "tags": [],
+   "tags": [
+    "feedback"
+   ],
    "fits": [
     "design"
    ],
@@ -684,7 +699,9 @@
    "ai": "Drafts practice scenarios for role-play in staff training",
    "idea": "Tutoring depends on reading the student's thinking, which can be practiced",
    "ideaHtml": "Tutoring depends on reading the student&#x27;s thinking, which can be practiced (<a class=\"cite\" href=\"references.html#markel2021\">Markel and Guo 2021</a>)",
-   "tags": [],
+   "tags": [
+    "student-contact"
+   ],
    "fits": [
     "staff"
    ],
