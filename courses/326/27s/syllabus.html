@@ -52,6 +52,7 @@
 <li><a href="#learning-objectives" id="toc-learning-objectives">Learning Objectives</a></li>
 <li><a href="#time-commitment" id="toc-time-commitment">Time Commitment</a></li>
 <li><a href="#course-structure-synopsis" id="toc-course-structure-synopsis">Course Structure Synopsis</a></li>
+<li><a href="#required-books-equipment-and-technology" id="toc-required-books-equipment-and-technology">Required Books, Equipment, and Technology</a></li>
 <li><a href="#development-environment" id="toc-development-environment">Development Environment</a></li>
 <li><a href="#assignments" id="toc-assignments">Assignments</a></li>
 <li><a href="#schedule" id="toc-schedule">Schedule</a></li>
@@ -81,12 +82,23 @@
 <li><strong>Credits:</strong> 4</li>
 <li><strong>Prerequisites:</strong> COMPSCI 220 with a grade of C or better, or INFO 248 and CICS 210 (or COMPSCI 187) with a grade of C or better. If you are from another academic institution or have unique circumstances, you must submit an <a href="https://www.cics.umass.edu/academics/course-overrides/undergraduate-overrides">override request</a> to be considered for enrollment.</li>
 </ul>
+<p><strong>At a glance</strong></p>
+<ul>
+<li><strong>Your grade:</strong> no exams. Homework 22%, sprints 23%, final project 19%, quizzes 9%, labs 7%, and in-class and preparation work (exit tickets, lab exit tickets, reading checks, participation) 20%. Letter grades follow the scale below, with no curve.</li>
+<li><strong>Late work:</strong> four late tokens for homework and labs, at most two on one assignment, with nothing to request; Canvas shows how many you have left. Sprints and the final project are hard deadlines.</li>
+<li><strong>Missed class:</strong> your lowest three exit tickets, lowest three lab exit tickets and lowest two reading checks are dropped. No note needed.</li>
+<li><strong>Regrades:</strong> within one week of the grade posting, citing the rubric line.</li>
+<li><strong>AI:</strong> no AI may write code, prose, or designs that are being evaluated. The AI Statement says what it may do.</li>
+<li><strong>Reach us:</strong> the Canvas Inbox, addressed to the whole staff. Not email.</li>
+<li><strong>Where things are:</strong> Canvas has the dated calendar, due dates, office hours and grades. Homework and labs are submitted in Gradescope, through Canvas.</li>
+</ul>
 <h2 id="description">Description</h2>
 <p>The web is arguably today’s most important application platform. Web browsers run on practically every device, and even many phone applications are in fact web applications under the covers. This course covers a broad range of client-side web technologies, including HTTP itself, HTML5, CSS, and JavaScript; it additionally covers key concepts for the server side of web applications, including persistent storage and databases. This course is hands-on and heavily project-based; students will construct a substantial dynamic web application based on the concepts, technologies, and techniques presented in the knowledge units. This course satisfies the IE Requirement and an Elective for both the CS and INFORM Majors.</p>
 <p><em>This course is concept-first and experiential. You will build a real running server early in the course and a complete full-stack application by the last. Each knowledge unit earns the next one, and the team project runs alongside the entire course, so the skills you practice each week go directly into something you are building.</em></p>
 <h2 id="staff">Staff</h2>
 <ul>
 <li><strong>Instructor:</strong> Tim Richards</li>
+<li><strong>Email:</strong> tdr@umass.edu, for the record only. Course questions go through the Canvas Inbox; see Communication.</li>
 <li><strong>Teaching assistants and undergraduate course assistants:</strong> listed on Canvas when the term opens.</li>
 <li><strong>Office hours:</strong> the full schedule, with rooms and Zoom links, is posted on Canvas in the first week. Your Friday lab is also staffed by a TA and a UCA, so it is a good place to bring something you are stuck on.</li>
 </ul>
@@ -107,6 +119,49 @@
 <li><p>Implement authentication and role-based authorization to control access to application resources.</p></li>
 <li><p>Plan, build, and present a complete full-stack web application as part of a team.</p></li>
 </ol>
+<h3 id="outcomes-and-the-work-that-shows-them">Outcomes and the work that shows them</h3>
+<p>The twelve objectives come down to five things you will be able to do. Each is graded through the work listed beside it.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">You will be able to</th>
+<th style="text-align: left;">Objectives</th>
+<th style="text-align: left;">Where it is shown and graded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Build the server side of a web application</td>
+<td style="text-align: left;">2, 6, 7, 11</td>
+<td style="text-align: left;">Homework, Sprints 1 to 4, quizzes</td>
+</tr>
+<tr>
+<td style="text-align: left;">Build an accessible, responsive front end that talks to it</td>
+<td style="text-align: left;">3, 4, 8, 10</td>
+<td style="text-align: left;">Homework, Sprints 2 and 3, quizzes</td>
+</tr>
+<tr>
+<td style="text-align: left;">Work in a professional toolchain: containers, Git, tests</td>
+<td style="text-align: left;">1, 5, 9</td>
+<td style="text-align: left;">Labs, sprints</td>
+</tr>
+<tr>
+<td style="text-align: left;">Explain how the web works underneath</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Reading checks, exit tickets, quizzes</td>
+</tr>
+<tr>
+<td style="text-align: left;">Plan, build and present a full-stack application with a team</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">Sprint 5 and the final project</td>
+</tr>
+</tbody>
+</table>
 <h2 id="time-commitment">Time Commitment</h2>
 <p><em>Plan for roughly thirteen to fourteen hours a week, most of it self-paced around the scheduled meetings.</em></p>
 <p>UMass Amherst defines course workload by a standard credit hour rule. For a four-credit course, the University expects at least 180 hours of total work across the term. Spread across the semester’s instructional weeks, that comes to roughly thirteen to fourteen hours a week. The course covers 18 knowledge units, 10 labs, and a full team project arc.</p>
@@ -136,6 +191,9 @@
 <p>All course communication happens through the <strong>Canvas Inbox</strong>. <strong>Do not send email directly to the instructor or to the course staff.</strong> Administrative questions go to the instructor alone. Questions about the course material go to the entire course staff, so that whoever is free first can answer. Answers worth the whole class seeing are posted to a Frequently Asked Questions page on Canvas and kept up to date. See the full Communication section below for how to address a message and what to put in it.</p>
 <h3 id="spire">Spire</h3>
 <p>Final grades will be posted to Canvas before they are submitted to Spire. You are expected to check your grades in both places to ensure that everything adds up. You are responsible for ensuring that your grades are accurate and that you have received credit for all assignments that you submitted by the posted deadline. If you notice any discrepancies, send the instructor a Canvas Inbox message immediately.</p>
+<h2 id="required-books-equipment-and-technology">Required Books, Equipment, and Technology</h2>
+<p><em>No textbook, one container that carries the entire stack, and a laptop that can run it.</em></p>
+<p>There is no textbook and nothing to buy: the knowledge units on Canvas are the reading. What this course requires is a laptop you control that can run Docker and the containerized development environment. A laptop is necessary, not a desktop, because the work happens in lecture and lab as well as at home. You need a reasonably current laptop running macOS, Windows, or Linux, with enough memory and disk space to run Docker comfortably; eight gigabytes of RAM is a practical minimum and sixteen is more comfortable. The software is free and is described in the next section.</p>
 <h2 id="development-environment">Development Environment</h2>
 <p>This course uses development containers (devcontainers) to provide a consistent development environment for all students. Devcontainers are a way to package and distribute development environments using Docker containers. This allows you to have a consistent environment across different machines and operating systems, and ensures that you have all the necessary tools and dependencies installed.</p>
 <p>You are not required to know much about Docker or devcontainers to begin, but you will need to have Docker installed on your machine, and over the course of the term you will come to understand containers as the production deployment model for modern web applications. You are required to use the devcontainer for all course-related work, including coding exercises, assignments, and the project.</p>
@@ -151,7 +209,7 @@
 <col style="width: 7%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th></th>
 <th></th>
 <th>Assessment Type</th>
@@ -160,154 +218,154 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Exercises</strong></td>
 <td>Short activities built into each KU</td>
 <td>F</td>
 <td>many</td>
 <td>0%</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Participation</strong></td>
 <td>Small participatory tasks</td>
 <td></td>
 <td></td>
 <td>4%</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Exit Tickets</strong></td>
 <td>In-class work, one per lecture, lowest three dropped</td>
 <td>F</td>
 <td>26</td>
 <td>8%</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Lab Exit Tickets</strong></td>
 <td>In lab, one per lab section meeting, lowest three dropped</td>
 <td>F</td>
 <td>10</td>
 <td>3%</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Reading Checks</strong></td>
 <td>Before each lecture, lowest two dropped</td>
 <td>F</td>
 <td>18</td>
 <td>5%</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Quizzes</strong></td>
 <td></td>
 <td></td>
 <td></td>
 <td>9%</td>
 </tr>
-<tr class="odd">
+<tr>
 <td></td>
 <td>Quiz</td>
 <td>F</td>
 <td>6</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Homework</strong></td>
 <td></td>
 <td></td>
 <td></td>
 <td>22%</td>
 </tr>
-<tr class="odd">
+<tr>
 <td></td>
 <td>Homework</td>
 <td>FS</td>
 <td>4</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Labs</strong></td>
 <td></td>
 <td></td>
 <td></td>
 <td>7%</td>
 </tr>
-<tr class="odd">
+<tr>
 <td></td>
 <td>Lab</td>
 <td>F</td>
 <td>10</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Sprints</strong></td>
 <td></td>
 <td></td>
 <td></td>
 <td>23%</td>
 </tr>
-<tr class="odd">
+<tr>
 <td></td>
 <td>Sprint 0: Team Formation</td>
 <td>F</td>
 <td>1</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td></td>
 <td>Sprint 1: First Running Server</td>
 <td>FS</td>
 <td>1</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td></td>
 <td>Sprint 2: First Feature, First Vertical Slice</td>
 <td>FS</td>
 <td>1</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td></td>
 <td>Sprint 3: Database, Tests, and a Real Frontend</td>
 <td>FS</td>
 <td>1</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td></td>
 <td>Sprint 4: Security, Authorization, and Pre-Demo Audit</td>
 <td>FS</td>
 <td>1</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Project</strong></td>
 <td></td>
 <td></td>
 <td></td>
 <td>19%</td>
 </tr>
-<tr class="odd">
+<tr>
 <td></td>
 <td>GitHub Repository URL</td>
 <td>S</td>
 <td>1</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td></td>
 <td>Recorded Video Demonstration</td>
 <td>S</td>
 <td>1</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td></td>
 <td>Project Poster</td>
 <td>S</td>
 <td>1</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td></td>
 <td>Reflection</td>
 <td>S</td>
@@ -318,7 +376,7 @@
 </table>
 <h3 id="participation">Participation</h3>
 <p><strong><em>Small, low-stakes tasks spread across the term that keep you engaged with the course and your peers.</em></strong></p>
-<p>Participation tasks appear throughout the weekly modules and take a variety of forms: discussion posts, short reflection forms, surveys, and other brief activities. They are not timed and not difficult; the expectation is simply that you show up and engage. Each task is graded on completion. Together, participation tasks make up four percent of your final grade. What counts as a participation task will be clearly labeled in each module on Canvas. Exit tickets are counted separately, in their own category. See below.</p>
+<p>Participation tasks appear throughout the weekly modules and take a variety of forms: discussion posts, short reflection forms, surveys, and other brief activities. They are not timed and not difficult; the expectation is simply that you show up and engage. Each task is graded on completion. Together, participation tasks make up four percent of your final grade. What counts as a participation task will be clearly labeled in each module on Canvas. Exit tickets are counted separately, in their own category. See below. In Week 1 there is also a five-question syllabus quiz, auto-graded on Canvas, so you know where the rules are before you need them.</p>
 <p><strong>Exit tickets: eight percent.</strong> The exit ticket you submit at the end of each lecture is its own category, worth eight percent of your final grade. That is not a score for being in the room. It records the in-class work: who you paired with, and what your pair decided and why. Showing up and not doing that work does not earn it.</p>
 <p><strong>The lowest three are dropped automatically</strong>, for everyone, with no reason needed and nothing to request. That covers illness, an interview, a bad morning, and a phone that would not submit. Beyond three, each further absence costs about a third of one percent, so an occasional miss stays cheap. What it will not survive is not coming: a student who misses every lecture but does everything else perfectly finishes at 92, which is an A minus rather than an A. That is deliberate. This course is built around what happens in the room, and a grade that says you mastered it without ever being there would not be telling the truth.</p>
 <p><strong>Lab exit tickets: three percent.</strong> Friday lab has its own short exit ticket, in its own category, worth three percent. It works the same way as the lecture one and is graded the same way, on submitting it rather than on what it says. The window differs by section, because the two lab sections meet at different times: it opens fifteen minutes before your own section ends and closes five minutes after. <strong>The lowest three of the ten are dropped</strong>, automatically and for everyone, which is what covers an illness, a conflict, or a morning that simply went wrong. Missing lab does not put an A out of reach on its own, unlike missing lecture; the two together do.</p>
@@ -415,7 +473,7 @@
 <col style="width: 41%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">Week</th>
 <th style="text-align: left;">Units</th>
 <th style="text-align: left;">Lab</th>
@@ -423,67 +481,67 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><strong>1</strong></td>
 <td style="text-align: left;">01 Hello Web; 02 Routes and Responses</td>
 <td style="text-align: left;">Lab 01 First Commit, First Push</td>
-<td style="text-align: left;">Sprint 0 (A)</td>
+<td style="text-align: left;">Sprint 0 (A), Syllabus quiz</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><strong>2</strong></td>
 <td style="text-align: left;">03 Serving HTML and Templates; 04 Designing with CSS</td>
 <td style="text-align: left;">Lab 02 Branching and the Pull Request</td>
 <td style="text-align: left;">Sprint 0 (D), Sprint 1 (A), Homework 1 (A)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><strong>3</strong></td>
 <td style="text-align: left;">05 JSON: Data’s Native Language; 06 HTTP: The Protocol Underneath</td>
 <td style="text-align: left;">Lab 03 Pulling, Merging, and Resolving Conflicts</td>
 <td style="text-align: left;">Sprint 1 (D)</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><strong>4</strong></td>
 <td style="text-align: left;">07 Living with Asynchrony; 08 Forms and Fetch</td>
 <td style="text-align: left;">Lab 04 Reading History with Log and Diff</td>
 <td style="text-align: left;">Homework 1 (D), Homework 2 (A)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><strong>5</strong></td>
 <td style="text-align: left;">09 Modules and Middleware; 10 CRUD Against a File</td>
 <td style="text-align: left;">Lab 05 Stashing Work and Switching Context</td>
 <td style="text-align: left;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><strong>6</strong></td>
 <td style="text-align: left;">11 Routes, Controllers, Services, Repositories; 12 From File to Real Database</td>
 <td style="text-align: left;">Lab 06 Cleaning History with Interactive Rebase</td>
 <td style="text-align: left;">Sprint 2 (A), Homework 2 (D), Homework 3 (A)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><strong>7</strong></td>
 <td style="text-align: left;">13 Tests as Specifications; 14 Partial Reloads with HTMX</td>
 <td style="text-align: left;">Lab 07 Finding Bugs with Bisect</td>
 <td style="text-align: left;">Sprint 2 (D)</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><strong>8</strong></td>
 <td style="text-align: left;">15 Designing with Tailwind; 16 Accessibility as a Default</td>
 <td style="text-align: left;">Lab 08 Marking Stable Work with Tags</td>
 <td style="text-align: left;">Sprint 3 (A), Homework 3 (D), Homework 4 (A)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><strong>9</strong></td>
 <td style="text-align: left;">17 Cookies, Sessions, and Tokens</td>
 <td style="text-align: left;">Lab 09 Moving Targeted Commits with Cherry-Pick</td>
 <td style="text-align: left;">Sprint 3 (D)</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><strong>10</strong></td>
 <td style="text-align: left;">18 Authorization, Roles, and Rules</td>
 <td style="text-align: left;">Lab 10 Working Across Branches with Worktree</td>
 <td style="text-align: left;">Sprint 4 (A), Homework 4 (D)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><strong>11 to end</strong></td>
 <td style="text-align: left;">No new units, project work</td>
 <td style="text-align: left;"></td>
@@ -494,12 +552,13 @@
 <p>Week 9 and Week 10 each have one lecture without a new unit, kept for review and help time. Spring holidays and recess are on the University academic calendar; the Canvas calendar accounts for them.</p>
 <h2 id="grades">Grades</h2>
 <p>All grades will be recorded and available in the Canvas Gradebook. Make sure you check your grades on a regular basis to ensure that they are correct. Homework and labs are graded by Gradescope, which you reach through the assignment in Canvas. Those scores are transferred into the Canvas Gradebook, so Canvas stays the single place to check where you stand.</p>
+<p><strong>Regrades.</strong> Ask within one week of the grade posting, citing the rubric line you think was misapplied: through Gradescope’s regrade request for homework and labs, and through a Canvas Inbox message to the staff for everything else. After a week the grade stands.</p>
 <h2 id="grading-scale">Grading Scale</h2>
 <p><em>The number you earn maps to a letter with no curve and no surprises.</em></p>
 <p>Final grades are computed from the weighted categories in the Assignments section and converted to a letter using the scale below. Grades are not curved. Your final percentage is rounded to the nearest whole number once, at the end of the term, so an 89.5 becomes a 90 and an 89.4 does not.</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Letter</th>
 <th style="text-align: left;">Range</th>
 <th style="text-align: left;"></th>
@@ -508,42 +567,42 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">A</td>
 <td style="text-align: left;">93 to 100</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">C</td>
 <td style="text-align: left;">73 to 76</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">A-</td>
 <td style="text-align: left;">90 to 92</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">C-</td>
 <td style="text-align: left;">70 to 72</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">B+</td>
 <td style="text-align: left;">87 to 89</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">D+</td>
 <td style="text-align: left;">67 to 69</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">B</td>
 <td style="text-align: left;">83 to 86</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">D</td>
 <td style="text-align: left;">60 to 66</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">B-</td>
 <td style="text-align: left;">80 to 82</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">below 60</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">C+</td>
 <td style="text-align: left;">77 to 79</td>
 <td style="text-align: left;"></td>
@@ -613,12 +672,12 @@ Failing commit: <code>github.com/team-cactus/326-project/commit/8c41f2a</code></
 <h2 id="course-policies">Course Policies</h2>
 <p><em>Engagement, late work, incompletes, and exemptions.</em></p>
 <p>This course has scheduled meetings (lecture twice a week, lab on Friday), and attendance at both factors into your Participation grade. Attendance alone is not the whole picture, though: the course moves steadily across the semester, each week builds on the one before, and because this is a building course, one missing piece can block everything downstream. Your engagement is measured by showing up, by the on-time completion of quizzes and homework, and by steady, visible contribution to your team’s project in GitHub.</p>
-<p>Late work is handled differently depending on what kind of work it is. Homework assignments and labs may be turned in late for up to two days past the due date, with a deduction of ten percent per day; after two days they are no longer accepted and are scored as zero. Sprint deliverables and the final project submission are hard deadlines and are not eligible for the late allowance, because your teammates and the staff depend on that work being in place on time and because the schedule has no slack to absorb a slipped milestone. If something is going to prevent you from meeting any deadline, send me a Canvas Inbox message requesting an extension before the deadline passes. Proactive communication is the rule in this course, not a courtesy.</p>
+<p>Late work is handled differently depending on what kind of work it is. <strong>Homework and labs: four late tokens.</strong> Each student has four late tokens for the term. Each one gives one extra day on a homework or a lab, at most two on any one assignment. You do not ask for them. Your tokens show in the Canvas gradebook as a Late Tokens item that counts for no points, so you can always see how many you have left. Once your tokens are used, late homework and labs lose ten percent per day and are accepted for up to two days. <strong>Sprint deliverables and the final project are hard deadlines</strong> and take no tokens, because your teammates and the staff depend on that work being in place on time and because the schedule has no slack to absorb a slipped milestone. An extension beyond these rules needs an excused absence under the University’s attendance regulation (illness, religious observance, a University-sanctioned activity, or an emergency). Send me a Canvas Inbox message before the deadline when you can.</p>
 <p>Incomplete grades follow university policy. An Incomplete (INC) may be granted only when a student who has been in good standing and has completed a substantial portion of the coursework is prevented by serious circumstances beyond their control from finishing on time. An Incomplete is never a substitute for a low grade and must be arranged with the instructor through a written agreement before the end of the term that specifies the remaining work and the completion date.</p>
 <p>There are no exemptions from individual assignments. Every student completes the same work, with the single exception of arrangements made through Disability Services or for documented religious observance, both of which are described in the sections below.</p>
 <h2 id="academic-honesty-and-collaboration">Academic Honesty and Collaboration</h2>
 <p><em>What honest work looks like here, what counts as collaboration, and how to disclose AI use.</em></p>
-<p>This statement is required by the University and is reproduced verbatim. Since the integrity of the academic enterprise of any institution of higher education requires honesty in scholarship and research, academic honesty is required of all students at the University of Massachusetts Amherst. Academic dishonesty is prohibited in all programs of the University. Academic dishonesty includes but is not limited to: cheating, fabrication, plagiarism, and facilitating dishonesty. Appropriate sanctions may be imposed on any student who has committed an act of academic dishonesty. Since students are expected to be familiar with this policy and the commonly accepted standards of academic integrity, ignorance of such standards is not normally sufficient evidence of lack of intent. For more information on the process and resolution of complaints, contact the Academic Honesty Office, 511 Goodell, (413) 577-6767, <a href="mailto:honesty@umass.edu">honesty@umass.edu</a>.</p>
+<p>The following statement is required by the University and is reproduced verbatim from the <a href="https://www.umass.edu/senate/book/responsible-employee-required-syllabus-statements">Faculty Senate, Responsible Employee Required Syllabus Statements</a>. UMass Amherst is strongly committed to academic integrity, which is defined as completing all academic work without cheating, lying, stealing, or receiving unauthorized assistance from any other person, or using any source of information not appropriately authorized or attributed. As a community, we hold each other accountable and support each other’s knowledge and understanding of academic integrity. Academic dishonesty is prohibited in all programs of the University and includes but is not limited to: Cheating, fabrication, plagiarism, lying, and facilitating dishonesty, via analogue and digital means. Sanctions may be imposed on any student who has committed or participated in an academic integrity infraction. Any person who has reason to believe that a student has committed an academic integrity infraction should bring such information to the attention of the appropriate course instructor as soon as possible. All students at the University of Massachusetts Amherst have read and acknowledged the Commitment to Academic Integrity and are knowingly responsible for completing all work with integrity and in accordance with the policy: (<a href="https://www.umass.edu/senate/book/academic-regulations-academic-integrity-policy" class="uri">https://www.umass.edu/senate/book/academic-regulations-academic-integrity-policy</a>)</p>
 <p>Because this course is built around a team project, it helps to be explicit about where collaboration is expected and where it is not. Within your own project team, collaboration is the point: you share a repository, you co-design, and you build together. Across teams, and on all individual work such as quizzes, homework, and the individual reflection, the work you submit must be your own. You may discuss concepts with classmates, but you may not copy another student’s code or homework submissions, and you may not share your own for copying. Submitting another person’s work as your own, or handing your work to someone else to submit, is facilitating dishonesty and is treated as a violation.</p>
 <h2 id="ai-statement">AI Statement</h2>
 <p><em>AI is a tool you may learn with. It is not a tool that does your work.</em></p>
@@ -635,29 +694,29 @@ Failing commit: <code>github.com/team-cactus/326-project/commit/8c41f2a</code></
 <col style="width: 23%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Level</th>
 <th style="text-align: left;">What AI may do</th>
 <th style="text-align: left;">What it may never do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><strong>Level 0: No AI</strong></td>
 <td style="text-align: left;">Nothing. Do not use an AI tool on this.</td>
 <td style="text-align: left;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><strong>Level 1: General questions</strong></td>
 <td style="text-align: left;">Answer general questions about JavaScript, Express, HTTP, Git, or any other topic the course covers.</td>
 <td style="text-align: left;">See your code, your error output, or the assignment text.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><strong>Level 2: Show and critique</strong></td>
 <td style="text-align: left;">Look at work you already wrote and tell you what is wrong with it or how it could be better.</td>
 <td style="text-align: left;">Tell you what to write.</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><strong>Level 3: Unrestricted, on declared support work</strong></td>
 <td style="text-align: left;">Anything at all, including writing the code, but only on parts of a project that you have declared and that no rubric line assesses.</td>
 <td style="text-align: left;">Touch anything a rubric assesses, or go undeclared.</td>
@@ -680,41 +739,41 @@ Failing commit: <code>github.com/team-cactus/326-project/commit/8c41f2a</code></
 <col style="width: 35%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Assignment</th>
 <th style="text-align: left;">Level</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">Quizzes 1-6</td>
 <td style="text-align: left;"><strong>Level 0</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">Homework 1 and 2</td>
 <td style="text-align: left;"><strong>Level 1</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">Homework 3 and 4</td>
 <td style="text-align: left;"><strong>Level 2</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">Labs 1-10</td>
 <td style="text-align: left;"><strong>Level 1</strong>, plus the rule below</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">Sprints 0-5, including README and diagrams</td>
 <td style="text-align: left;"><strong>Level 2</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">Project: repository, video, poster, reflection</td>
 <td style="text-align: left;"><strong>Level 2</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">Reading checks, exit tickets, and the Team Formation Survey</td>
 <td style="text-align: left;"><strong>Level 0</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">Discussions and Reflections</td>
 <td style="text-align: left;"><strong>Level 2</strong></td>
 </tr>
@@ -753,21 +812,21 @@ Failing commit: <code>github.com/team-cactus/326-project/commit/8c41f2a</code></
 <col style="width: 93%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Level</th>
 <th style="text-align: left;">What to write</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><strong>Level 1</strong></td>
 <td style="text-align: left;">One sentence: what you asked about. No transcript.</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><strong>Level 2</strong></td>
 <td style="text-align: left;">A few sentences: what you asked, what it said, what you changed and why. Include the exchange if you have it. If the tool does not produce a transcript, describe what it looked at.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">Level 3</td>
 <td style="text-align: left;">What the part is, where it lives in the repository, what job it does, why no rubric line covers it, and what the AI did. No transcript needed. Declare it before the work is graded, not after.</td>
 </tr>
@@ -798,14 +857,15 @@ Failing commit: <code>github.com/team-cactus/326-project/commit/8c41f2a</code></
 <p>What I owe you in exchange is a straight answer. <strong>Ask me, about anything in this course, how I checked that a given claim was true</strong>, and you will get one. If something here is wrong, I want to hear about it.</p>
 <h2 id="disability-accommodation-statement">Disability Accommodation Statement</h2>
 <p><em>Reasonable accommodations are available; the sooner you register, the sooner they apply.</em></p>
-<p>The following statement is required by the University and is reproduced verbatim. The University of Massachusetts Amherst is committed to providing an equal educational opportunity for all students. If you have a documented physical, psychological, or learning disability on file with Disability Services (DS), you may be eligible for reasonable academic accommodations to help you succeed in this course. If you have a documented disability that requires an accommodation, please notify me within the first two weeks of the semester so that we may make appropriate arrangements. For more information, consult the Disability Services website.</p>
-<p>Disability Services is located at 161 Whitmore Administration Building and can be reached at (413) 545-0892.</p>
+<p>The following statement is required by the University and is reproduced verbatim from the <a href="https://www.umass.edu/senate/book/responsible-employee-required-syllabus-statements">Faculty Senate, Responsible Employee Required Syllabus Statements</a>. The University of Massachusetts Amherst is committed to making reasonable, effective, and appropriate accommodations to meet the needs of students with disabilities and help create a barrier-free campus. If you have a disability and require accommodations, please register with Disability Services, meet with an Access Coordinator in Disability Services, and send your accommodation letter to your faculty. Information on services and registration is available on the Disability Services website (<a href="https://www.umass.edu/disability/" class="uri">https://www.umass.edu/disability/</a>)</p>
+<p>Disability Services is in 161 Whitmore Administration Building, (413) 545-0892, <a href="https://www.umass.edu/disability/">umass.edu/disability</a>.</p>
 <h2 id="diversity-equity-and-inclusion">Diversity, Equity, and Inclusion</h2>
 <p><em>A learning environment that works only when everyone in it is respected.</em></p>
 <p>The Manning College of Information and Computer Sciences and this course are committed to a learning environment in which every student is welcomed and respected regardless of race, ethnicity, national origin, gender identity or expression, sexual orientation, disability, age, religion, socioeconomic background, or veteran status. Computing is built by teams, and the best computing is built by teams whose members bring different experiences to the problem. The Computing for the Common Good framing of this course rests on that premise: the applications you build are meant to serve real communities, which requires taking seriously perspectives other than your own. I expect every interaction in this course, in your teams, in your reflections, and in any communication with the staff, to be conducted with that respect. If anything in this course, including its examples, its assignments, or the conduct of a classmate, makes you feel excluded or unwelcome, please send me a Canvas Inbox message so that I can address it.</p>
 <h2 id="title-ix-statement">Title IX Statement</h2>
 <p><em>A safe learning environment, and the resources that protect it.</em></p>
-<p>The following statement is required by the University and is reproduced verbatim. In accordance with Title IX of the Education Amendments of 1972 that prohibits gender-based discrimination in educational settings that receive federal funds, the University of Massachusetts Amherst is committed to providing a safe learning environment for all students, free from all forms of discrimination, including sexual assault, sexual harassment, domestic violence, dating violence, stalking, and retaliation. This includes interactions in person or online through digital platforms and social media. Title IX also protects against discrimination on the basis of pregnancy, childbirth, false pregnancy, miscarriage, abortion, or related conditions, including recovery. There are resources here on campus to support you. A summary of the available Title IX resources, both confidential and non-confidential, can be found at the following link: <a href="https://www.umass.edu/titleix/resources">https://www.umass.edu/titleix/resources</a>.</p>
+<p>The following statement is required by the University and is reproduced verbatim from the <a href="https://www.umass.edu/senate/book/responsible-employee-required-syllabus-statements">Faculty Senate, Responsible Employee Required Syllabus Statements</a>. In accordance with Title IX of the Education Amendments of 1972 that prohibits gender-based discrimination in educational settings that receive federal funds, the University of Massachusetts Amherst is committed to providing a safe learning environment for all students, free from all forms of discrimination, including sexual assault, sexual harassment, domestic violence, dating violence, stalking, and retaliation. This includes interactions in person or online through digital platforms and social media. Title IX also protects against discrimination on the basis of pregnancy, childbirth, false pregnancy, miscarriage, abortion, or related conditions, including recovery. There are resources here on campus to support you. A summary of the available Title IX resources (confidential and non-confidential) can be found at the following link: <a href="https://www.umass.edu/titleix/resources" class="uri">https://www.umass.edu/titleix/resources</a>. You do not need to make a formal report to access them. If you need immediate support, you are not alone. Free and confidential support is available 24 hours a day / 7 days a week / 365 days a year at the SASA Hotline 413-545-0800.</p>
+<p>For purposes of Title IX reporting, I am considered a “responsible employee” at UMass (<a href="https://www.umass.edu/titleix/about" class="uri">https://www.umass.edu/titleix/about</a>). That means that if you tell me about a situation involving sexual assault, sexual harassment, domestic violence, dating violence, stalking, and retaliation, I must share that information with the Title IX Coordinator. Making a report to the Title IX Coordinator is my legal obligation, meets the University’s goal of providing members of our community with supportive resources they might need, and enables the University to obtain a more accurate picture of the extent of sexual violence in our community. It will be completely up to you to determine if and how you want to work with the Title IX Coordinator’s office. You will not be in trouble for reporting to me that you have experienced any of these situations, and the law prohibits retaliation against anyone who participates in a Title IX process.</p>
 <h2 id="chosen-names-and-pronouns">Chosen Names and Pronouns</h2>
 <p><em>You tell us who you are, and we use it.</em></p>
 <p>I want to address you by the name and pronouns you use. If your chosen name or pronouns differ from what appears on the official roster, please send me a Canvas Inbox message at the start of the term, and I will use them in all communication and feedback. UMass Amherst allows students to designate a chosen name and a pronoun in SPIRE, which then propagates to Canvas and class rosters, and I encourage you to set these if you have not already. If I ever get your name or pronouns wrong, a quick, private Canvas Inbox message is welcome and I will fix it.</p>
