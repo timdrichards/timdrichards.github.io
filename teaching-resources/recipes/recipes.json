@@ -805,6 +805,46 @@
     "staff"
    ],
    "needs": []
+  },
+  {
+   "n": 43,
+   "title": "Exams students can prepare for",
+   "term": "Fall 2026",
+   "week": 1,
+   "out": true,
+   "ai": "Checks your questions against the blueprint and drafts practice questions that combine topics; you write the real exam",
+   "idea": "Recalling from memory beats rereading, even with no feedback, and a concept map drawn from memory works like a practice test",
+   "ideaHtml": "<strong>Feedback.</strong> Recalling from memory beats rereading, even with no feedback (<a class=\"cite\" href=\"references.html#roediger2006\">Roediger and Karpicke 2006</a>), and a concept map drawn from memory works like a practice test (<a class=\"cite\" href=\"references.html#blunt2014\">Blunt and Karpicke 2014</a>)",
+   "tags": [
+    "formative",
+    "saves-time"
+   ],
+   "fits": [
+    "exams",
+    "falling-behind"
+   ],
+   "needs": [
+    "exams"
+   ]
+  },
+  {
+   "n": 44,
+   "title": "A syllabus that runs the semester for you",
+   "term": "Fall 2026",
+   "week": 2,
+   "out": true,
+   "ai": "Checks a draft against the Senate's 14 required elements and drafts the calendar backward from fixed dates",
+   "idea": "Rules and purpose spelled out help most the students who need them, and the university requires them",
+   "ideaHtml": "Rules and purpose spelled out help most the students who need them (<a class=\"cite\" href=\"references.html#winkelmes2016\">Winkelmes et al. 2016</a>), and the university requires them (<a class=\"cite\" href=\"references.html#senate2024\">UMass Amherst Faculty Senate 2024</a>)",
+   "tags": [
+    "saves-time"
+   ],
+   "fits": [
+    "design",
+    "fairness",
+    "specs"
+   ],
+   "needs": []
   }
  ],
  "problems": {
