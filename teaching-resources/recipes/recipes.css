@@ -63,3 +63,18 @@ a.cite { white-space: nowrap; }
 }
 /* The display rules above beat the hidden attribute, so the filter needs this. */
 .recipe-list li[hidden], .term[hidden] { display: none; }
+/* Concept-map figures (guides/concept-maps.md, drawn by guides/draw_maps.py) */
+.cmap-fig { margin: var(--space-2) 0 0.4rem; overflow-x: auto; }
+.cmap-fig svg { display: block; width: 100%; min-width: 34rem; height: auto; }
+.cm-region { fill: var(--bg-alt); }
+.cm-region-label { font: 600 15px Inter, sans-serif; fill: var(--ink-soft); }
+.cm-node { fill: var(--bg); stroke: var(--forest); stroke-width: 2; }
+.cm-text { font: 600 17px Inter, sans-serif; fill: var(--forest); text-anchor: middle; }
+.cm-edge { stroke: var(--ink-soft); stroke-width: 1.6; fill: none; }
+.cm-cross { stroke: var(--clay); stroke-dasharray: 6 4; }
+.cm-head { fill: var(--ink-soft); }
+.cm-label { font: italic 14px Inter, sans-serif; fill: var(--ink); text-anchor: middle; paint-order: stroke; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
+.cmap-key { font-size: 0.9rem; color: var(--ink-soft); margin-top: 0; }
+.guide li > ul { margin-top: 0.2rem; }
+.guide li { margin-bottom: 0.2rem; }
+@media print { .cmap-fig { break-inside: avoid; } .cmap-fig svg { min-width: 0; } }
