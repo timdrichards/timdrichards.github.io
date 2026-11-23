@@ -1,6 +1,5 @@
 /* Teaching Recipes: extras on top of style.css and resources.css */
 .glance { max-width: 46rem; margin: 0 0 var(--space-3); }
-.glance { grid-column: 2; grid-row: 1; position: sticky; top: var(--space-2); }
 .recipe-wrap > .recipe { grid-column: 1; grid-row: 1; }
 .recipe-wrap > .page-nav, .recipe-wrap > .soon-page { grid-column: 1; }
 .glance { background: var(--bg-alt); border-left: 4px solid var(--sage); border-radius: 0 0.5rem 0.5rem 0; padding: var(--space-2); font-size: 0.92rem; }
@@ -55,7 +54,7 @@ a.cite { white-space: nowrap; }
 .finder-ai, .finder-results { margin-top: var(--space-3); }
 .small { font-size: 0.9rem; color: var(--ink-soft); }
 @media print {
-  .site-header, .site-footer, .page-nav, .print-note, .skip-link { display: none !important; }
+  .site-header, .site-footer, .page-nav, .print-note, .skip-link, .pin-title { display: none !important; }
   .glance { break-inside: avoid; margin-bottom: 1rem; }
   body { font-size: 10.5pt; }
   .page-head { padding: 0 0 0.5rem; }
@@ -78,3 +77,7 @@ a.cite { white-space: nowrap; }
 .guide li > ul { margin-top: 0.2rem; }
 .guide li { margin-bottom: 0.2rem; }
 @media print { .cmap-fig { break-inside: avoid; } .cmap-fig svg { min-width: 0; } }
+/* The page title, pinned under the site header once it scrolls away (js/pin-title.js) */
+.pin-title { position: fixed; left: 0; right: 0; z-index: 9; padding: 0.45rem 0; background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 1.05rem; color: var(--forest); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transform: translateY(-0.5rem); transition: opacity 0.15s, transform 0.15s; pointer-events: none; }
+.pin-title .wrap { overflow: hidden; text-overflow: ellipsis; }
+.pin-title.on { opacity: 1; transform: none; }
