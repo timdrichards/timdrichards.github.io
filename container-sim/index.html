@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Container Simulator | Tim Richards</title>
-<meta name="description" content="A browser simulator for COMPSCI 426 that animates the Docker and Docker Compose commands the course teaches: images, containers, ports, networks and volumes, with activities you can export and submit.">
+<meta name="description" content="A guided browser simulator for COMPSCI 426: run the course's Docker and Docker Compose commands step by step and watch images, containers, ports, networks and volumes change.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
 <link rel="stylesheet" href="css/sim.css">
@@ -27,95 +27,101 @@
 </header>
 
 <main id="main">
-  <section class="sim-head">
-    <h1>Container Simulator</h1>
-    <p class="lead">See what each Docker and Compose command from COMPSCI 426 does, change it, and run it again. This is a teaching model of the commands the course uses, not Docker itself: each activity ends with the same task on your own machine.</p>
-    <ol class="steps"><li><strong>Pick an activity</strong> from the list.</li><li><strong>Run its commands</strong> in the terminal and watch the picture change.</li><li><strong>Export your work</strong> when the goals are done, and submit the file in Canvas.</li></ol>
-    <div class="bar">
-      <label>Activity <select id="activity"></select></label>
-      <label>Name <input id="student-name" autocomplete="name" size="16"></label>
-      <label>UMass email <input id="student-email" type="email" autocomplete="email" size="20"></label>
-      <button type="button" id="export">Export my work</button>
-      <label class="file-btn">Import a file <input id="import" type="file" accept="application/json,.json"></label>
-      <button type="button" id="reset" class="quiet">Start this activity over</button>
-      <button type="button" id="tour" class="quiet">Take the tour</button>
+  <!-- Home: what this is, and the activities -->
+  <section id="home">
+    <div class="hero">
+      <h1>Container Simulator</h1>
+      <p class="lead">Docker is hard to learn because you can't see what it does. Here you run the commands from COMPSCI 426, one guided step at a time, and watch a picture of your laptop change: the images you build, the containers you start, the ports that connect them, the data that survives.</p>
+      <ol class="how">
+        <li><span class="how-n">1</span><div><strong>Pick an activity</strong><br>Each is one short task from a unit, 8 to 12 minutes.</div></li>
+        <li><span class="how-n">2</span><div><strong>Follow the steps</strong><br>Press Run it, watch what changes, read what it means.</div></li>
+        <li><span class="how-n">3</span><div><strong>Export and submit</strong><br>Your work saves in this browser; export the file for Canvas.</div></li>
+      </ol>
+      <p class="fine">A teaching model, not real Docker: nothing you do here can break anything. Each activity ends with the same commands to try on your own machine.</p>
     </div>
-    <p id="saved" class="saved" role="status"></p>
-    <p class="warn">Your work is saved in this browser on this computer only. Clearing the browser, a private window or another computer starts empty: export your work to keep a copy, and import it to carry on elsewhere. The exported file is what you submit in Canvas.</p>
+    <div id="cards"></div>
+    <section class="home-work" aria-labelledby="work-h">
+      <h2 id="work-h">Your work</h2>
+      <div id="work-home"></div>
+    </section>
   </section>
 
-  <section class="goals-strip" aria-label="Activity goals">
-    <div>
-      <h2>Goals</h2>
-      <p class="help">Tick off by themselves when the simulator sees them done.</p>
-      <ul id="goals" class="goals"></ul>
+  <!-- An activity: the guide on the left, the stage (picture, files, console) on the right -->
+  <section id="lesson" hidden>
+    <div class="lesson-bar">
+      <button type="button" id="back" class="link">← All activities</button>
+      <div class="lesson-title"><span id="l-unit" class="unit"></span><h1 id="l-title"></h1></div>
+      <div class="lesson-tools">
+        <span id="l-progress" class="progress" aria-live="polite"></span>
+        <button type="button" id="tour" class="quiet">Tour</button>
+        <button type="button" id="mywork-btn" class="quiet">My work</button>
+      </div>
     </div>
-    <div>
-      <h2>Hints <span id="hint-count" class="q"></span></h2>
-      <ol id="hints" class="hints"></ol>
-      <button type="button" id="hint-btn" class="quiet">Show a hint</button>
-    </div>
-    <div id="forreal" hidden>
-      <h2>Now do it for real</h2>
-      <p>Run the same thing on your own Docker:</p>
-      <pre id="forreal-cmds"></pre>
+    <div class="lesson-grid">
+      <aside id="guide" class="guide" aria-label="Steps">
+        <ol id="steps" class="steps"></ol>
+        <div id="finished" class="finished" hidden></div>
+        <details class="stuck">
+          <summary>Stuck? <span id="hint-count" class="q"></span></summary>
+          <ol id="hints"></ol>
+          <button type="button" id="hint-btn" class="quiet">Show a hint</button>
+        </details>
+        <details class="goals-box">
+          <summary>All goals for this activity</summary>
+          <ul id="goals" class="goals"></ul>
+        </details>
+      </aside>
+      <section class="stage" aria-label="The simulator">
+        <div class="tabs" role="tablist" id="stage-tabs">
+          <button type="button" role="tab" id="tab-picture" aria-controls="panel-picture" aria-selected="true">What's running</button>
+          <button type="button" role="tab" id="tab-files" aria-controls="panel-files" aria-selected="false">Files <span id="files-note" class="dot-note" hidden></span></button>
+        </div>
+        <div id="panel-picture" role="tabpanel" aria-labelledby="tab-picture" class="panel">
+          <svg id="world" role="img" aria-label="Your laptop: images, networks, containers, ports and volumes"></svg>
+          <details id="world-key" class="key">
+            <summary>What the colours mean</summary>
+            <ul>
+              <li><span class="sw run"></span>running container</li>
+              <li><span class="sw start"></span>starting, not ready yet</li>
+              <li><span class="sw stop"></span>stopped</li>
+              <li><span class="sw newb"></span>new since the last command</li>
+              <li><span class="sw pipe"></span>a port from your laptop</li>
+              <li><span class="sw cached"></span>layer reused from the cache</li>
+              <li><span class="sw built"></span>layer built this time</li>
+              <li><span class="sw vol"></span>a volume: saved data</li>
+              <li><span class="sw ok"></span>a request that arrived</li>
+            </ul>
+          </details>
+        </div>
+        <div id="panel-files" role="tabpanel" aria-labelledby="tab-files" class="panel" hidden>
+          <div class="files-head">
+            <label for="file-tabs">File</label>
+            <select id="file-tabs"></select>
+          </div>
+          <label class="sr" for="file-text">File contents</label>
+          <textarea id="file-text" spellcheck="false" rows="20"></textarea>
+          <ul id="file-lint" class="lint" aria-live="polite"></ul>
+          <p class="q">Changes save as you type. Build or run again to use them.</p>
+        </div>
+        <div id="console" class="console">
+          <div class="console-head"><span>Terminal</span><span class="q">type any command, or use Run it in the steps</span></div>
+          <pre id="term-out" class="term-out" aria-live="polite"></pre>
+          <form id="term-form" class="term-form">
+            <span aria-hidden="true">$</span>
+            <label class="sr" for="term-in">Command</label>
+            <input id="term-in" autocomplete="off" spellcheck="false" autocapitalize="off" placeholder="type a command and press Enter">
+            <button type="submit" id="term-run">Run</button>
+            <button type="button" id="term-skip" class="quiet" hidden>Skip <span class="q">(Esc)</span></button>
+          </form>
+        </div>
+      </section>
     </div>
   </section>
 
-  <section class="panes">
-    <div class="pane term">
-      <h2>Terminal</h2>
-      <p class="help">Type a command and press Enter, or click one of the commands below to put it here first.</p>
-      <pre id="term-out" class="term-out" aria-live="polite"></pre>
-      <form id="term-form" class="term-form">
-        <span aria-hidden="true">$</span>
-        <label class="sr" for="term-in">Command</label>
-        <input id="term-in" autocomplete="off" spellcheck="false" autocapitalize="off" placeholder="docker build -t places-api -f places-api/Dockerfile .">
-        <button type="submit" id="term-run">Run</button>
-        <button type="button" id="term-skip" class="quiet" hidden>Skip <span class="q">(Esc)</span></button>
-      </form>
-      <h3>Commands for this activity</h3>
-      <p class="help">Click one to put it in the terminal, read it, then press Enter.</p>
-      <ul id="suggested" class="suggested"></ul>
-    </div>
-    <div class="pane world-pane">
-      <h2>What is running on your laptop</h2>
-      <p class="help">Updates after every command. Containers sit inside their network; a blue pipe is a port from your laptop; cylinders are volumes.</p>
-      <svg id="world" role="img" aria-label="The simulated laptop: images, networks, containers, ports and volumes"></svg>
-      <details id="world-key" class="key" open>
-        <summary>Key</summary>
-        <ul>
-          <li><span class="sw run"></span>running container</li>
-          <li><span class="sw start"></span>starting (not ready yet)</li>
-          <li><span class="sw stop"></span>stopped</li>
-          <li><span class="sw net"></span>a network: containers inside can reach each other</li>
-          <li><span class="sw pipe"></span>a port from your laptop into a container</li>
-          <li><span class="sw cached"></span>image layer reused from the cache</li>
-          <li><span class="sw built"></span>image layer built this time</li>
-          <li><span class="sw vol"></span>a volume: data that outlives containers</li>
-          <li><span class="sw ok"></span>a request that arrived; <span class="badx">✕</span> one that failed</li>
-        </ul>
-      </details>
-      <h3>What the last command did</h3>
-      <ul id="events" class="events" aria-live="polite"></ul>
-    </div>
-    <div class="pane files">
-      <h2>Files in your repo</h2>
-      <p class="help">Pick a file, edit it, then build or run again to use it. Problems are pointed out under the editor.</p>
-      <label class="sr" for="file-tabs">File</label>
-      <select id="file-tabs"></select>
-      <label class="sr" for="file-text">File contents</label>
-      <textarea id="file-text" spellcheck="false" rows="22"></textarea>
-      <ul id="file-lint" class="lint" aria-live="polite"></ul>
-      <p class="q">Edits are saved as you type. Build or run again to use them.</p>
-    </div>
-  </section>
-
-  <dialog id="predict">
-    <h2>Predict first</h2>
-    <p id="predict-q"></p>
-    <ul id="predict-choices" class="choices"></ul>
-    <p class="q">Your answer is recorded, right or wrong. Then the command runs and you can compare.</p>
+  <dialog id="mywork" aria-labelledby="mywork-h">
+    <h2 id="mywork-h">My work</h2>
+    <div id="work-dialog"></div>
+    <p><button type="button" id="mywork-close">Close</button></p>
   </dialog>
 </main>
 

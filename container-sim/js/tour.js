@@ -5,17 +5,12 @@
 const SEEN = "container-sim:toured";
 
 const STEPS = [
-  { target: ".sim-head h1", title: "Welcome", text: "This simulator shows what Docker and Docker Compose do while you type the commands from the course. Nothing here runs real Docker, so you can't break anything. This tour takes about a minute." },
-  { target: "#activity", title: "1. Pick an activity", text: "Each activity is one short task from a unit. Start with the first one. Your progress on each is kept separately." },
-  { target: "#goals", title: "2. Your goals", text: "What the activity asks you to do. Each goal ticks off by itself when the simulator sees it done." },
-  { target: "#suggested", title: "3. Commands to try", text: "The commands this activity needs. Click one to put it in the terminal, read it, then press Enter to run it." },
-  { target: "#term-form", title: "4. The terminal", text: "Type or paste commands here and press Enter. The output scrolls in above, as it would on your own machine. Up arrow brings back earlier commands." },
-  { target: "#world", title: "5. What is running", text: "A picture of your laptop right now: images, containers, networks, ports and volumes. Watch it change after each command; this is the part real Docker never shows you." },
-  { target: "#world-key", title: "6. Reading the picture", text: "What the colours and shapes mean. A blue box is a running container; dashed amber means it is still starting." },
-  { target: "#events", title: "7. What just happened", text: "The last command's effects in plain words, step by step. Read this when the picture changes and you're not sure why." },
-  { target: "#file-tabs", title: "8. Your files", text: "The repo's files: the Dockerfile, the Compose file, .env. Edit them here; build or run again to use your change. Problems are pointed out below the editor." },
-  { target: "#hint-btn", title: "9. Stuck?", text: "Hints, one at a time. Using one is fine; it's recorded, not counted against you." },
-  { target: "#export", title: "10. Save and submit", text: "Your work is saved in this browser as you go. Export it to keep a copy, to move to another computer, or to submit the file in Canvas." },
+  { target: "#guide", title: "1. Follow the steps", text: "The activity, one step at a time. Each step says what to do, what to watch for, and afterwards what it meant. Click any step's title to go back to it." },
+  { target: ".step.current .run, .step.current .step-body", title: "2. Run it", text: "Run it puts the step's command in the terminal and runs it. You can also type any command yourself." },
+  { target: "#panel-picture", title: "3. Watch the picture", text: "Your laptop, drawn: images, containers, networks, ports and volumes. Anything a command adds glows and is tagged new, so you can see exactly what it did." },
+  { target: "#console", title: "4. The terminal", text: "The output, as your own machine would print it. Skip (or Esc) shows long output at once." },
+  { target: "#stage-tabs", title: "5. Files", text: "When a step asks you to edit the Dockerfile or the Compose file, the Files tab opens with checks that point out problems as you type." },
+  { target: "#mywork-btn", title: "6. Save and submit", text: "Your work saves in this browser as you go. My work is where you export it to submit in Canvas, or import it on another computer." },
 ];
 
 let i = 0, box, shade, current;
@@ -32,7 +27,7 @@ function place() {
   box.querySelector(".tour-text").textContent = step.text;
   box.querySelector(".tour-count").textContent = `${i + 1} of ${STEPS.length}`;
   box.querySelector(".tour-back").disabled = i === 0;
-  box.querySelector(".tour-next").textContent = i === STEPS.length - 1 ? "Start" : "Next";
+  box.querySelector(".tour-next").textContent = i === STEPS.length - 1 ? "Got it" : "Next";
   // Below the target if there's room, else above; kept inside the window.
   setTimeout(() => {
     const r = el.getBoundingClientRect(), bw = Math.min(360, window.innerWidth - 24);

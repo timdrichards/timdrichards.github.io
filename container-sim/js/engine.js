@@ -637,6 +637,7 @@ function programExec(w, c, cmd, events) {
   const [prog, ...args] = cmd;
   const img = w.images[c.image];
   events.push({ type: "exec", id: c.id, cmd: cmd.join(" ") });
+  fact(w, "exec", { container: c.id, image: c.image, cmd: cmd.join(" ") });
   if (prog === "sh" || prog === "bash") return `(The simulator can't open a shell. Run one command at a time instead, for example:\n  docker exec ${c.name} ls -a /app)\n`;
   if (prog === "id") return "uid=0(root) gid=0(root) groups=0(root)\n";
   if (prog === "env") return Object.entries(c.env).map(([k, v]) => `${k}=${v}`).join("\n") + "\n";
@@ -974,6 +975,8 @@ function publicContainer(c) {
 export function check(w, spec) {
   const running = Object.values(w.containers).filter((c) => c.state === "running");
   switch (spec.type) {
+    case "all": return spec.of.every((s) => check(w, s));
+    case "execSeen": return w.facts.some((f) => f.type === "exec" && new RegExp(spec.match).test(f.cmd) && (!spec.image || f.image === normalizeImage(spec.image)));
     case "imageExists": return !!w.images[normalizeImage(spec.image)];
     case "imageLacks": { const i = w.images[normalizeImage(spec.image)]; return !!i && !i.fs.some((p) => p.endsWith(spec.path)); }
     case "containerRunning":

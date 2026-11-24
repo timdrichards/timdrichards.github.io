@@ -121,7 +121,7 @@ export const ACTIVITIES = [
       { id: "built", text: "An image named places-api exists", check: { type: "imageExists", image: "places-api" } },
       { id: "running", text: "A places-api container runs with laptop port 3000 connected to its port 3000", check: { type: "containerRunning", program: "places-api", publish: { host: 3000, container: 3000 } } },
       { id: "answers", text: "From the laptop, the Amherst box returns 127 places", check: { type: "httpSeen", path: "/places", status: 200, count: 127 } },
-      { id: "no-env", text: "The image holds no .env file", check: { type: "imageLacks", image: "places-api", path: "/.env" } },
+      { id: "no-env", text: "You looked inside the image and it holds no .env file", check: { type: "all", of: [{ type: "execSeen", match: "^ls", image: "places-api" }, { type: "imageLacks", image: "places-api", path: "/.env" }] } },
     ],
     predictions: [
       { id: "no-port", when: "^docker run(?!.*-p ).*places-api", question: "You are starting places-api with no -p. What will curl localhost:3000 do afterwards?", choices: ["Return the places as usual", "Fail to connect", "Return 404"], answer: 1 },
@@ -236,5 +236,127 @@ export const ACTIVITIES = [
     forReal: ["docker compose down -v && docker compose up -d && docker compose exec places-api npm run seed"],
   },
 ];
+
+
+// ---------- guided steps ----------
+// Each step: what to do (text), a command to run or a file to edit, what to watch for in
+// the picture, what it means afterwards, and how the app knows the step is done.
+const FIX_LAYERS = { path: "places-api/Dockerfile", find: "COPY places-api/ ./\nRUN npm ci --omit=dev", replace: "COPY places-api/package.json places-api/package-lock.json ./\nRUN npm ci --omit=dev\nCOPY places-api/ ./" };
+const TOUCH_SERVER = (n) => ({ path: "places-api/src/server.js", append: `// change ${n}: a new comment\n` });
+
+const STEPS = {
+  "u02-container": [
+    { title: "Read the recipe", open: "places-api/Dockerfile",
+      text: "An image is built from a recipe called a Dockerfile. It's open on the right. Each line is one step: start from Node.js, copy the package list, install the packages, copy the code, say how to start it.",
+      watch: "Nothing changes yet: you're only reading.", after: "", done: { read: true } },
+    { title: "Build the image", cmd: "docker build -t places-api -f places-api/Dockerfile .",
+      text: "docker build follows the recipe and saves the result as an image named places-api. The final . means: you may copy files from the top of this repo.",
+      watch: "A new image appears under Images: a stack of bars, one per Dockerfile line.",
+      after: "The image is a packaged copy of places-api with its own Node.js and packages. It is a recipe, already cooked and frozen: nothing is running yet.", done: { goal: "built" } },
+    { title: "Start a container", cmd: "docker run -d --name places-api -p 3000:3000 places-api",
+      text: "docker run starts a container: one running copy of the image. -p 3000:3000 connects port 3000 on your laptop to port 3000 inside the container.",
+      watch: "A container box appears inside the network, and a blue pipe joins your laptop's port 3000 to it.",
+      after: "The container is running in its own little world: its own files, its own network address, its own localhost. The pipe is the only way in from your laptop.", done: { goal: "running" } },
+    { title: "Ask it for places", cmd: "curl -s 'http://localhost:3000/places?bbox=-72.55,42.33,-72.45,42.42' | jq '.features | length'",
+      text: "curl sends the request from your laptop, exactly as in Unit 01. jq counts the places in the answer.",
+      watch: "A green dot travels from your laptop through the pipe into the container.",
+      after: "127: the same answer as Unit 01, now from a container. The map didn't change; how it's packaged and started did.", done: { goal: "answers" } },
+    { title: "Look inside the image", cmd: "docker run --rm places-api ls -a /app",
+      text: "Give docker run a command and the container runs just that command and stops. --rm throws the container away afterwards.",
+      watch: "A container appears for a moment and is gone again. The terminal lists what's in /app.",
+      after: "data, places-api and web, and no .env: the .dockerignore file kept your passwords out of the image. Anyone who has an image can read every file in it.", done: { goal: "no-env" } },
+    { title: "Try it without -p", cmd: "docker run -d --name hidden places-api",
+      text: "Start a second copy with no -p. It runs fine. Can anything reach it?",
+      watch: "A second container appears, but no pipe leads to it.",
+      after: "It's running and listening on its port 3000, but no pipe joins it to your laptop, so nothing outside can reach it. That's the sandbox: a container is reachable only where you say so.", done: { ran: "docker run .*--name hidden" } },
+  ],
+  "u02-layers": [
+    { title: "Build it once", cmd: "docker build -t places-api -f places-api/Dockerfile .",
+      text: "This Dockerfile works, but its order is wrong for fast rebuilds. Build it once so Docker saves every layer.",
+      watch: "Every layer of the new image is amber: built this time.", after: "Docker saved the result of each line as a layer. Next time it can reuse them.", done: { ran: "docker build" } },
+    { title: "Change one line of code", open: "places-api/src/server.js", edit: { ...TOUCH_SERVER(1), label: "Make the change for me" },
+      text: "Edit places-api/src/server.js on the right: add a comment anywhere, like a developer fixing a typo. Or let the button do it.",
+      watch: "Nothing yet: a change only matters when you build again.", after: "", done: { edited: { path: "places-api/src/server.js", changed: true } } },
+    { title: "Build again", cmd: "docker build -t places-api -f places-api/Dockerfile .",
+      text: "Rebuild with the changed code. Before it runs, you'll be asked which steps will run again.",
+      watch: "The image's layers: green ones were reused, amber ones were rebuilt. Look at RUN npm ci.",
+      after: "Docker reuses layers from the top down and stops at the first changed input. Here that's COPY places-api/, which comes before npm ci, so every package was installed again for a one-line change.", done: { ran: "docker build" } },
+    { title: "Fix the order", open: "places-api/Dockerfile", edit: { ...FIX_LAYERS, label: "Show me the fix" },
+      text: "Edit the Dockerfile so it copies only package.json and package-lock.json, runs npm ci, and only then copies the rest of places-api/. Try it yourself first; \"Show me the fix\" counts as a hint.",
+      watch: "The checks under the editor stop warning about the order.", after: "", done: { edited: { path: "places-api/Dockerfile", contains: "COPY places-api/package.json" } } },
+    { title: "Change the code and rebuild", cmd: "docker build -t places-api -f places-api/Dockerfile .", edit: { ...TOUCH_SERVER(2), label: "Change server.js for me first" },
+      text: "Build once with the new order, change server.js again, and build again. (Two builds: the first saves the new layers.)",
+      watch: "RUN npm ci is green: reused. Only the steps after COPY places-api/ are amber.",
+      after: "That's the point of the order: the slow step sits above the code that changes all the time, so it stays cached. With hundreds of packages it saves minutes on every build.", done: { goal: "reused" } },
+  ],
+  "u02-volume": [
+    { title: "Start a database with a volume", cmd: "docker run -d --name db1 -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -v pgdata:/var/lib/postgresql/data ghcr.io/umass-cs-426/postgis:17-3.7",
+      text: "This starts the course's database image. -e passes the password from .env. -v pgdata:... keeps the database's files in a volume named pgdata.",
+      watch: "A dashed amber container (still starting) and a new cylinder, pgdata, joined to it.",
+      after: "The database is setting itself up for the first time. Its files go into the volume, not into the container.", done: { ran: "docker run .*--name db1" } },
+    { title: "Write a row", cmd: "docker exec db1 psql -U postgres -c \"CREATE TABLE notes (id serial PRIMARY KEY, body text)\" -c \"INSERT INTO notes (body) VALUES ('written by the first container')\"",
+      text: "docker exec runs a command inside a running container: here psql, the database's own tool, creating a table and adding one row.",
+      watch: "If the box is still amber, the database isn't ready: you'll get \"starting up\". Run docker ps, then try again.",
+      after: "The row is stored in the pgdata volume.", done: { insert: true } },
+    { title: "Throw the container away", cmd: "docker rm -f db1",
+      text: "Remove the container completely.", watch: "The container box disappears. The pgdata cylinder stays.",
+      after: "Containers are disposable. The volume, with the row in it, is still there.", done: { ran: "docker rm .*db1" } },
+    { title: "Start a new container on the same volume", cmd: "docker run -d --name db2 -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -v pgdata:/var/lib/postgresql/data ghcr.io/umass-cs-426/postgis:17-3.7",
+      text: "A brand new container, db2, that has never seen that row, on the same volume.", watch: "db2 joined to the same pgdata cylinder.",
+      after: "db2 found an existing database in the volume, so it skipped the setup.", done: { ran: "docker run .*--name db2" } },
+    { title: "Read the row back", cmd: "docker exec db2 psql -U postgres -c \"SELECT * FROM notes\"",
+      text: "Ask db2 for the notes.", watch: "The terminal shows the row. (If it says \"starting up\", run docker ps and try again.)",
+      after: "db2 never ran the INSERT. The row came from the volume: programs are disposable, data is not.", done: { goal: "survives" } },
+    { title: "Now try without a volume", cmd: "docker run -d --name db3 -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD ghcr.io/umass-cs-426/postgis:17-3.7",
+      text: "Start db3 with no -v, then ask it for the notes with the next step's command.", watch: "db3 gets an unnamed volume of its own (a dashed cylinder) that nothing else uses.",
+      after: "The image asks for a volume, so Docker made a fresh unnamed one: an empty database.", done: { ran: "docker run .*--name db3" } },
+    { title: "Ask db3 for the notes", cmd: "docker exec db3 psql -U postgres -c \"SELECT * FROM notes\"",
+      text: "Same question as before.", watch: "An error in the terminal. (If it says \"starting up\", run docker ps and try again.)",
+      after: "relation \"notes\" does not exist: without the volume, the row is gone. That's why every database in this course gets a named volume.", done: { goal: "lost" } },
+  ],
+  "u04-reach-db": [
+    { title: "Start both services", cmd: "docker compose up -d", open: "docker-compose.yml",
+      text: "The Compose file on the right describes both containers. docker compose up builds places-api and starts it with db, on a network of their own.",
+      watch: "A new network with two containers. db has a pipe from your laptop: its port is published.",
+      after: "Both are running. But look at DATABASE_URL in the file: places-api will look for the database at localhost.", done: { goal: "both" } },
+    { title: "Ask places-api if it's healthy", cmd: "curl -s localhost:3000/health",
+      text: "The /health route asks the database for a count. Predict what happens first.", watch: "A red line: places-api tries to reach the database and fails.",
+      after: "ECONNREFUSED 127.0.0.1:5432. Inside a container, localhost is that container itself, and nothing in places-api listens on 5432. The database is in a different container.", done: { ran: "curl .*health" } },
+    { title: "Fix the Compose file", open: "docker-compose.yml", edit: { path: "docker-compose.yml", find: "@localhost:5432", replace: "@db:5432", also: { find: '    ports:\n      - "5432:5432"\n', replace: "" }, label: "Show me the fix" },
+      text: "Two changes: in DATABASE_URL, replace localhost with db, the service name; and delete db's ports: lines, since only places-api needs to reach it. The checks under the editor point at both.",
+      watch: "The warnings under the editor go away.", after: "", done: { edited: { path: "docker-compose.yml", contains: "@db:5432" } } },
+    { title: "Apply the change", cmd: "docker compose up -d --build",
+      text: "docker compose up again: Compose recreates only the services whose settings changed.", watch: "db's pipe is gone. places-api is recreated.",
+      after: "Both services are on the project network, where each finds the other by its service name.", done: { goal: "no-db-port" } },
+    { title: "Load the places", cmd: "docker compose exec places-api npm run seed",
+      text: "Run the seed script inside places-api. It connects to db:5432 and loads 1,351 places.", watch: "A green dot from places-api to db. (ECONNREFUSED means db is still starting: run docker compose ps and try again.)",
+      after: "places-api reached db by name.", done: { goal: "seeded" } },
+    { title: "Ask again", cmd: "curl -s localhost:3000/health",
+      text: "Same question as step 2.", watch: "A green dot from your laptop to places-api, and from places-api to db.",
+      after: "{\"ok\":true,\"places\":1351}. The fix was one word: a service name instead of localhost.", done: { goal: "healthy" } },
+  ],
+  "u04-race": [
+    { title: "Start fresh and seed at once", cmd: "docker compose down -v && docker compose up -d && docker compose exec places-api npm run seed",
+      text: "down -v deletes the database's volume, up starts everything, and the seed runs immediately. That's what CI does on every run.", open: "docker-compose.yml",
+      watch: "db is amber and dashed: still creating its database when the seed tries to connect.",
+      after: "ECONNREFUSED. depends_on only waits for db's container to start, not for the database inside it to be ready. On a fresh volume it needs a few seconds.", done: { ran: "npm run seed" } },
+    { title: "Wait for healthy", open: "docker-compose.yml", edit: { path: "docker-compose.yml", find: "    depends_on:\n      - db\n", replace: "    depends_on:\n      db:\n        condition: service_healthy\n", also: { find: "      - db-data:/var/lib/postgresql/data\n", replace: "      - db-data:/var/lib/postgresql/data\n    healthcheck:\n      test: [\"CMD\", \"pg_isready\", \"-h\", \"127.0.0.1\", \"-U\", \"valleymap\", \"-d\", \"valleymap\"]\n      interval: 2s\n      retries: 30\n" }, label: "Show me the fix" },
+      text: "Two changes: give db a healthcheck (pg_isready asks the database if it's ready), and make places-api's depends_on wait for condition: service_healthy.",
+      watch: "The checks under the editor stop warning.", after: "", done: { goal: "condition" } },
+    { title: "Run the same thing again", cmd: "docker compose down -v && docker compose up -d && docker compose exec places-api npm run seed",
+      text: "Exactly the same command as step 1.", watch: "This time Compose waits: db turns blue (healthy) before places-api starts.",
+      after: "\"Container db Healthy\", then the seed works. A health check turns \"the container started\" into \"the service is ready\".", done: { goal: "seed-fresh" } },
+  ],
+};
+
+const MINUTES = { "u02-container": 10, "u02-layers": 10, "u02-volume": 12, "u04-reach-db": 12, "u04-race": 8 };
+const SUMMARY = {
+  "u02-container": "Build the Unit 01 places-api into an image, run it as a container, and reach it from your laptop.",
+  "u02-layers": "See why the order of a Dockerfile decides how fast it rebuilds, and fix one that's slow.",
+  "u02-volume": "Store a row in a database container, throw the container away, and get the row back.",
+  "u04-reach-db": "Start the API and database together with Compose, and fix why they can't talk to each other.",
+  "u04-race": "Watch a fresh start fail because the database isn't ready yet, then fix it with a health check."
+};
+for (const a of ACTIVITIES) { a.steps = STEPS[a.id]; a.minutes = MINUTES[a.id]; a.summary = SUMMARY[a.id]; }
 
 export const activityById = (id) => ACTIVITIES.find((a) => a.id === id);

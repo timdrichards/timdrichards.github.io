@@ -5,8 +5,11 @@
 const NS = "http://www.w3.org/2000/svg";
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-export function draw(svg, w, events = []) {
+export function draw(svg, w, events = [], prev = null) {
   const W = 760;
+  // What this command added: drawn with a glow and a "new" tag.
+  const isNew = (kind, key) => !!prev && !prev[kind][key];
+  const tag = (x, y) => `<g class="newtag"><rect x="${x}" y="${y}" width="30" height="14" rx="7"/><text x="${x + 15}" y="${y + 10.5}" text-anchor="middle">new</text></g>`;
   const images = Object.values(w.images);
   const nets = Object.values(w.networks).filter((n) => !n.builtin || Object.values(w.containers).some((c) => c.networks.includes(n.name)));
   const vols = Object.values(w.volumes);
@@ -22,7 +25,7 @@ export function draw(svg, w, events = []) {
   y += 32;
 
   // Images, each a stack of layer bars (the last build coloured by what it reused).
-  parts.push(`<text x="16" y="${y + 12}" class="sub">images</text>`);
+  parts.push(`<text x="16" y="${y + 12}" class="sub">Images</text><text x="72" y="${y + 12}" class="q">recipes, built but not running: a stack of layers, one per Dockerfile line</text>`);
   y += 20;
   let x = 16, rowH = 0;
   for (const img of images) {
@@ -30,8 +33,11 @@ export function draw(svg, w, events = []) {
     const bw = 200, bh = 16 + layers.length * 15 + 8;
     if (x + bw > W - 16) { x = 16; y += rowH + 12; rowH = 0; }
     const last = w.lastBuild && w.lastBuild.image === img.name;
-    parts.push(`<g class="image${events.some((e) => e.type === "build" && e.image === img.name) ? " flash" : ""}"><rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="6" class="box"/>`);
-    parts.push(`<text x="${x + 8}" y="${y + 13}" class="n">${esc(img.name.replace(/:latest$/, ""))}</text>`);
+    const fresh = isNew("images", img.name) || events.some((e) => e.type === "build" && e.image === img.name);
+    parts.push(`<g class="image${fresh ? " is-new" : ""}"><rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="6" class="box"/>`);
+    if (fresh) parts.push(tag(x + bw - 36, y - 7));
+    const iname = img.name.replace(/:latest$/, "");
+    parts.push(`<text x="${x + 8}" y="${y + 13}" class="n"><title>${esc(iname)}</title>${esc(iname.length > 24 ? iname.slice(0, 23) + "…" : iname)}</text>`);
     layers.forEach((l, i) => {
       const ly = y + bh - 8 - (i + 1) * 15;
       const cls = !last ? "layer" : l.status === "cached" ? "layer cached" : l.status === "built" ? "layer built" : "layer";
@@ -41,7 +47,7 @@ export function draw(svg, w, events = []) {
     x += bw + 12;
     rowH = Math.max(rowH, bh);
   }
-  if (!images.length) { parts.push(`<text x="16" y="${y + 12}" class="q">none yet: docker build or docker run makes one</text>`); rowH = 18; }
+  if (!images.length) { parts.push(`<text x="16" y="${y + 12}" class="q">None yet. docker build makes one from a Dockerfile; docker run pulls one if it needs to.</text>`); rowH = 18; }
   y += rowH + 24;
 
   // Networks, each a dashed region holding its containers.
@@ -50,23 +56,26 @@ export function draw(svg, w, events = []) {
     const rows = Math.max(1, Math.ceil(members.length / 3));
     const h = 34 + rows * 92;
     parts.push(`<rect x="16" y="${y}" width="${W - 32}" height="${h}" rx="10" class="net"/>`);
-    parts.push(`<text x="28" y="${y + 18}" class="sub">network ${esc(n.name)}${n.dns ? " (finds containers by name)" : " (default: no names)"}</text>`);
+    parts.push(`<text x="28" y="${y + 18}" class="sub">Network ${esc(n.name)}</text><text x="${36 + n.name.length * 7 + 60}" y="${y + 18}" class="q">${n.dns ? "containers here find each other by name" : "Docker's default: containers here can't find each other by name"}</text>`);
     members.forEach((c, i) => {
       const cx = 32 + (i % 3) * 240, cy = y + 30 + Math.floor(i / 3) * 92, cw = 224, ch = 80;
       pos[c.id] = { x: cx, y: cy, w: cw, h: ch, netTop: y };
       const state = c.state !== "running" ? "stopped" : c.program === "postgres" && !c.ready ? "starting" : "running";
       const flash = events.some((e) => (e.type === "start" || e.type === "exec") && e.id === c.id) ? " flash" : "";
-      parts.push(`<g class="ctr ${state}${flash}"><rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" rx="8" class="box"/>`);
+      const fresh = isNew("containers", c.id);
+      parts.push(`<g class="ctr ${state}${flash}${fresh ? " is-new" : ""}"><rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" rx="8" class="box"/>`);
+      if (fresh) parts.push(tag(cx + cw - 36, cy - 7));
       parts.push(`<text x="${cx + 10}" y="${cy + 18}" class="n">${esc(c.name)}</text>`);
       parts.push(`<text x="${cx + 10}" y="${cy + 34}" class="l2">${esc(c.image.replace(/:latest$/, ""))}</text>`);
       const ip = c.ip[n.name] ? `${c.ip[n.name]}` : "";
-      parts.push(`<text x="${cx + 10}" y="${cy + 50}" class="l2">${state}${c.exitCode ? ` (exit ${c.exitCode})` : ""}${ip ? " · " + ip : ""}</text>`);
+      const stateWords = state === "starting" ? "starting: not ready yet" : state === "stopped" ? `stopped${c.exitCode ? ` (exit ${c.exitCode})` : ""}` : "running";
+      parts.push(`<text x="${cx + 10}" y="${cy + 50}" class="l2 st-${state}">${stateWords}${ip ? " · " + ip : ""}</text>`);
       parts.push(`<text x="${cx + 10}" y="${cy + 66}" class="l2">${c.listen && c.state === "running" ? "listens on " + c.listen.join(", ") + " · own localhost" : "own localhost"}</text>`);
       parts.push(`</g>`);
     });
     y += h + 16;
   }
-  if (!containers.length) { parts.push(`<text x="16" y="${y + 4}" class="q">no containers: docker run starts one from an image</text>`); y += 24; }
+  if (!containers.length) { parts.push(`<text x="16" y="${y + 4}" class="sub">Containers</text><text x="96" y="${y + 4}" class="q">None running. docker run starts one: a running copy of an image, in its own box.</text>`); y += 24; }
 
   // Port pipes from the top edge into containers.
   for (const [port, id] of hostPorts) {
@@ -79,11 +88,13 @@ export function draw(svg, w, events = []) {
 
   // Volumes along the bottom, with a line to each container that mounts one.
   if (vols.length) {
-    parts.push(`<text x="16" y="${y + 12}" class="sub">volumes (outlive their containers)</text>`);
+    parts.push(`<text x="16" y="${y + 12}" class="sub">Volumes</text><text x="76" y="${y + 12}" class="q">saved data, kept outside every container: it survives when containers are removed</text>`);
     y += 22;
     vols.forEach((v, i) => {
       const vx = 16 + (i % 4) * 182, vy = y + Math.floor(i / 4) * 64;
-      parts.push(`<g class="vol${v.anonymous ? " anon" : ""}"><ellipse cx="${vx + 80}" cy="${vy + 8}" rx="80" ry="7" class="box"/><path d="M${vx} ${vy + 8} V${vy + 40} A80 7 0 0 0 ${vx + 160} ${vy + 40} V${vy + 8}" class="box"/>`);
+      const freshV = isNew("volumes", v.name);
+      if (freshV) parts.push(tag(vx + 128, vy - 8));
+      parts.push(`<g class="vol${v.anonymous ? " anon" : ""}${freshV ? " is-new" : ""}"><ellipse cx="${vx + 80}" cy="${vy + 8}" rx="80" ry="7" class="box"/><path d="M${vx} ${vy + 8} V${vy + 40} A80 7 0 0 0 ${vx + 160} ${vy + 40} V${vy + 8}" class="box"/>`);
       const tables = Object.keys(v.data.tables || {});
       parts.push(`<text x="${vx + 80}" y="${vy + 30}" text-anchor="middle" class="l2">${esc(v.anonymous ? "unnamed " + v.name.slice(0, 8) + "…" : v.name)}</text>`);
       parts.push(`<text x="${vx + 80}" y="${vy + 44}" text-anchor="middle" class="l">${tables.length ? "tables: " + esc(tables.join(", ")) : v.data.initialized ? "database files" : "empty"}</text></g>`);
