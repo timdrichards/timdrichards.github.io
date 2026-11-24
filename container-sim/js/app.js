@@ -6,11 +6,79 @@ import { parseYaml } from "./yaml.js";
 import { ACTIVITIES, activityById } from "./activities.js";
 import { draw, narrate } from "./view.js";
 import * as store from "./store.js";
+import { startTour, maybeTour } from "./tour.js";
 
 const $ = (id) => document.getElementById(id);
 const state = store.load();
 let activity = activityById(state.current) || ACTIVITIES[0];
 let world, lastEvents = [], history = [], hpos = 0, openFile = null;
+let running = false, skip = false;
+const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+// ---------- making a command look like it runs ----------
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, skip || calm.matches ? 0 : ms));
+
+// How long a command "thinks" before its first line: longer for the ones that do more.
+function thinkTime(line) {
+  if (/compose up/.test(line)) return 900;
+  if (/docker build|compose build/.test(line)) return 700;
+  if (/docker run/.test(line)) return 550;
+  if (/npm run seed|psql/.test(line)) return 450;
+  if (/curl/.test(line)) return 300;
+  return 220;
+}
+
+// How long to wait before each line, so slow steps look slow and quick ones quick.
+function lineDelay(l, prev) {
+  if (/DONE 0\.5s/.test(l) && /npm ci/.test(prev)) return 900;
+  if (/Pulling from|Downloaded newer image| Pulled$/.test(l)) return 650;
+  if (/Healthy$/.test(l)) return 1000;
+  if (/ Started$| Created$| Removed$| Running$/.test(l)) return 220;
+  if (/^#\d+ \[\d+\/\d+\]/.test(l)) return 90;
+  if (/^#\d+ (DONE|CACHED)/.test(l)) return 70;
+  if (/exporting to image|naming to/.test(l)) return 160;
+  if (/^places table now has/.test(l)) return 600;
+  return 18;
+}
+
+async function spinner(ms) {
+  if (skip || calm.matches || ms <= 0) return;
+  const el = document.createElement("span");
+  el.className = "spin";
+  $("term-out").appendChild(el);
+  const frames = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏";
+  const start = performance.now();
+  let i = 0;
+  while (!skip && performance.now() - start < ms) {
+    el.textContent = `${frames[i++ % frames.length]} running\n`;
+    $("term-out").scrollTop = $("term-out").scrollHeight;
+    await new Promise((r) => setTimeout(r, 80));
+  }
+  el.remove();
+}
+
+// Print a command's output a line at a time, scrolling as it goes.
+async function play(text, cls, line) {
+  await spinner(thinkTime(line));
+  const lines = text.replace(/\n$/, "").split("\n");
+  let prev = "";
+  for (const l of lines) {
+    await sleep(lineDelay(l, prev));
+    print(l, cls);
+    prev = l;
+  }
+}
+
+function setRunning(on) {
+  running = on;
+  skip = false;
+  $("term-in").disabled = on;
+  $("term-run").hidden = on;
+  $("term-skip").hidden = !on;
+  if (!on) $("term-in").focus({ preventScroll: true });
+}
+
 
 // ---------- activities ----------
 
@@ -74,11 +142,16 @@ async function submit(line) {
   }
   print(`$ ${line}`, "cmd");
   if (line === "clear") { $("term-out").textContent = ""; return; }
+  // The engine answers at once; the screen plays it back as a real terminal would.
   const r = run(world, line);
-  world = r.world; lastEvents = r.events;
   a.log.push({ kind: "cmd", text: line, ok: r.ok, at: new Date().toISOString() });
   a.attempts += 1;
-  if (r.out) print(r.out, r.ok ? "" : "err");
+  persist();
+  setRunning(true);
+  if (r.out) await play(r.out, r.ok ? "" : "err", line);
+  else await spinner(thinkTime(line) / 2);
+  world = r.world; lastEvents = r.events;
+  setRunning(false);
   renderAll();
   persist();
 }
@@ -166,8 +239,11 @@ const escapeAttr = (s) => escapeHtml(s).replace(/"/g, "&quot;");
 
 // ---------- wiring ----------
 
+$("term-skip").addEventListener("click", () => { skip = true; });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && running) skip = true; });
 $("term-form").addEventListener("submit", (e) => {
   e.preventDefault();
+  if (running) return;
   const v = $("term-in").value;
   $("term-in").value = "";
   submit(v);
@@ -178,7 +254,7 @@ $("term-in").addEventListener("keydown", (e) => {
 });
 $("suggested").addEventListener("click", (e) => {
   const b = e.target.closest("button[data-cmd]");
-  if (b) { $("term-in").value = b.dataset.cmd; $("term-in").focus(); }
+  if (b) { $("term-in").value = b.dataset.cmd; $("term-in").focus({ preventScroll: true }); }
 });
 $("activity").addEventListener("change", (e) => selectActivity(e.target.value));
 $("file-tabs").addEventListener("change", (e) => { openFile = e.target.value; renderFiles(); });
@@ -239,5 +315,7 @@ $("import").addEventListener("change", async (e) => {
   e.target.value = "";
 });
 
+$("tour").addEventListener("click", startTour);
 selectActivity(activity.id);
-$("term-in").focus();
+$("term-in").focus({ preventScroll: true });
+maybeTour();

@@ -30,6 +30,7 @@
   <section class="sim-head">
     <h1>Container Simulator</h1>
     <p class="lead">See what each Docker and Compose command from COMPSCI 426 does, change it, and run it again. This is a teaching model of the commands the course uses, not Docker itself: each activity ends with the same task on your own machine.</p>
+    <ol class="steps"><li><strong>Pick an activity</strong> from the list.</li><li><strong>Run its commands</strong> in the terminal and watch the picture change.</li><li><strong>Export your work</strong> when the goals are done, and submit the file in Canvas.</li></ol>
     <div class="bar">
       <label>Activity <select id="activity"></select></label>
       <label>Name <input id="student-name" autocomplete="name" size="16"></label>
@@ -37,6 +38,7 @@
       <button type="button" id="export">Export my work</button>
       <label class="file-btn">Import a file <input id="import" type="file" accept="application/json,.json"></label>
       <button type="button" id="reset" class="quiet">Start this activity over</button>
+      <button type="button" id="tour" class="quiet">Take the tour</button>
     </div>
     <p id="saved" class="saved" role="status"></p>
     <p class="warn">Your work is saved in this browser on this computer only. Clearing the browser, a private window or another computer starts empty: export your work to keep a copy, and import it to carry on elsewhere. The exported file is what you submit in Canvas.</p>
@@ -45,6 +47,7 @@
   <section class="goals-strip" aria-label="Activity goals">
     <div>
       <h2>Goals</h2>
+      <p class="help">Tick off by themselves when the simulator sees them done.</p>
       <ul id="goals" class="goals"></ul>
     </div>
     <div>
@@ -62,24 +65,43 @@
   <section class="panes">
     <div class="pane term">
       <h2>Terminal</h2>
+      <p class="help">Type a command and press Enter, or click one of the commands below to put it here first.</p>
       <pre id="term-out" class="term-out" aria-live="polite"></pre>
       <form id="term-form" class="term-form">
         <span aria-hidden="true">$</span>
         <label class="sr" for="term-in">Command</label>
         <input id="term-in" autocomplete="off" spellcheck="false" autocapitalize="off" placeholder="docker build -t places-api -f places-api/Dockerfile .">
-        <button type="submit">Run</button>
+        <button type="submit" id="term-run">Run</button>
+        <button type="button" id="term-skip" class="quiet" hidden>Skip <span class="q">(Esc)</span></button>
       </form>
       <h3>Commands for this activity</h3>
+      <p class="help">Click one to put it in the terminal, read it, then press Enter.</p>
       <ul id="suggested" class="suggested"></ul>
     </div>
     <div class="pane world-pane">
-      <h2>What is running</h2>
+      <h2>What is running on your laptop</h2>
+      <p class="help">Updates after every command. Containers sit inside their network; a blue pipe is a port from your laptop; cylinders are volumes.</p>
       <svg id="world" role="img" aria-label="The simulated laptop: images, networks, containers, ports and volumes"></svg>
+      <details id="world-key" class="key" open>
+        <summary>Key</summary>
+        <ul>
+          <li><span class="sw run"></span>running container</li>
+          <li><span class="sw start"></span>starting (not ready yet)</li>
+          <li><span class="sw stop"></span>stopped</li>
+          <li><span class="sw net"></span>a network: containers inside can reach each other</li>
+          <li><span class="sw pipe"></span>a port from your laptop into a container</li>
+          <li><span class="sw cached"></span>image layer reused from the cache</li>
+          <li><span class="sw built"></span>image layer built this time</li>
+          <li><span class="sw vol"></span>a volume: data that outlives containers</li>
+          <li><span class="sw ok"></span>a request that arrived; <span class="badx">✕</span> one that failed</li>
+        </ul>
+      </details>
       <h3>What the last command did</h3>
       <ul id="events" class="events" aria-live="polite"></ul>
     </div>
     <div class="pane files">
-      <h2>Files</h2>
+      <h2>Files in your repo</h2>
+      <p class="help">Pick a file, edit it, then build or run again to use it. Problems are pointed out under the editor.</p>
       <label class="sr" for="file-tabs">File</label>
       <select id="file-tabs"></select>
       <label class="sr" for="file-text">File contents</label>
